@@ -30,6 +30,7 @@ idea {
 repositories {
     mavenCentral()
     maven { url 'https://dl.bintray.com/underdark/android/' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
@@ -38,10 +39,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'io.underdark:underdark:1.0.11'
+    compile 'com.akexorcist:bluetoothspp:1.0.0'
+
     testCompile 'junit:junit:4.12'
 }

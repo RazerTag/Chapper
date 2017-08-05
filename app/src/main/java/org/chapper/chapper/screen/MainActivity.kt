@@ -3,29 +3,43 @@ package org.chapper.chapper.screen
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import io.underdark.Underdark
-import io.underdark.transport.TransportKind
-import io.underdark.util.Identity
+import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import app.akexorcist.bluetotohspp.library.BluetoothState
+import butterknife.bindView
 import org.chapper.chapper.R
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    val mTextView: TextView by bindView(R.id.textviw)
+
+    private val bt = BluetoothSPP(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val mTextView: TextView = findViewById(R.id.textviw) as TextView
+        bt.setBluetoothStateListener { state ->
+            when (state) {
+                BluetoothState.REQUEST_ENABLE_BT -> {
+                    mTextView.setText("Bluetooth yoooo")
+                }
+                BluetoothState.STATE_NONE -> {
+                    mTextView.setText("ASKmDKASMdKASMD")
+                }
+            }
+        }
+    }
 
-        val kek = Underdark.configureTransport(554554345,
-                Identity.generateNodeId(), null, null,
-                this,
-                EnumSet.of(TransportKind.WIFI,
-                        TransportKind.BLUETOOTH))
+    override fun onResume() {
+        super.onStart()
 
-        kek.start()
-
-        mTextView.setOnClickListener {
-
+        if (!bt.isBluetoothAvailable) {
+            mTextView.setText("Bluetooth break")
+        } else if (bt.isBluetoothAvailable) {
+            if (!bt.isBluetoothEnabled()) {
+                // Do somthing if bluetooth is disable
+            } else {
+                // Do something if bluetooth is already enable
+            }
         }
     }
 }
