@@ -1,5 +1,5 @@
 # Chapper
-Offline messenger.
+Android offline messenger.
 
 ## Contact
 Send me a message in Telegram: [@vakosta](https://t.me/vakosta).
