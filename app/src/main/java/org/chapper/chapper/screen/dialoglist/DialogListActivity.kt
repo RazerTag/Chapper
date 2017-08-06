@@ -2,43 +2,68 @@ package org.chapper.chapper.screen.dialoglist
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
+import android.support.v7.widget.Toolbar
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
+import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.bluetooth.BluetoothFactory
+import org.chapper.chapper.utils.DrawerFactory
 
 class DialogListActivity : AppCompatActivity() {
-    val mTextView: TextView by bindView(R.id.textviw)
+    val mToolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val bt = BluetoothFactory.getBluetoothSSP(this)
+    private val mBt = BluetoothFactory.getBluetoothSSP(this)
+
+    private var mDrawer: Drawer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dialog_list)
+        initToolbar()
 
-        bt.setBluetoothStateListener { state ->
+        mDrawer = DrawerFactory.getDrawer(this)
+
+        mBt.setBluetoothStateListener { state ->
             when (state) {
                 BluetoothState.REQUEST_ENABLE_BT -> {
-                    mTextView.setText("Bluetooth yoooo")
+                    // later
                 }
                 BluetoothState.STATE_NONE -> {
-                    mTextView.setText("ASKmDKASMdKASMD")
+                    mToolbar.title = getString(R.string.app_name)
                 }
             }
+
+            checkBluetoothStatus()
+        }
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(mToolbar)
+    }
+
+    override fun onBackPressed() {
+        if (mDrawer!!.isDrawerOpen) {
+            mDrawer!!.closeDrawer()
+        } else {
+            super.onBackPressed()
         }
     }
 
     override fun onResume() {
         super.onStart()
 
-        if (!bt.isBluetoothAvailable) {
-            mTextView.setText("Bluetooth break")
-        } else if (bt.isBluetoothAvailable) {
-            if (!bt.isBluetoothEnabled()) {
-                // Do somthing if bluetooth is disable
+        checkBluetoothStatus()
+    }
+
+    private fun checkBluetoothStatus() {
+        if (!mBt.isBluetoothAvailable) {
+            mToolbar.title = getString(R.string.bluetooth_not_available)
+        } else if (mBt.isBluetoothAvailable) {
+            if (!mBt.isBluetoothEnabled) {
+                mToolbar.title = getString(R.string.bluetooth_not_enabled)
             } else {
-                // Do something if bluetooth is already enable
+                mToolbar.title = getString(R.string.app_name)
             }
         }
     }

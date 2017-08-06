@@ -50,4 +50,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     testCompile 'junit:junit:4.12'
+
+    compile('com.mikepenz:materialdrawer:5.9.0@aar') {
+        transitive = true
+    }
 }

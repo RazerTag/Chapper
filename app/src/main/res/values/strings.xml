@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Chapper</string>
+    <string name="app_name" translatable="false">Chapper</string>
+    <string name="bluetooth_not_available">Bluetooth is not available</string>
+    <string name="bluetooth_not_enabled">Bluetooth is not enabled</string>
+    <string name="search_for_devices">Search for devices</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="settings">Settings</string>
+    <string name="faq" translatable="false">FAQ</string>
 </resources>
