@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.chapper.chapper.screen.MainActivity">
+    tools:context="org.chapper.chapper.screen.dialoglist.DialogListActivity">
 
     <TextView
         android:id="@+id/textviw"

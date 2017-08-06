@@ -1,21 +1,21 @@
-package org.chapper.chapper.screen
+package org.chapper.chapper.screen.dialoglist
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
+import org.chapper.chapper.bluetooth.BluetoothFactory
 
-class MainActivity : AppCompatActivity() {
+class DialogListActivity : AppCompatActivity() {
     val mTextView: TextView by bindView(R.id.textviw)
 
-    private val bt = BluetoothSPP(this)
+    private val bt = BluetoothFactory.getBluetoothSSP(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_dialog_list)
 
         bt.setBluetoothStateListener { state ->
             when (state) {
