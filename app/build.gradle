@@ -51,7 +51,7 @@ dependencies {
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     testCompile 'junit:junit:4.12'
 
-    compile('com.mikepenz:materialdrawer:5.9.0@aar') {
+    compile('com.mikepenz:materialdrawer:5.9.2@aar') {
         transitive = true
     }
 }

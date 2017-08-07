@@ -1,6 +1,7 @@
 package org.chapper.chapper.screen.dialoglist
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import app.akexorcist.bluetotohspp.library.BluetoothState
@@ -9,6 +10,7 @@ import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.bluetooth.BluetoothFactory
 import org.chapper.chapper.utils.DrawerFactory
+
 
 class DialogListActivity : AppCompatActivity() {
     val mToolbar: Toolbar by bindView(R.id.toolbar)
@@ -40,6 +42,10 @@ class DialogListActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(mToolbar)
+        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.menu)
+        mToolbar.setNavigationOnClickListener {
+            mDrawer!!.openDrawer()
+        }
     }
 
     override fun onBackPressed() {
