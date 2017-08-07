@@ -5,4 +5,8 @@
     <string name="search_for_devices">Поиск устройств</string>
     <string name="invite_friends">Пригласить друзей</string>
     <string name="settings">Настройки</string>
+    <string name="error">Ошибка</string>
+    <string name="sharing_text">Привет! Приглашаю тебя в Chapper.</string>
+    <string name="looking_for_devices">Поиск устройств...</string>
+    <string name="unknown_mac_address">Неизвестный MAC-адрес</string>
 </resources>

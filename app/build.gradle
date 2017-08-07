@@ -42,16 +42,17 @@ dependencies {
     })
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'org.jetbrains.anko:anko:0.10.1'
 
     compile "ru.arturvasilov:sqlite:$sqliteVersion"
 
+
+    compile('com.mikepenz:materialdrawer:5.9.2@aar') {
+        transitive = true
+    }
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     testCompile 'junit:junit:4.12'
-
-    compile('com.mikepenz:materialdrawer:5.9.2@aar') {
-        transitive = true
-    }
 }

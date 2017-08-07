@@ -20,6 +20,10 @@
         </activity>
         <activity android:name=".screen.dialog.DialogActivity">
         </activity>
+        <activity android:name=".screen.settings.SettingsActivity">
+        </activity>
+        <activity android:name=".screen.searchdeviceslist.SearchDevicesListActivity">
+        </activity>
     </application>
 
 </manifest>
