@@ -2,6 +2,7 @@ package org.chapper.chapper.screen.dialoglist
 
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -23,6 +24,8 @@ import kotlin.properties.Delegates
 class DialogListActivity : AppCompatActivity() {
     val mToolbar: Toolbar by bindView(R.id.toolbar)
 
+    val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
+
     var mDrawer: Drawer by Delegates.notNull()
 
     private val mBt = BluetoothFactory.getBluetoothSSP(this)
@@ -32,6 +35,10 @@ class DialogListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dialog_list)
         initToolbar()
         initDrawer()
+
+        mSearchDevicesFloatButton.setOnClickListener {
+            startActivity<SearchDevicesListActivity>()
+        }
 
         mBt.setBluetoothStateListener { state ->
             when (state) {

@@ -21,7 +21,7 @@ object DrawerFactory {
                 .withAccountHeader(headerResult)
                 .withSelectedItem(-1)
                 .addDrawerItems(
-                        PrimaryDrawerItem().withName(context.getString(R.string.search_for_devices)).withIcon(R.drawable.access_point).withSelectable(false),
+                        PrimaryDrawerItem().withName(context.getString(R.string.search_for_devices)).withIcon(R.drawable.access_point_black).withSelectable(false),
                         DividerDrawerItem(),
                         PrimaryDrawerItem().withName(context.getString(R.string.invite_friends)).withIcon(R.drawable.account_plus).withSelectable(false),
                         PrimaryDrawerItem().withName(context.getString(R.string.settings)).withIcon(R.drawable.settings).withSelectable(false),
@@ -50,11 +50,14 @@ object DrawerFactory {
     fun getHeader(context: Context, name: String, btMacAddress: String): AccountHeader {
         return AccountHeaderBuilder()
                 .withActivity(context as Activity)
-                .withHeaderBackground(R.color.colorSecondary)
+                .withHeaderBackground(R.color.colorSecondaryDark)
                 .withSelectionListEnabled(false)
                 .withProfileImagesClickable(false)
                 .addProfiles(
-                        ProfileDrawerItem().withName(name).withEmail(btMacAddress).withIcon(context.getDrawable(R.drawable.menu))
+                        ProfileDrawerItem()
+                                .withName(name)
+                                .withEmail(btMacAddress)
+                                .withIcon(context.getDrawable(R.drawable.menu))
                 )
                 .build()
     }
