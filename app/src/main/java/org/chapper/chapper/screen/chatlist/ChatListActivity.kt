@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.dialoglist
+package org.chapper.chapper.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import app.akexorcist.bluetotohspp.library.DeviceList
@@ -16,6 +18,7 @@ import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.bluetooth.BluetoothFactory
+import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.screen.searchdeviceslist.SearchDevicesListActivity
 import org.chapper.chapper.screen.settings.SettingsActivity
 import org.chapper.chapper.utils.DrawerFactory
@@ -26,8 +29,11 @@ import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 
-class DialogListActivity : AppCompatActivity() {
+class ChatListActivity : AppCompatActivity() {
     val mToolbar: Toolbar by bindView(R.id.toolbar)
+
+    val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
+    var mAdapter: ChatsAdapter by Delegates.notNull()
 
     val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
 
@@ -37,9 +43,11 @@ class DialogListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dialog_list)
+        setContentView(R.layout.activity_chat_list)
+
         initToolbar()
         initDrawer()
+        showDialogs()
 
         mSearchDevicesFloatButton.setOnClickListener {
             //startActivity<SearchDevicesListActivity>()
@@ -101,6 +109,13 @@ class DialogListActivity : AppCompatActivity() {
         checkBluetoothStatus()
     }
 
+    private fun showDialogs() {
+        mRecyclerView.setHasFixedSize(false)
+        mRecyclerView.layoutManager = LinearLayoutManager(this)
+        mAdapter = ChatsAdapter(getChats())
+        mRecyclerView.adapter = mAdapter
+    }
+
     private fun handleDrawerItemClickListener(position: Int): Boolean {
         when (position) {
             1 -> {
@@ -136,5 +151,13 @@ class DialogListActivity : AppCompatActivity() {
             val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
             initDrawer("Vladislav Annenkov", btMacAddress)
         }
+    }
+
+    private fun getChats(): ArrayList<Chat> {
+        val chats = arrayListOf<Chat>()
+
+        // TODO: Getting chats
+
+        return chats
     }
 }

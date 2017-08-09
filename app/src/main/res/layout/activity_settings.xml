@@ -21,7 +21,6 @@
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:title="@string/settings"/>
 
     </android.support.design.widget.AppBarLayout>

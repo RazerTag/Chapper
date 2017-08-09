@@ -57,7 +57,7 @@ object DrawerFactory {
                         ProfileDrawerItem()
                                 .withName(name)
                                 .withEmail(btMacAddress)
-                                .withIcon(context.getDrawable(R.drawable.menu))
+                                .withIcon(context.getDrawable(R.drawable.account_white))
                 )
                 .build()
     }
