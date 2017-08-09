@@ -1,12 +1,17 @@
 package org.chapper.chapper.screen.dialoglist
 
 import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import app.akexorcist.bluetotohspp.library.BluetoothState
+import app.akexorcist.bluetotohspp.library.DeviceList
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
@@ -37,21 +42,27 @@ class DialogListActivity : AppCompatActivity() {
         initDrawer()
 
         mSearchDevicesFloatButton.setOnClickListener {
-            startActivity<SearchDevicesListActivity>()
+            //startActivity<SearchDevicesListActivity>()
+            val intent = Intent(applicationContext, DeviceList::class.java)
+            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
         }
 
         mBt.setBluetoothStateListener { state ->
             when (state) {
                 BluetoothState.REQUEST_ENABLE_BT -> {
-                    // later
+                    checkBluetoothStatus()
                 }
                 BluetoothState.STATE_NONE -> {
                     mToolbar.title = getString(R.string.app_name)
                 }
             }
-
-            checkBluetoothStatus()
         }
+
+        registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                checkBluetoothStatus()
+            }
+        }, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     private fun initToolbar() {

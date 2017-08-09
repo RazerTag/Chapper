@@ -7,8 +7,8 @@
     <string name="settings">Settings</string>
     <string name="faq" translatable="false">FAQ</string>
     <string name="error">Error</string>
-    <string name="faq_url" translatable="false">https://annenkov.me/</string>
-    <string name="sharing_text">Hey!</string>
-    <string name="looking_for_devices">Looking for devices...</string>
+    <string name="faq_url" translatable="false">https://chapper.org/</string>
+    <string name="sharing_text">Hey! Let\'s switch to Chapper: https://chapper.org/</string>
+    <string name="looking_for_devices">Looking for devices…</string>
     <string name="unknown_mac_address">Unknown MAC-address</string>
 </resources>

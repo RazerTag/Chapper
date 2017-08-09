@@ -6,8 +6,8 @@ import ru.arturvasilov.sqlite.core.SQLiteContentProvider
 import ru.arturvasilov.sqlite.core.SQLiteSchema
 
 class ChapperContentProvider : SQLiteContentProvider() {
-    private val DATABASE_NAME = "simpleweather.db"
-    private val CONTENT_AUTHORITY = "ru.gdgkazan.simpleweather"
+    private val DATABASE_NAME = "chapper.db"
+    private val CONTENT_AUTHORITY = "org.chapper.chapper"
 
     override fun prepareConfig(config: SQLiteConfig) {
         config.setDatabaseName(DATABASE_NAME)
