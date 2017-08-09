@@ -75,14 +75,14 @@ class DialogListActivity : AppCompatActivity() {
 
     private fun initDrawer() {
         mDrawer = DrawerFactory.getDrawer(this)
-        mDrawer.setOnDrawerItemClickListener { view, position, drawerItem ->
+        mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             handleDrawerItemClickListener(position)
         }
     }
 
     private fun initDrawer(name: String, btMacAddress: String) {
         mDrawer = DrawerFactory.getDrawer(this, name, btMacAddress)
-        mDrawer.setOnDrawerItemClickListener { view, position, drawerItem ->
+        mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             handleDrawerItemClickListener(position)
         }
     }
