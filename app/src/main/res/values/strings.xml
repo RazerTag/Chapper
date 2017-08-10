@@ -11,4 +11,11 @@
     <string name="sharing_text">Hey! Let\'s switch to Chapper: https://chapper.org/</string>
     <string name="looking_for_devices">Looking for devices…</string>
     <string name="unknown_mac_address">Unknown MAC-address</string>
+    <string name="fill_in_all_fields">Please, fill in all the fields.</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="username">Username</string>
+    <string name="what_is_your_name">What is your name?</string>
+    <string name="firstname_lastname_visible">The firstname and lastname are only visible to friends.</string>
+    <string name="username_visible">Username is the name of your Bluetooth.\nIt is visible to all nearby.</string>
 </resources>

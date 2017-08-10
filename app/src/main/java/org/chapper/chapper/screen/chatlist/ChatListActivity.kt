@@ -19,6 +19,9 @@ import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
+import org.chapper.chapper.data.model.Settings
+import org.chapper.chapper.data.tables.SettingsTable
+import org.chapper.chapper.screen.intro.IntroActivity
 import org.chapper.chapper.screen.searchdeviceslist.SearchDevicesListActivity
 import org.chapper.chapper.screen.settings.SettingsActivity
 import org.chapper.chapper.utils.DrawerFactory
@@ -26,10 +29,12 @@ import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import ru.arturvasilov.sqlite.core.BasicTableObserver
+import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
 
 
-class ChatListActivity : AppCompatActivity() {
+class ChatListActivity : AppCompatActivity(), BasicTableObserver {
     val mToolbar: Toolbar by bindView(R.id.toolbar)
 
     val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
@@ -45,9 +50,16 @@ class ChatListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
 
+        initSQLTables()
         initToolbar()
         initDrawer()
         showDialogs()
+
+        SQLite.get().registerObserver(SettingsTable.TABLE, this)
+
+        if (SettingsTable.SETTINGS.isFirstStart) {
+            startActivity<IntroActivity>()
+        }
 
         mSearchDevicesFloatButton.setOnClickListener {
             //startActivity<SearchDevicesListActivity>()
@@ -82,16 +94,27 @@ class ChatListActivity : AppCompatActivity() {
     }
 
     private fun initDrawer() {
-        mDrawer = DrawerFactory.getDrawer(this)
+        val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
+        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, btMacAddress)
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             handleDrawerItemClickListener(position)
         }
     }
 
-    private fun initDrawer(name: String, btMacAddress: String) {
-        mDrawer = DrawerFactory.getDrawer(this, name, btMacAddress)
+    private fun initDrawer(btMacAddress: String) {
+        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, btMacAddress)
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             handleDrawerItemClickListener(position)
+        }
+    }
+
+    private fun initSQLTables() {
+        if (SQLite.get().query(SettingsTable.TABLE).isEmpty()) {
+            val settings = Settings()
+            settings.isFirstStart = true
+            settings.firstName = ""
+            settings.lastName = ""
+            SQLite.get().insert(SettingsTable.TABLE, settings)
         }
     }
 
@@ -107,6 +130,11 @@ class ChatListActivity : AppCompatActivity() {
         super.onStart()
 
         checkBluetoothStatus()
+    }
+
+    override fun onTableChanged() {
+        initDrawer()
+        showDialogs()
     }
 
     private fun showDialogs() {
@@ -140,7 +168,7 @@ class ChatListActivity : AppCompatActivity() {
     private fun checkBluetoothStatus() {
         if (!mBt.isBluetoothAvailable) {
             mToolbar.title = getString(R.string.bluetooth_not_available)
-            initDrawer("Vladislav Annenkov", getString(R.string.unknown_mac_address))
+            initDrawer(getString(R.string.unknown_mac_address))
         } else if (mBt.isBluetoothAvailable) {
             if (!mBt.isBluetoothEnabled) {
                 mToolbar.title = getString(R.string.bluetooth_not_enabled)
@@ -148,8 +176,7 @@ class ChatListActivity : AppCompatActivity() {
                 mToolbar.title = getString(R.string.app_name)
             }
 
-            val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
-            initDrawer("Vladislav Annenkov", btMacAddress)
+            initDrawer()
         }
     }
 

@@ -13,8 +13,8 @@ import org.chapper.chapper.R
 
 
 object DrawerFactory {
-    fun getDrawer(context: Context, name: String, btMacAddress: String): com.mikepenz.materialdrawer.Drawer {
-        val headerResult = getHeader(context, name, btMacAddress)
+    fun getDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): com.mikepenz.materialdrawer.Drawer {
+        val headerResult = getHeader(context, firstName, lastName, btMacAddress)
 
         return DrawerBuilder()
                 .withActivity(context as Activity)
@@ -43,11 +43,7 @@ object DrawerFactory {
                 .build()
     }
 
-    fun getDrawer(context: Context): com.mikepenz.materialdrawer.Drawer {
-        return getDrawer(context, "Vladislav Annenkov", "Loading...")
-    }
-
-    fun getHeader(context: Context, name: String, btMacAddress: String): AccountHeader {
+    fun getHeader(context: Context, firstName: String, lastName: String, btMacAddress: String): AccountHeader {
         return AccountHeaderBuilder()
                 .withActivity(context as Activity)
                 .withHeaderBackground(R.color.colorSecondaryDark)
@@ -55,14 +51,10 @@ object DrawerFactory {
                 .withProfileImagesClickable(false)
                 .addProfiles(
                         ProfileDrawerItem()
-                                .withName(name)
+                                .withName("$firstName $lastName")
                                 .withEmail(btMacAddress)
-                                .withIcon(context.getDrawable(R.drawable.account_white))
+                                .withIcon(context.getDrawable(R.drawable.camera_white))
                 )
                 .build()
-    }
-
-    fun getHeader(context: Context): AccountHeader {
-        return getHeader(context, "Vladislav Annenkov", "Analise")
     }
 }
