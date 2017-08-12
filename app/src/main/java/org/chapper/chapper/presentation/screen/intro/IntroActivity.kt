@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.intro
+package org.chapper.chapper.presentation.screen.intro
 
 import agency.tango.materialintroscreen.MaterialIntroActivity
 import agency.tango.materialintroscreen.SlideFragmentBuilder

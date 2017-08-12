@@ -1,4 +1,4 @@
-package org.chapper.chapper
+package org.chapper.chapper.presentation
 
 import android.app.Application
 import ru.arturvasilov.sqlite.core.SQLite

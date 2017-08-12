@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.chatlist
+package org.chapper.chapper.presentation.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
@@ -17,14 +17,14 @@ import app.akexorcist.bluetotohspp.library.DeviceList
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
-import org.chapper.chapper.bluetooth.BluetoothFactory
+import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.tables.SettingsTable
-import org.chapper.chapper.screen.intro.IntroActivity
-import org.chapper.chapper.screen.searchdeviceslist.SearchDevicesListActivity
-import org.chapper.chapper.screen.settings.SettingsActivity
-import org.chapper.chapper.utils.DrawerFactory
+import org.chapper.chapper.presentation.screen.intro.IntroActivity
+import org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity
+import org.chapper.chapper.presentation.screen.settings.SettingsActivity
+import org.chapper.chapper.presentation.utils.DrawerFactory
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity

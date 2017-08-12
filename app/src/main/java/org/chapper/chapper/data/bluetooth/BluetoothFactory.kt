@@ -1,4 +1,4 @@
-package org.chapper.chapper.bluetooth
+package org.chapper.chapper.data.bluetooth
 
 import android.content.Context
 import app.akexorcist.bluetotohspp.library.BluetoothSPP

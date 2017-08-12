@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.chatlist
+package org.chapper.chapper.presentation.screen.chatlist
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

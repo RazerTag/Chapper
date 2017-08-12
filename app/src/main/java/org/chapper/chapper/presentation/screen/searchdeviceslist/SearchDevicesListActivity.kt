@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.searchdeviceslist
+package org.chapper.chapper.presentation.screen.searchdeviceslist
 
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle

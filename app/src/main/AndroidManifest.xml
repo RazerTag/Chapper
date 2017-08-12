@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
-        android:name=".ChapperApp"
+        android:name=".presentation.ChapperApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screen.chatlist.ChatListActivity">
+        <activity android:name="org.chapper.chapper.presentation.screen.chatlist.ChatListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,13 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screen.intro.IntroActivity"
+            android:name="org.chapper.chapper.presentation.screen.intro.IntroActivity"
             android:theme="@style/Theme.Intro"/>
-        <activity android:name=".screen.chat.ChatActivity">
+        <activity android:name="org.chapper.chapper.presentation.screen.chat.ChatActivity">
         </activity>
-        <activity android:name=".screen.settings.SettingsActivity">
+        <activity android:name="org.chapper.chapper.presentation.screen.settings.SettingsActivity">
         </activity>
-        <activity android:name=".screen.searchdeviceslist.SearchDevicesListActivity">
+        <activity android:name="org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity">
         </activity>
 
         <provider

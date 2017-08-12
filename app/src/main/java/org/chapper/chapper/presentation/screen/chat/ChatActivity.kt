@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.chat
+package org.chapper.chapper.presentation.screen.chat
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

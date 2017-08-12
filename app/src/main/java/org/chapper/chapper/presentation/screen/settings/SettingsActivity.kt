@@ -1,4 +1,4 @@
-package org.chapper.chapper.screen.settings
+package org.chapper.chapper.presentation.screen.settings
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
