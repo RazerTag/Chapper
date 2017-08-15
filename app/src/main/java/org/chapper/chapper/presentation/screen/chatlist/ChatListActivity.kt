@@ -5,13 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import app.akexorcist.bluetotohspp.library.DeviceList
 import butterknife.bindView
+import com.arellomobile.mvp.MvpAppCompatActivity
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.PresenterType
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
@@ -31,15 +33,18 @@ import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
 
 
-class ChatListActivity : AppCompatActivity(), BasicTableObserver {
-    val mToolbar: Toolbar by bindView(R.id.toolbar)
+class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListView {
+    @InjectPresenter(type = PresenterType.GLOBAL)
+    lateinit var mChatListPresenter: ChatListPresenter
 
-    val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
-    var mAdapter: ChatsAdapter by Delegates.notNull()
+    private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
-    val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
+    private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
 
-    var mDrawer: Drawer by Delegates.notNull()
+    private var mAdapter: ChatListAdapter by Delegates.notNull()
+    private val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
+
+    private var mDrawer: Drawer by Delegates.notNull()
 
     private val mBt = BluetoothFactory.getBluetoothSSP(this)
 
@@ -47,10 +52,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
 
-        initSQLTables()
-        initToolbar()
-        initDrawer()
-        showDialogs()
+        mChatListPresenter.init()
 
         SQLite.get().registerObserver(SettingsTable.TABLE, this)
         SQLite.get().registerObserver(ChatTable.TABLE, this)
@@ -77,7 +79,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
         }
     }
 
-    private fun initToolbar() {
+    override fun initToolbar() {
         setSupportActionBar(mToolbar)
         mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.menu)
         mToolbar.setNavigationOnClickListener {
@@ -85,7 +87,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
         }
     }
 
-    private fun initDrawer() {
+    override fun initDrawer() {
         val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
         initDrawer(btMacAddress)
     }
@@ -93,11 +95,11 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
     private fun initDrawer(btMacAddress: String) {
         mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, btMacAddress)
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
-            handleDrawerItemClickListener(position)
+            mChatListPresenter.handleDrawerItemClickListener(position)
         }
     }
 
-    private fun initSQLTables() {
+    override fun initSQLTables() {
         if (SQLite.get().query(SettingsTable.TABLE).isEmpty()) {
             val settings = Settings()
             settings.isFirstStart = true
@@ -135,32 +137,31 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
         showDialogs()
     }
 
-    private fun showDialogs() {
+    override fun showDialogs() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatsAdapter(ChatTable.chats)
+        mAdapter = ChatListAdapter(ChatTable.chats)
         mRecyclerView.adapter = mAdapter
     }
 
-    private fun handleDrawerItemClickListener(position: Int): Boolean {
-        when (position) {
-            1 -> {
-                startActivity<SearchDevicesListActivity>()
-            }
-            3 -> {
-                share(getString(R.string.sharing_text))
-            }
-            4 -> {
-                startActivity<SettingsActivity>()
-            }
-            5 -> {
-                browse(getString(R.string.faq_url))
-            }
-            else -> {
-                toast(getString(R.string.error))
-            }
-        }
-        return false
+    override fun startSearchDevicesListActivity() {
+        startActivity<SearchDevicesListActivity>()
+    }
+
+    override fun shareWithFriends() {
+        share(getString(R.string.sharing_text))
+    }
+
+    override fun startSettingsActivity() {
+        startActivity<SettingsActivity>()
+    }
+
+    override fun openFaqInBrowser() {
+        browse(getString(R.string.faq_url))
+    }
+
+    override fun showError() {
+        toast(getString(R.string.error))
     }
 
     private fun checkBluetoothStatus() {

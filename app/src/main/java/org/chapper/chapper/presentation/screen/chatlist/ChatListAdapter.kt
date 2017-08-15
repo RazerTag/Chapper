@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
-class ChatsAdapter(val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>() {
+class ChatListAdapter(val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatHolder {
         val itemView = LayoutInflater.from(parent!!.context)
                 .inflate(R.layout.item_chat, parent, false)
