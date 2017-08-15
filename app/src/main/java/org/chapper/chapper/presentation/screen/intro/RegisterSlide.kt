@@ -21,9 +21,9 @@ class RegisterSlide : SlideFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_register_slide, container, false)
 
-        firstName = view.findViewById(R.id.first_name) as EditText?
-        lastName = view.findViewById(R.id.last_name) as EditText?
-        username = view.findViewById(R.id.username) as EditText?
+        firstName = view.findViewById<EditText>(R.id.first_name)
+        lastName = view.findViewById<EditText>(R.id.last_name)
+        username = view.findViewById<EditText>(R.id.username)
 
         username!!.setText(BluetoothAdapter.getDefaultAdapter().name)
 

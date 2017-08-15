@@ -8,7 +8,7 @@ import butterknife.bindView
 import org.chapper.chapper.R
 
 class SettingsActivity : AppCompatActivity() {
-    val mToolbar: Toolbar by bindView(R.id.settings_toolbar)
+    val mToolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

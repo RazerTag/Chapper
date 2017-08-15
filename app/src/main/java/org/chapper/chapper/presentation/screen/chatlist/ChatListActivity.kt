@@ -1,10 +1,7 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
@@ -18,8 +15,8 @@ import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
-import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Settings
+import org.chapper.chapper.data.tables.ChatTable
 import org.chapper.chapper.data.tables.SettingsTable
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity
@@ -56,6 +53,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
         showDialogs()
 
         SQLite.get().registerObserver(SettingsTable.TABLE, this)
+        SQLite.get().registerObserver(ChatTable.TABLE, this)
 
         if (SettingsTable.SETTINGS.isFirstStart) {
             startActivity<IntroActivity>()
@@ -77,12 +75,6 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
                 }
             }
         }
-
-        registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                checkBluetoothStatus()
-            }
-        }, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     private fun initToolbar() {
@@ -95,10 +87,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
 
     private fun initDrawer() {
         val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
-        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, btMacAddress)
-        mDrawer.setOnDrawerItemClickListener { _, position, _ ->
-            handleDrawerItemClickListener(position)
-        }
+        initDrawer(btMacAddress)
     }
 
     private fun initDrawer(btMacAddress: String) {
@@ -128,8 +117,17 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
 
     override fun onResume() {
         super.onStart()
-
         checkBluetoothStatus()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        SQLite.get().unregisterObserver(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mRecyclerView.adapter = null
     }
 
     override fun onTableChanged() {
@@ -140,7 +138,7 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
     private fun showDialogs() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatsAdapter(getChats())
+        mAdapter = ChatsAdapter(ChatTable.chats)
         mRecyclerView.adapter = mAdapter
     }
 
@@ -178,13 +176,5 @@ class ChatListActivity : AppCompatActivity(), BasicTableObserver {
 
             initDrawer()
         }
-    }
-
-    private fun getChats(): ArrayList<Chat> {
-        val chats = arrayListOf<Chat>()
-
-        // TODO: Getting chats
-
-        return chats
     }
 }

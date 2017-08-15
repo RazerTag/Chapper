@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.View
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
+import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
@@ -13,7 +14,9 @@ import org.chapper.chapper.R
 
 
 object DrawerFactory {
-    fun getDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): com.mikepenz.materialdrawer.Drawer {
+    private var mDrawer: Drawer? = null
+
+    private fun initDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): Drawer {
         val headerResult = getHeader(context, firstName, lastName, btMacAddress)
 
         return DrawerBuilder()
@@ -27,7 +30,7 @@ object DrawerFactory {
                         PrimaryDrawerItem().withName(context.getString(R.string.settings)).withIcon(R.drawable.settings).withSelectable(false),
                         PrimaryDrawerItem().withName(context.getString(R.string.faq)).withIcon(R.drawable.help_circle).withSelectable(false)
                 )
-                .withOnDrawerListener(object : com.mikepenz.materialdrawer.Drawer.OnDrawerListener {
+                .withOnDrawerListener(object : Drawer.OnDrawerListener {
                     override fun onDrawerOpened(drawerView: View) {
                         Keyboard.hideKeyboard(context)
                     }
@@ -43,7 +46,7 @@ object DrawerFactory {
                 .build()
     }
 
-    fun getHeader(context: Context, firstName: String, lastName: String, btMacAddress: String): AccountHeader {
+    private fun getHeader(context: Context, firstName: String, lastName: String, btMacAddress: String): AccountHeader {
         return AccountHeaderBuilder()
                 .withActivity(context as Activity)
                 .withHeaderBackground(R.color.colorSecondaryDark)
@@ -56,5 +59,11 @@ object DrawerFactory {
                                 .withIcon(context.getDrawable(R.drawable.camera_white))
                 )
                 .build()
+    }
+
+    fun getDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): Drawer {
+        mDrawer = initDrawer(context, firstName, lastName, btMacAddress)
+
+        return mDrawer!!
     }
 }
