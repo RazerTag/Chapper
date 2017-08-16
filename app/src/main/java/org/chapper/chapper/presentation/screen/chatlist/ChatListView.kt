@@ -5,6 +5,7 @@ import com.arellomobile.mvp.MvpView
 interface ChatListView : MvpView {
     fun initToolbar()
     fun initDrawer()
+    fun initLoadingDrawer()
     fun initSQLTables()
     fun showDialogs()
 
@@ -13,4 +14,8 @@ interface ChatListView : MvpView {
     fun startSettingsActivity()
     fun openFaqInBrowser()
     fun showError()
+
+    fun btNotAvailable()
+    fun btNotEnabled()
+    fun btEnabled()
 }

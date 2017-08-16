@@ -1,7 +1,10 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
@@ -16,7 +19,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.PresenterType
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
-import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.tables.ChatTable
 import org.chapper.chapper.data.tables.SettingsTable
@@ -46,13 +48,12 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
 
     private var mDrawer: Drawer by Delegates.notNull()
 
-    private val mBt = BluetoothFactory.getBluetoothSSP(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
 
         mChatListPresenter.init()
+        mChatListPresenter.bluetoothStatusAction()
 
         SQLite.get().registerObserver(SettingsTable.TABLE, this)
         SQLite.get().registerObserver(ChatTable.TABLE, this)
@@ -67,16 +68,11 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
             startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
         }
 
-        mBt.setBluetoothStateListener { state ->
-            when (state) {
-                BluetoothState.REQUEST_ENABLE_BT -> {
-                    checkBluetoothStatus()
-                }
-                BluetoothState.STATE_NONE -> {
-                    mToolbar.title = getString(R.string.app_name)
-                }
+        registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                mChatListPresenter.bluetoothStatusAction()
             }
-        }
+        }, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     override fun initToolbar() {
@@ -88,12 +84,14 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
     }
 
     override fun initDrawer() {
-        val btMacAddress = BluetoothAdapter.getDefaultAdapter().address
-        initDrawer(btMacAddress)
+        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, BluetoothAdapter.getDefaultAdapter().address)
+        mDrawer.setOnDrawerItemClickListener { _, position, _ ->
+            mChatListPresenter.handleDrawerItemClickListener(position)
+        }
     }
 
-    private fun initDrawer(btMacAddress: String) {
-        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, btMacAddress)
+    override fun initLoadingDrawer() {
+        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, getString(R.string.unknown_mac_address))
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             mChatListPresenter.handleDrawerItemClickListener(position)
         }
@@ -119,7 +117,7 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
 
     override fun onResume() {
         super.onStart()
-        checkBluetoothStatus()
+        mChatListPresenter.bluetoothStatusAction()
     }
 
     override fun onStop() {
@@ -164,18 +162,18 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
         toast(getString(R.string.error))
     }
 
-    private fun checkBluetoothStatus() {
-        if (!mBt.isBluetoothAvailable) {
-            mToolbar.title = getString(R.string.bluetooth_not_available)
-            initDrawer(getString(R.string.unknown_mac_address))
-        } else if (mBt.isBluetoothAvailable) {
-            if (!mBt.isBluetoothEnabled) {
-                mToolbar.title = getString(R.string.bluetooth_not_enabled)
-            } else {
-                mToolbar.title = getString(R.string.app_name)
-            }
+    override fun btNotAvailable() {
+        mToolbar.title = getString(R.string.bluetooth_not_available)
+        initLoadingDrawer()
+    }
 
-            initDrawer()
-        }
+    override fun btNotEnabled() {
+        mToolbar.title = getString(R.string.bluetooth_not_enabled)
+        initDrawer()
+    }
+
+    override fun btEnabled() {
+        mToolbar.title = getString(R.string.app_name)
+        initDrawer()
     }
 }

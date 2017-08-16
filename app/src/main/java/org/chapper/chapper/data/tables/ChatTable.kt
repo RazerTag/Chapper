@@ -2,8 +2,8 @@ package org.chapper.chapper.data.tables
 
 import android.content.ContentValues
 import android.database.Cursor
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.chapper.chapper.data.GsonHolder
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.sqlite.database.sqlite.SQLiteDatabase
@@ -54,7 +54,7 @@ class ChatTable : BaseTable<Chat>() {
         values.put(LAST_NAME, t.lastName)
         values.put(USERNAME, t.username)
         values.put(BLUETOOTH_MAC_ADDRESS, t.bluetoothMacAddress)
-        values.put(MESSAGES, GsonHolder.gson.toJson(t.messages))
+        values.put(MESSAGES, Gson().toJson(t.messages))
         return values
     }
 
@@ -68,7 +68,7 @@ class ChatTable : BaseTable<Chat>() {
         chat.bluetoothMacAddress = cursor.getString(cursor.getColumnIndex(BLUETOOTH_MAC_ADDRESS))
 
         val arrayListType = object : TypeToken<ArrayList<Message>>() {}.type
-        chat.messages = GsonHolder.gson.fromJson(cursor.getString(cursor.getColumnIndex(MESSAGES)),
+        chat.messages = Gson().fromJson(cursor.getString(cursor.getColumnIndex(MESSAGES)),
                 arrayListType)
 
         return chat

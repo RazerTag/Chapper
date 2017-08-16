@@ -2,20 +2,12 @@ package org.chapper.chapper.data.bluetooth
 
 import android.content.Context
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import kotlin.properties.Delegates
 
 object BluetoothFactory {
-    private var sBt: BluetoothSPP? = null
+    var sBt: BluetoothSPP by Delegates.notNull()
 
-    fun getBluetoothSSP(context: Context): BluetoothSPP {
-        var bt = sBt
-        if (bt == null) {
-            synchronized(BluetoothFactory) {
-                bt = sBt
-                if (bt == null) {
-                    bt = BluetoothSPP(context)
-                }
-            }
-        }
-        return bt!!
+    fun initBluetoothSSP(context: Context) {
+        sBt = BluetoothSPP(context)
     }
 }

@@ -2,13 +2,15 @@ package org.chapper.chapper.presentation.screen.chatlist
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import org.chapper.chapper.data.bluetooth.BluetoothStatus
+import org.chapper.chapper.domain.usecase.BluetoothUsecase
 
 @InjectViewState
 class ChatListPresenter : MvpPresenter<ChatListView>() {
     fun init() {
         viewState.initSQLTables()
         viewState.initToolbar()
-        viewState.initDrawer()
+        viewState.initLoadingDrawer()
         viewState.showDialogs()
     }
 
@@ -31,5 +33,15 @@ class ChatListPresenter : MvpPresenter<ChatListView>() {
             }
         }
         return false
+    }
+
+    fun bluetoothStatusAction() {
+        val status = BluetoothUsecase().checkStatus()
+
+        when (status) {
+            BluetoothStatus.NOT_AVAILABLE -> viewState.btNotAvailable()
+            BluetoothStatus.NOT_ENABLED -> viewState.btNotEnabled()
+            BluetoothStatus.ENABLED -> viewState.btEnabled()
+        }
     }
 }
