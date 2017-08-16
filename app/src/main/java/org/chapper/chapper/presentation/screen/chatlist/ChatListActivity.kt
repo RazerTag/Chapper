@@ -1,8 +1,6 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -22,6 +20,7 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.tables.ChatTable
 import org.chapper.chapper.data.tables.SettingsTable
+import org.chapper.chapper.presentation.broadcastreceivers.BluetoothBroadcastReceiver
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
@@ -38,6 +37,8 @@ import kotlin.properties.Delegates
 class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListView {
     @InjectPresenter(type = PresenterType.GLOBAL)
     lateinit var mChatListPresenter: ChatListPresenter
+
+    private var mBtReceiver: BluetoothBroadcastReceiver by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
@@ -68,11 +69,9 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
             startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
         }
 
-        registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                mChatListPresenter.bluetoothStatusAction()
-            }
-        }, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+        mBtReceiver = BluetoothBroadcastReceiver(mChatListPresenter)
+        registerReceiver(mBtReceiver
+                , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     override fun initToolbar() {
@@ -117,17 +116,21 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
 
     override fun onResume() {
         super.onStart()
+
         mChatListPresenter.bluetoothStatusAction()
     }
 
     override fun onStop() {
         super.onStop()
+
         SQLite.get().unregisterObserver(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
         mRecyclerView.adapter = null
+        unregisterReceiver(mBtReceiver)
     }
 
     override fun onTableChanged() {
