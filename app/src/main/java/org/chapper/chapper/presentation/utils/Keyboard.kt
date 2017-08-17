@@ -1,12 +1,16 @@
 package org.chapper.chapper.presentation.utils
 
 import android.app.Activity
+import android.content.Context
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 
 object Keyboard {
-    fun hideKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+    fun hideKeyboard(context: Context, focus: View?) {
+        if (focus != null) {
+            val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(focus.windowToken, 0)
+        }
     }
 }

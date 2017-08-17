@@ -1,9 +1,7 @@
 package org.chapper.chapper.presentation.utils
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
-import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -13,15 +11,13 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import org.chapper.chapper.R
 
 
-object DrawerFactory {
-    private var mDrawer: Drawer? = null
-
-    private fun initDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): Drawer {
-        val headerResult = getHeader(context, firstName, lastName, btMacAddress)
-
+class DrawerBuilderFactory(val context: Context,
+                           val focus: View?,
+                           val firstName: String,
+                           val lastName: String,
+                           val btMacAddress: String) {
+    fun getDrawerBuilder(): DrawerBuilder {
         return DrawerBuilder()
-                .withActivity(context as Activity)
-                .withAccountHeader(headerResult)
                 .withSelectedItem(-1)
                 .addDrawerItems(
                         PrimaryDrawerItem().withName(context.getString(R.string.search_for_devices)).withIcon(R.drawable.access_point_black).withSelectable(false),
@@ -32,7 +28,7 @@ object DrawerFactory {
                 )
                 .withOnDrawerListener(object : Drawer.OnDrawerListener {
                     override fun onDrawerOpened(drawerView: View) {
-                        Keyboard.hideKeyboard(context)
+                        Keyboard.hideKeyboard(context, focus)
                     }
 
                     override fun onDrawerClosed(drawerView: View) {
@@ -43,12 +39,10 @@ object DrawerFactory {
 
                     }
                 })
-                .build()
     }
 
-    private fun getHeader(context: Context, firstName: String, lastName: String, btMacAddress: String): AccountHeader {
+    fun getHeaderBuilder(): AccountHeaderBuilder {
         return AccountHeaderBuilder()
-                .withActivity(context as Activity)
                 .withHeaderBackground(R.color.colorSecondaryDark)
                 .withSelectionListEnabled(false)
                 .withProfileImagesClickable(false)
@@ -58,12 +52,5 @@ object DrawerFactory {
                                 .withEmail(btMacAddress)
                                 .withIcon(context.getDrawable(R.drawable.camera_white))
                 )
-                .build()
-    }
-
-    fun getDrawer(context: Context, firstName: String, lastName: String, btMacAddress: String): Drawer {
-        mDrawer = initDrawer(context, firstName, lastName, btMacAddress)
-
-        return mDrawer!!
     }
 }

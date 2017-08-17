@@ -1,5 +1,6 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
+
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
@@ -24,7 +25,7 @@ import org.chapper.chapper.presentation.broadcastreceivers.BluetoothBroadcastRec
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
-import org.chapper.chapper.presentation.utils.DrawerFactory
+import org.chapper.chapper.presentation.utils.DrawerBuilderFactory
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
@@ -32,7 +33,6 @@ import org.jetbrains.anko.toast
 import ru.arturvasilov.sqlite.core.BasicTableObserver
 import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
-
 
 class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListView {
     @InjectPresenter(type = PresenterType.GLOBAL)
@@ -43,8 +43,8 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
-
     private var mAdapter: ChatListAdapter by Delegates.notNull()
+
     private val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
 
     private var mDrawer: Drawer by Delegates.notNull()
@@ -83,14 +83,42 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
     }
 
     override fun initDrawer() {
-        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, BluetoothAdapter.getDefaultAdapter().address)
+        val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
+                this.currentFocus,
+                SettingsTable.SETTINGS.firstName,
+                SettingsTable.SETTINGS.lastName,
+                BluetoothAdapter.getDefaultAdapter().address)
+
+        val account = drawerBuilderFactory.getHeaderBuilder()
+                .withActivity(this)
+                .build()
+
+        mDrawer = drawerBuilderFactory.getDrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(account)
+                .build()
+
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             mChatListPresenter.handleDrawerItemClickListener(position)
         }
     }
 
     override fun initLoadingDrawer() {
-        mDrawer = DrawerFactory.getDrawer(this, SettingsTable.SETTINGS.firstName, SettingsTable.SETTINGS.lastName, getString(R.string.unknown_mac_address))
+        val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
+                this.currentFocus,
+                SettingsTable.SETTINGS.firstName,
+                SettingsTable.SETTINGS.lastName,
+                getString(R.string.unknown_mac_address))
+
+        val account = drawerBuilderFactory.getHeaderBuilder()
+                .withActivity(this)
+                .build()
+
+        mDrawer = drawerBuilderFactory.getDrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(account)
+                .build()
+
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             mChatListPresenter.handleDrawerItemClickListener(position)
         }
