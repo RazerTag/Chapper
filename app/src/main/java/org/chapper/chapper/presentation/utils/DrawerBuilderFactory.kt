@@ -10,12 +10,11 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import org.chapper.chapper.R
 
-
 class DrawerBuilderFactory(val context: Context,
                            val focus: View?,
-                           val firstName: String,
-                           val lastName: String,
-                           val btMacAddress: String) {
+                           private val firstName: String,
+                           private val lastName: String,
+                           private val btMacAddress: String) {
     fun getDrawerBuilder(): DrawerBuilder {
         return DrawerBuilder()
                 .withSelectedItem(-1)
@@ -43,7 +42,7 @@ class DrawerBuilderFactory(val context: Context,
 
     fun getHeaderBuilder(): AccountHeaderBuilder {
         return AccountHeaderBuilder()
-                .withHeaderBackground(R.color.colorSecondaryDark)
+                .withHeaderBackground(R.drawable.wallpaper)
                 .withSelectionListEnabled(false)
                 .withProfileImagesClickable(false)
                 .addProfiles(

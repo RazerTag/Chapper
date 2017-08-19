@@ -18,4 +18,6 @@
     <string name="what_is_your_name">What is your name?</string>
     <string name="firstname_lastname_visible">The firstname and lastname are only visible to friends.</string>
     <string name="username_visible">Username is the name of your Bluetooth.\nIt is visible to all nearby.</string>
+    <string name="refresh">Refresh</string>
+    <string name="refreshing">Refreshing…</string>
 </resources>

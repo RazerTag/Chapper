@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -24,12 +25,9 @@
         <activity
             android:name="org.chapper.chapper.presentation.screen.intro.IntroActivity"
             android:theme="@style/Theme.Intro"/>
-        <activity android:name="org.chapper.chapper.presentation.screen.chat.ChatActivity">
-        </activity>
-        <activity android:name="org.chapper.chapper.presentation.screen.settings.SettingsActivity">
-        </activity>
-        <activity android:name="org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity">
-        </activity>
+        <activity android:name="org.chapper.chapper.presentation.screen.chat.ChatActivity"/>
+        <activity android:name="org.chapper.chapper.presentation.screen.settings.SettingsActivity"/>
+        <activity android:name="org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity"/>
 
         <provider
             android:name=".data.sqlite.ChapperContentProvider"

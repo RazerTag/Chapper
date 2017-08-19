@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
-class ChatListAdapter(val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>() {
+class ChatListAdapter(private val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatHolder {
         val itemView = LayoutInflater.from(parent!!.context)
                 .inflate(R.layout.item_chat, parent, false)
@@ -18,7 +18,5 @@ class ChatListAdapter(val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>
         holder!!.bind(chat)
     }
 
-    override fun getItemCount(): Int {
-        return mChats.size
-    }
+    override fun getItemCount(): Int = mChats.size
 }

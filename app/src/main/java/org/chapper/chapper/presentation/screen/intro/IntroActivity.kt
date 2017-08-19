@@ -2,6 +2,7 @@ package org.chapper.chapper.presentation.screen.intro
 
 import agency.tango.materialintroscreen.MaterialIntroActivity
 import agency.tango.materialintroscreen.SlideFragmentBuilder
+import android.Manifest
 import android.os.Bundle
 import org.chapper.chapper.R
 
@@ -42,6 +43,15 @@ class IntroActivity : MaterialIntroActivity() {
                 .image(R.drawable.nature_people_white)
                 .title("Работает как рация.\nНо лучше.")
                 .description("Общайтесь и координируйтесь — заграницей, на природе или работе — везде, где нет интернета.")
+                .build())
+
+        addSlide(SlideFragmentBuilder()
+                .neededPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION))
+                .backgroundColor(R.color.colorPrimary)
+                .buttonsColor(R.color.colorAccent)
+                .image(R.drawable.bluetooth_connect_white)
+                .title("Начнём настройку.")
+                .description("Пожалуйста, разрешите приложению использовать ваш Bluetooth.")
                 .build())
 
         addSlide(RegisterSlide())

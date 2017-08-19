@@ -16,4 +16,6 @@
     <string name="what_is_your_name">Как вас зовут?</string>
     <string name="firstname_lastname_visible">Имя и фамилия видны только знакомым.</string>
     <string name="username_visible">Имя пользователя — это имя вашего Bluetooth.\nОно видно всем поблизости.</string>
+    <string name="refresh">Обновить</string>
+    <string name="refreshing">Обновление…</string>
 </resources>

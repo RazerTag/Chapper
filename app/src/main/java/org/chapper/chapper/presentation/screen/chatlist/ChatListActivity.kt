@@ -1,6 +1,5 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
-
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
@@ -10,20 +9,17 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import app.akexorcist.bluetotohspp.library.BluetoothState
-import app.akexorcist.bluetotohspp.library.DeviceList
 import butterknife.bindView
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.PresenterType
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
-import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.tables.ChatTable
 import org.chapper.chapper.data.tables.SettingsTable
 import org.chapper.chapper.presentation.broadcastreceivers.BluetoothBroadcastReceiver
+import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
-import org.chapper.chapper.presentation.screen.searchdeviceslist.SearchDevicesListActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
 import org.chapper.chapper.presentation.utils.DrawerBuilderFactory
 import org.jetbrains.anko.browse
@@ -34,7 +30,7 @@ import ru.arturvasilov.sqlite.core.BasicTableObserver
 import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
 
-class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListView {
+class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserver {
     @InjectPresenter(type = PresenterType.GLOBAL)
     lateinit var mChatListPresenter: ChatListPresenter
 
@@ -59,14 +55,11 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
         SQLite.get().registerObserver(SettingsTable.TABLE, this)
         SQLite.get().registerObserver(ChatTable.TABLE, this)
 
-        if (SettingsTable.SETTINGS.isFirstStart) {
+        if (SettingsTable.SETTINGS.isFirstStart)
             startActivity<IntroActivity>()
-        }
 
         mSearchDevicesFloatButton.setOnClickListener {
-            //startActivity<SearchDevicesListActivity>()
-            val intent = Intent(applicationContext, DeviceList::class.java)
-            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
+            startSearchDevicesListActivity()
         }
 
         mBtReceiver = BluetoothBroadcastReceiver(mChatListPresenter)
@@ -124,28 +117,12 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
         }
     }
 
-    override fun initSQLTables() {
-        if (SQLite.get().query(SettingsTable.TABLE).isEmpty()) {
-            val settings = Settings()
-            settings.isFirstStart = true
-            settings.firstName = ""
-            settings.lastName = ""
-            SQLite.get().insert(SettingsTable.TABLE, settings)
-        }
-    }
-
     override fun onBackPressed() {
         if (mDrawer.isDrawerOpen) {
             mDrawer.closeDrawer()
         } else {
             super.onBackPressed()
         }
-    }
-
-    override fun onResume() {
-        super.onStart()
-
-        mChatListPresenter.bluetoothStatusAction()
     }
 
     override fun onStop() {
@@ -174,7 +151,10 @@ class ChatListActivity : MvpAppCompatActivity(), BasicTableObserver, ChatListVie
     }
 
     override fun startSearchDevicesListActivity() {
-        startActivity<SearchDevicesListActivity>()
+        val intent = Intent(applicationContext, DeviceListActivity::class.java)
+        startActivity(intent)
+        /*val intent = Intent(applicationContext, DeviceList::class.java)
+        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)*/
     }
 
     override fun shareWithFriends() {

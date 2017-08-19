@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(mToolbar)
-        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.keyboard_backspace)
+        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
         mToolbar.setNavigationOnClickListener {
             finishActivity()
         }

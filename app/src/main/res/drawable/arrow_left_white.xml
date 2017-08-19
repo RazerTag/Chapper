@@ -1,4 +1,4 @@
-<!-- drawable/keyboard_backspace.xml -->
+<!-- drawable/arrow_left.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
@@ -6,5 +6,5 @@
         android:viewportWidth="24">
     <path
         android:fillColor="#fff"
-        android:pathData="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z"/>
+        android:pathData="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/>
 </vector>

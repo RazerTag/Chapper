@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
-
 object Keyboard {
     fun hideKeyboard(context: Context, focus: View?) {
         if (focus != null) {

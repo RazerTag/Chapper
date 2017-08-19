@@ -8,7 +8,6 @@ import org.chapper.chapper.domain.usecase.BluetoothUsecase
 @InjectViewState
 class ChatListPresenter : MvpPresenter<ChatListView>() {
     fun init() {
-        viewState.initSQLTables()
         viewState.initToolbar()
         viewState.initLoadingDrawer()
         viewState.showDialogs()

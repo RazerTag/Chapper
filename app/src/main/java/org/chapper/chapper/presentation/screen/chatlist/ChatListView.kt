@@ -6,7 +6,6 @@ interface ChatListView : MvpView {
     fun initToolbar()
     fun initDrawer()
     fun initLoadingDrawer()
-    fun initSQLTables()
     fun showDialogs()
 
     fun startSearchDevicesListActivity()
