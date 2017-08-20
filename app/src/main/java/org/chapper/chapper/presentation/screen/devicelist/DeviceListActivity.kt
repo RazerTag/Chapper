@@ -20,54 +20,41 @@ import android.view.Menu
 import android.view.MenuItem
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.PresenterType
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Device
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 class DeviceListActivity : AppCompatActivity(), DeviceListView {
-    @InjectPresenter(type = PresenterType.GLOBAL)
-    lateinit var mDeviceListPresenter: DeviceListPresenter
+    var mDeviceListPresenter: DeviceListPresenter by Delegates.notNull()
 
     private val REQUEST_CODE_COARSE_LOCATION_PERMISSIONS = 1
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
-    // Member fields
     private var mBtAdapter: BluetoothAdapter? = null
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mPairedDeviceArrayAdapter: DeviceListAdapter by Delegates.notNull()
-    private var mPairedDevices: Set<BluetoothDevice> by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
+        mDeviceListPresenter = DeviceListPresenter(this)
 
-        initToolbar()
-        initDevices()
+        mDeviceListPresenter.init()
 
-        // Set result CANCELED in case the user backs out
         setResult(Activity.RESULT_CANCELED)
 
-        // Register for broadcasts when a device is discovered
         var filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
         this.registerReceiver(mReceiver, filter)
 
-        // Register for broadcasts when a device is discovered
         filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         this.registerReceiver(mReceiver, filter)
 
-        // Register for broadcasts when discovery has finished
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         this.registerReceiver(mReceiver, filter)
 
-        // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter()
-
-        // Get a set of currently paired devices
-        mPairedDevices = mBtAdapter!!.bondedDevices
 
         doDiscovery()
     }
@@ -111,16 +98,13 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Make sure we're not doing discovery anymore
         if (mBtAdapter != null) {
             mBtAdapter!!.cancelDiscovery()
         }
 
         this.unregisterReceiver(mReceiver)
-        this.finish()
     }
 
-    // Start device discover with the BluetoothAdapter
     private fun doDiscovery() {
         val hasPermission = ActivityCompat.checkSelfPermission(this@DeviceListActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (hasPermission == PackageManager.PERMISSION_DENIED) {

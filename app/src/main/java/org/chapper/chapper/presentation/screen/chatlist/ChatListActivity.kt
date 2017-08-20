@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import butterknife.bindView
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -17,7 +19,7 @@ import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.data.tables.ChatTable
 import org.chapper.chapper.data.tables.SettingsTable
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceivers.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
@@ -34,7 +36,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
     @InjectPresenter(type = PresenterType.GLOBAL)
     lateinit var mChatListPresenter: ChatListPresenter
 
-    private var mBtReceiver: BluetoothBroadcastReceiver by Delegates.notNull()
+    private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
@@ -62,8 +64,8 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
             startSearchDevicesListActivity()
         }
 
-        mBtReceiver = BluetoothBroadcastReceiver(mChatListPresenter)
-        registerReceiver(mBtReceiver
+        mBtReceiverState = BluetoothStateBroadcastReceiver(mChatListPresenter)
+        registerReceiver(mBtReceiverState
                 , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
@@ -115,6 +117,21 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_refresh, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item!!.itemId
+
+        when (id) {
+            R.id.action_refresh -> {
+            } // TODO : Do something
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onBackPressed() {
         if (mDrawer.isDrawerOpen) {
             mDrawer.closeDrawer()
@@ -133,7 +150,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
         super.onDestroy()
 
         mRecyclerView.adapter = null
-        unregisterReceiver(mBtReceiver)
+        unregisterReceiver(mBtReceiverState)
     }
 
     override fun onTableChanged() {
@@ -151,8 +168,6 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
     override fun startSearchDevicesListActivity() {
         val intent = Intent(applicationContext, DeviceListActivity::class.java)
         startActivity(intent)
-        /*val intent = Intent(applicationContext, DeviceList::class.java)
-        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)*/
     }
 
     override fun shareWithFriends() {
