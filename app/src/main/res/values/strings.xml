@@ -20,4 +20,5 @@
     <string name="username_visible">Username is the name of your Bluetooth.\nIt is visible to all nearby.</string>
     <string name="refresh">Refresh</string>
     <string name="refreshing">Refreshing…</string>
+    <string name="no_one_near">No one near :(</string>
 </resources>

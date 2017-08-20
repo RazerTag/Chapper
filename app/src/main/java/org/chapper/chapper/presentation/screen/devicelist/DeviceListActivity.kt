@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
@@ -31,6 +32,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
     private val REQUEST_CODE_COARSE_LOCATION_PERMISSIONS = 1
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
+    private val mNoOneNearBlock: View by bindView(R.id.noOneNear)
 
     private var mBtAdapter: BluetoothAdapter? = null
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
@@ -164,6 +166,8 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
                     if (device.name == null || device.name == "") return
                     else deviceModel.bluetoothName = device.name
                     deviceModel.bluetoothAddress = device.address
+
+                    mNoOneNearBlock.visibility = View.INVISIBLE
                     addDevice(deviceModel)
                 }
 
@@ -172,6 +176,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
                 mToolbar.title = getString(R.string.search_for_devices)
             } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED == action) {
                 mToolbar.title = getString(R.string.refreshing)
+                mNoOneNearBlock.visibility = View.VISIBLE
             }
         }
     }

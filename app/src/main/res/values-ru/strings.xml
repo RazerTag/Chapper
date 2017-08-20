@@ -18,4 +18,5 @@
     <string name="username_visible">Имя пользователя — это имя вашего Bluetooth.\nОно видно всем поблизости.</string>
     <string name="refresh">Обновить</string>
     <string name="refreshing">Обновление…</string>
+    <string name="no_one_near">Рядом никого нет :(</string>
 </resources>
