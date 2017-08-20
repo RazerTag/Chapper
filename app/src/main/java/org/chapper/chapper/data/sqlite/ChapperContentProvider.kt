@@ -1,7 +1,7 @@
 package org.chapper.chapper.data.sqlite
 
-import org.chapper.chapper.data.tables.ChatTable
-import org.chapper.chapper.data.tables.SettingsTable
+import org.chapper.chapper.data.table.ChatTable
+import org.chapper.chapper.data.table.SettingsTable
 import ru.arturvasilov.sqlite.core.SQLiteConfig
 import ru.arturvasilov.sqlite.core.SQLiteContentProvider
 import ru.arturvasilov.sqlite.core.SQLiteSchema

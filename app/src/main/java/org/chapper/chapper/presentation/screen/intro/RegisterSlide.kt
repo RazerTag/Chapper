@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Settings
-import org.chapper.chapper.data.tables.SettingsTable
-import org.chapper.chapper.presentation.utils.BluetoothHelper
+import org.chapper.chapper.data.table.SettingsTable
+import org.chapper.chapper.presentation.util.BluetoothHelper
 import ru.arturvasilov.sqlite.core.SQLite
 
 class RegisterSlide : SlideFragment() {

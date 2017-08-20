@@ -1,4 +1,4 @@
-package org.chapper.chapper.presentation.broadcastreceivers
+package org.chapper.chapper.presentation.broadcastreceiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

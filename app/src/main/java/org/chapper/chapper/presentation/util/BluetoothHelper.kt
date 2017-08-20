@@ -1,11 +1,11 @@
-package org.chapper.chapper.presentation.utils
+package org.chapper.chapper.presentation.util
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.provider.Settings.Secure
 
 object BluetoothHelper {
-    val bluetoothAdapter get() = BluetoothAdapter.getDefaultAdapter()
+    val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
 
     val bluetoothName: String
         get() {

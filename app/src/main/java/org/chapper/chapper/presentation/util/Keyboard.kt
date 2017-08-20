@@ -1,4 +1,4 @@
-package org.chapper.chapper.presentation.utils
+package org.chapper.chapper.presentation.util
 
 import android.app.Activity
 import android.content.Context

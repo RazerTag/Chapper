@@ -1,6 +1,6 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothStateBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
 interface ChatListView {
     fun initToolbar()

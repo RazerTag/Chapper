@@ -7,7 +7,7 @@ import butterknife.bindView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
-import org.chapper.chapper.data.tables.ChatTable
+import org.chapper.chapper.data.table.ChatTable
 
 class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val mProfileImage: CircleImageView by bindView(R.id.profile_image)

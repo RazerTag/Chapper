@@ -3,7 +3,7 @@ package org.chapper.chapper.presentation
 import android.app.Application
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Settings
-import org.chapper.chapper.data.tables.SettingsTable
+import org.chapper.chapper.data.table.SettingsTable
 import ru.arturvasilov.sqlite.core.SQLite
 
 class ChapperApp : Application() {

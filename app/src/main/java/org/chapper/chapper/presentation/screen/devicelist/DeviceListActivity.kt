@@ -22,7 +22,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Device
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothDiscoveryBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -46,7 +46,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         mDeviceListPresenter.init()
 
-        setResult(Activity.RESULT_CANCELED)
+        setResult(Activity.RESULT_CANCELED, Intent())
 
         mDeviceListPresenter.registerReceiver()
 
@@ -161,7 +161,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
             mBtAdapter!!.cancelDiscovery()
 
         val intent = Intent()
-        intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address)
+        intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address.toString())
 
         setResult(Activity.RESULT_OK, intent)
         finish()

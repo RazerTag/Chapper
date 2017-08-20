@@ -2,7 +2,7 @@ package org.chapper.chapper.presentation.screen.devicelist
 
 import android.content.Intent
 import org.chapper.chapper.data.model.Device
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothDiscoveryBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 
 interface DeviceListView {
     fun initToolbar()

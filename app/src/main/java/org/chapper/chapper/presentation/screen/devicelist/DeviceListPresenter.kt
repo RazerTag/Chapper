@@ -1,7 +1,7 @@
 package org.chapper.chapper.presentation.screen.devicelist
 
 import android.content.Intent
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothDiscoveryBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 
 class DeviceListPresenter(private val viewState: DeviceListView) {
     fun init() {

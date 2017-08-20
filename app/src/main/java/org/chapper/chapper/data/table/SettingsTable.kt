@@ -1,4 +1,4 @@
-package org.chapper.chapper.data.tables
+package org.chapper.chapper.data.table
 
 import android.content.ContentValues
 import android.database.Cursor

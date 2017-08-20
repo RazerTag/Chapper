@@ -2,7 +2,7 @@ package org.chapper.chapper.presentation.screen.chatlist
 
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.domain.usecase.BluetoothUsecase
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothStateBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
 class ChatListPresenter(private val viewState: ChatListView) {
     fun init() {

@@ -1,5 +1,6 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
@@ -12,16 +13,18 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
-import org.chapper.chapper.data.tables.ChatTable
-import org.chapper.chapper.data.tables.SettingsTable
-import org.chapper.chapper.presentation.broadcastreceivers.BluetoothStateBroadcastReceiver
+import org.chapper.chapper.data.table.ChatTable
+import org.chapper.chapper.data.table.SettingsTable
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
-import org.chapper.chapper.presentation.utils.DrawerBuilderFactory
+import org.chapper.chapper.presentation.util.DrawerBuilderFactory
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
@@ -44,6 +47,8 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
 
     private var mDrawer: Drawer by Delegates.notNull()
 
+    private var mBt: BluetoothSPP by Delegates.notNull()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
@@ -63,6 +68,10 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
         }
 
         mChatListPresenter.registerReceiver()
+
+        mBt = BluetoothSPP(applicationContext)
+        mBt.setupService()
+        mBt.startService(BluetoothState.DEVICE_ANDROID)
     }
 
     override fun initToolbar() {
@@ -170,7 +179,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
 
     override fun startSearchDevicesListActivity() {
         val intent = Intent(applicationContext, DeviceListActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
     }
 
     override fun shareWithFriends() {
@@ -202,5 +211,15 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
     override fun btEnabled() {
         mToolbar.title = getString(R.string.app_name)
         initDrawer()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                BluetoothState.REQUEST_CONNECT_DEVICE -> {
+                    mBt.connect(data)
+                }
+            }
+        }
     }
 }
