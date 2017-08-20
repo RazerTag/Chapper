@@ -1,8 +1,8 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
-import com.arellomobile.mvp.MvpView
+import org.chapper.chapper.presentation.broadcastreceivers.BluetoothStateBroadcastReceiver
 
-interface ChatListView : MvpView {
+interface ChatListView {
     fun initToolbar()
     fun initDrawer()
     fun initLoadingDrawer()
@@ -17,4 +17,6 @@ interface ChatListView : MvpView {
     fun btNotAvailable()
     fun btNotEnabled()
     fun btEnabled()
+
+    fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener)
 }

@@ -6,15 +6,13 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import butterknife.bindView
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.PresenterType
 import com.mikepenz.materialdrawer.Drawer
 import org.chapper.chapper.R
 import org.chapper.chapper.data.tables.ChatTable
@@ -32,9 +30,8 @@ import ru.arturvasilov.sqlite.core.BasicTableObserver
 import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
 
-class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserver {
-    @InjectPresenter(type = PresenterType.GLOBAL)
-    lateinit var mChatListPresenter: ChatListPresenter
+class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
+    var mChatListPresenter: ChatListPresenter by Delegates.notNull()
 
     private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
@@ -50,6 +47,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
+        mChatListPresenter = ChatListPresenter(this)
 
         mChatListPresenter.init()
         mChatListPresenter.bluetoothStatusAction()
@@ -64,9 +62,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
             startSearchDevicesListActivity()
         }
 
-        mBtReceiverState = BluetoothStateBroadcastReceiver(mChatListPresenter)
-        registerReceiver(mBtReceiverState
-                , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+        mChatListPresenter.registerReceiver()
     }
 
     override fun initToolbar() {
@@ -115,6 +111,13 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
             mChatListPresenter.handleDrawerItemClickListener(position)
         }
+    }
+
+    override fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener) {
+        mBtReceiverState = BluetoothStateBroadcastReceiver(listener)
+
+        registerReceiver(mBtReceiverState
+                , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
