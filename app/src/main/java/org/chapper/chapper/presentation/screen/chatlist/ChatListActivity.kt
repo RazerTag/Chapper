@@ -79,8 +79,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
         val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
                 this.currentFocus,
                 SettingsTable.SETTINGS.firstName,
-                SettingsTable.SETTINGS.lastName,
-                BluetoothAdapter.getDefaultAdapter().address)
+                SettingsTable.SETTINGS.lastName)
 
         val account = drawerBuilderFactory.getHeaderBuilder()
                 .withActivity(this)
@@ -100,8 +99,7 @@ class ChatListActivity : MvpAppCompatActivity(), ChatListView, BasicTableObserve
         val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
                 this.currentFocus,
                 SettingsTable.SETTINGS.firstName,
-                SettingsTable.SETTINGS.lastName,
-                getString(R.string.unknown_mac_address))
+                SettingsTable.SETTINGS.lastName)
 
         val account = drawerBuilderFactory.getHeaderBuilder()
                 .withActivity(this)

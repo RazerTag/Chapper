@@ -13,8 +13,7 @@ import org.chapper.chapper.R
 class DrawerBuilderFactory(val context: Context,
                            val focus: View?,
                            private val firstName: String,
-                           private val lastName: String,
-                           private val btMacAddress: String) {
+                           private val lastName: String) {
     fun getDrawerBuilder(): DrawerBuilder {
         return DrawerBuilder()
                 .withSelectedItem(-1)
@@ -48,7 +47,7 @@ class DrawerBuilderFactory(val context: Context,
                 .addProfiles(
                         ProfileDrawerItem()
                                 .withName("$firstName $lastName")
-                                .withEmail(btMacAddress)
+                                .withEmail(BluetoothHelper.getBluetoothAddress(context))
                                 .withIcon(context.getDrawable(R.drawable.camera_white))
                 )
     }
