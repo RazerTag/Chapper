@@ -46,28 +46,46 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 
+    // Kotlin & Anko
     compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre7', version: "$kotlinVersion"
     compile "org.jetbrains.anko:anko:$ankoVersion"
 
+    // SQLite
     compile "ru.arturvasilov:sqlite:$sqliteVersion"
 
-    compile("com.mikepenz:materialdrawer:$materialDrawerVersion") {
+    // View libraries
+    compile("com.mikepenz:materialdrawer:${materialDrawerVersion}@aar") {
         transitive = true
     }
     compile "agency.tango.android:material-intro-screen:$materialIntroScreenVersion"
     compile "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
+    // KottenKnife
     compile "com.jakewharton:kotterknife:$kottenknifeVersion"
 
+    // BluetoothSPP
     compile "com.akexorcist:bluetoothspp:$bluetoothsppVersion"
 
+    // Gson
     compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 
+    // Glide
     compile "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
+    // Dagger
     compile "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
+    // RXJava
     compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+
+    // DBFlow
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflowVersion}"
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-rx:${dbflowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
 }
