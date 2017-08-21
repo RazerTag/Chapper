@@ -19,6 +19,7 @@ import com.raizlabs.android.dbflow.config.DatabaseConfig
 import com.raizlabs.android.dbflow.config.FlowConfig
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.runtime.DirectModelNotifier
+import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Settings
@@ -49,8 +50,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     private var mDrawer: Drawer by Delegates.notNull()
 
-    private var mModelListenerSettings: DirectModelNotifier.ModelChangedListener<Settings> by Delegates.notNull()
-    private var mModelListenerChat: DirectModelNotifier.ModelChangedListener<Chat> by Delegates.notNull()
+    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +60,15 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mPresenter.init()
         mPresenter.bluetoothStatusAction()
 
-        mModelListenerSettings = mPresenter.getModelListenerSettings()
-        mModelListenerChat = mPresenter.getModelListenerChat()
+        mFlowObserver = FlowContentObserver()
 
-        DirectModelNotifier.get().registerForModelChanges(Settings::class.java, mModelListenerSettings)
-        DirectModelNotifier.get().registerForModelChanges(Chat::class.java, mModelListenerChat)
+        mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
+
+        mFlowObserver.addModelChangeListener { table, action, primaryKeyValues ->
+            initDrawer()
+            showDialogs()
+        }
 
         if (SettingsRepository.isFirstStart())
             startActivity<IntroActivity>()
@@ -149,8 +153,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     override fun onStop() {
         super.onStop()
 
-        DirectModelNotifier.get().unregisterForModelChanges(Settings::class.java, mModelListenerSettings)
-        DirectModelNotifier.get().unregisterForModelChanges(Chat::class.java, mModelListenerChat)
+        mFlowObserver.unregisterForContentChanges(applicationContext)
     }
 
     override fun onDestroy() {
