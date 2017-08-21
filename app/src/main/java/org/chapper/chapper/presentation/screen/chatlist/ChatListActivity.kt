@@ -15,9 +15,15 @@ import android.view.MenuItem
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
+import com.raizlabs.android.dbflow.config.DatabaseConfig
+import com.raizlabs.android.dbflow.config.FlowConfig
+import com.raizlabs.android.dbflow.config.FlowManager
+import com.raizlabs.android.dbflow.runtime.DirectModelNotifier
 import org.chapper.chapper.R
-import org.chapper.chapper.data.table.ChatTable
-import org.chapper.chapper.data.table.SettingsTable
+import org.chapper.chapper.data.model.Chat
+import org.chapper.chapper.data.model.Settings
+import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
@@ -27,12 +33,10 @@ import org.jetbrains.anko.browse
 import org.jetbrains.anko.share
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import ru.arturvasilov.sqlite.core.BasicTableObserver
-import ru.arturvasilov.sqlite.core.SQLite
 import kotlin.properties.Delegates
 
-class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
-    var mChatListPresenter: ChatListPresenter by Delegates.notNull()
+class ChatListActivity : AppCompatActivity(), ChatListView {
+    var mPresenter: ChatListPresenter by Delegates.notNull()
 
     private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
@@ -45,27 +49,33 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
 
     private var mDrawer: Drawer by Delegates.notNull()
 
+    private var mModelListenerSettings: DirectModelNotifier.ModelChangedListener<Settings> by Delegates.notNull()
+    private var mModelListenerChat: DirectModelNotifier.ModelChangedListener<Chat> by Delegates.notNull()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
-        mChatListPresenter = ChatListPresenter(this)
+        mPresenter = ChatListPresenter(this)
 
-        mChatListPresenter.init()
-        mChatListPresenter.bluetoothStatusAction()
+        mPresenter.init()
+        mPresenter.bluetoothStatusAction()
 
-        SQLite.get().registerObserver(SettingsTable.TABLE, this)
-        SQLite.get().registerObserver(ChatTable.TABLE, this)
+        mModelListenerSettings = mPresenter.getModelListenerSettings()
+        mModelListenerChat = mPresenter.getModelListenerChat()
 
-        if (SettingsTable.SETTINGS.isFirstStart)
+        DirectModelNotifier.get().registerForModelChanges(Settings::class.java, mModelListenerSettings)
+        DirectModelNotifier.get().registerForModelChanges(Chat::class.java, mModelListenerChat)
+
+        if (SettingsRepository.isFirstStart())
             startActivity<IntroActivity>()
 
         mSearchDevicesFloatButton.setOnClickListener {
             startSearchDevicesListActivity()
         }
 
-        mChatListPresenter.registerBluetoothStateReceiver()
-        mChatListPresenter.onDataReceivedListener()
-        mChatListPresenter.bluetoothConnectionListener()
+        mPresenter.registerBluetoothStateReceiver()
+        mPresenter.onDataReceivedListener()
+        mPresenter.bluetoothConnectionListener()
     }
 
     override fun initToolbar() {
@@ -79,8 +89,8 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
     override fun initDrawer() {
         val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
                 this.currentFocus,
-                SettingsTable.SETTINGS.firstName,
-                SettingsTable.SETTINGS.lastName)
+                SettingsRepository.getFirstName(),
+                SettingsRepository.getLastName())
 
         val account = drawerBuilderFactory.getHeaderBuilder()
                 .withActivity(this)
@@ -92,8 +102,18 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
                 .build()
 
         mDrawer.setOnDrawerItemClickListener { _, position, _ ->
-            mChatListPresenter.handleDrawerItemClickListener(position)
+            mPresenter.handleDrawerItemClickListener(position)
         }
+    }
+
+    override fun initFlowManager() {
+        FlowManager.init(FlowConfig.Builder(applicationContext)
+                .addDatabaseConfig(DatabaseConfig.Builder(Settings::class.java)
+                        .modelNotifier(DirectModelNotifier.get())
+                        .build())
+                .addDatabaseConfig(DatabaseConfig.Builder(Chat::class.java)
+                        .modelNotifier(DirectModelNotifier.get())
+                        .build()).build())
     }
 
     override fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener) {
@@ -129,7 +149,8 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
     override fun onStop() {
         super.onStop()
 
-        SQLite.get().unregisterObserver(this)
+        DirectModelNotifier.get().unregisterForModelChanges(Settings::class.java, mModelListenerSettings)
+        DirectModelNotifier.get().unregisterForModelChanges(Chat::class.java, mModelListenerChat)
     }
 
     override fun onDestroy() {
@@ -139,15 +160,10 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
         unregisterReceiver(mBtReceiverState)
     }
 
-    override fun onTableChanged() {
-        initDrawer()
-        showDialogs()
-    }
-
     override fun showDialogs() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatListAdapter(ChatTable.chats)
+        mAdapter = ChatListAdapter(ChatRepository.getChats())
         mRecyclerView.adapter = mAdapter
     }
 
@@ -198,6 +214,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        mChatListPresenter.activityResult(requestCode, resultCode, data)
+        mPresenter.activityResult(requestCode, resultCode, data)
     }
 }

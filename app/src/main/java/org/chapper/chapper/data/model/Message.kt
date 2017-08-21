@@ -1,22 +1,31 @@
 package org.chapper.chapper.data.model
 
+import com.raizlabs.android.dbflow.annotation.Column
+import com.raizlabs.android.dbflow.annotation.PrimaryKey
+import com.raizlabs.android.dbflow.annotation.Table
+import com.raizlabs.android.dbflow.annotation.Unique
+import com.raizlabs.android.dbflow.structure.BaseModel
 import org.chapper.chapper.data.MessageStatus
-import java.text.SimpleDateFormat
+import org.chapper.chapper.data.database.AppDatabase
 import java.util.*
 
-class Message {
-    var status = MessageStatus.INCOMING_UNREAD
-    var text = ""
-    var date = Date()
+@Table(database = AppDatabase::class)
+data class Message(
+        @PrimaryKey(autoincrement = true)
+        @Unique
+        var id: Int = 0,
 
-    val timeString: String
-        get() = SimpleDateFormat("HH:mm").format(date)
+        @Column
+        var chatId: String = "",
 
-    val isNew: Boolean
-        get() = status == MessageStatus.INCOMING_UNREAD
+        @Column
+        var status: MessageStatus = MessageStatus.INCOMING_UNREAD,
 
-    val isMine: Boolean
-        get() = status == MessageStatus.OUTGOING_NOT_SENT
-                || status == MessageStatus.OUTGOING_UNREAD
-                || status == MessageStatus.OUTGOING_READ
+        @Column
+        var text: String = "",
+
+        @Column
+        var date: Date = Date()
+) : BaseModel() {
+    val timeString = ""
 }

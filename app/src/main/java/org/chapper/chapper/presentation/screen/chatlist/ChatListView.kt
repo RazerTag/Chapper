@@ -6,6 +6,7 @@ interface ChatListView {
     fun initToolbar()
     fun initDrawer()
     fun showDialogs()
+    fun initFlowManager()
 
     fun startSearchDevicesListActivity()
     fun startEnableBluetoothDiscoverableActivity()

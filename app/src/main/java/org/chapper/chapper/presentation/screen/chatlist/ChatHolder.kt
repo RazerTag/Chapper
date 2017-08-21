@@ -7,7 +7,7 @@ import butterknife.bindView
 import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
-import org.chapper.chapper.data.table.ChatTable
+import org.chapper.chapper.data.repository.ChatRepository
 
 class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val mProfileImage: CircleImageView by bindView(R.id.profile_image)
@@ -21,9 +21,9 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         mProfileImage.setImageResource(R.drawable.account_black)
 
         mChatName.text = "${chat.firstName} ${chat.lastName}"
-        mChatPreview.text = ChatTable.getChat(chat.id)!!.lastMessage.text
+        mChatPreview.text = ChatRepository.getChat(chat.id)!!.lastMessage.text
 
-        val newMessages = ChatTable.getChat(chat.id)!!.newMessagesNumber
+        val newMessages = ChatRepository.getChat(chat.id)!!.newMessagesNumber
         if (newMessages != 0) {
             mNewMessagesCounter.text = newMessages.toString()
             mNewMessagesCounter.visibility = View.VISIBLE
@@ -31,6 +31,6 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             mNewMessagesCounter.visibility = View.INVISIBLE
         }
 
-        mLastMessageTime.text = ChatTable.getChat(chat.id)!!.lastMessage.timeString
+        mLastMessageTime.text = ChatRepository.getChat(chat.id)!!.lastMessage.timeString
     }
 }

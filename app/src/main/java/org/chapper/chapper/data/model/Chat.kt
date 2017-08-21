@@ -1,28 +1,29 @@
 package org.chapper.chapper.data.model
 
-import java.util.*
+import com.raizlabs.android.dbflow.annotation.Column
+import com.raizlabs.android.dbflow.annotation.PrimaryKey
+import com.raizlabs.android.dbflow.annotation.Table
+import com.raizlabs.android.dbflow.annotation.Unique
+import org.chapper.chapper.data.database.AppDatabase
 
-class Chat {
-    var id: String = UUID.randomUUID().toString()
-    var firstName: String = ""
-    var lastName: String = ""
-    var username: String = ""
-    var bluetoothMacAddress: String = ""
-    var messages: List<Message> = arrayListOf()
+@Table(database = AppDatabase::class)
+data class Chat(
+        @PrimaryKey(autoincrement = true)
+        @Unique
+        var id: Int = 0,
 
-    val lastMessage: Message
-        get() {
-            if (messages.isNotEmpty())
-                return messages[messages.size - 1]
-            return Message()
-        }
+        @Column()
+        var firstName: String = "",
 
-    val newMessagesNumber: Int
-        get() {
-            var newCount = 0
-            (messages.size - 1 downTo 0)
-                    .takeWhile { messages[it].isNew }
-                    .forEach { newCount++ }
-            return newCount
-        }
+        @Column()
+        var lastName: String = "",
+
+        @Column()
+        var username: String = "",
+
+        @Column()
+        var bluetoothMacAddress: String = ""
+) {
+    val lastMessage = Message()
+    val newMessagesNumber = 0
 }

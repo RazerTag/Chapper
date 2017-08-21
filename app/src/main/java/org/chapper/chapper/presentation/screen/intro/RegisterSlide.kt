@@ -9,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import org.chapper.chapper.R
-import org.chapper.chapper.data.model.Settings
-import org.chapper.chapper.data.table.SettingsTable
+import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.util.BluetoothHelper
-import ru.arturvasilov.sqlite.core.SQLite
 
 class RegisterSlide : SlideFragment() {
     private var firstName: EditText? = null
@@ -55,14 +53,9 @@ class RegisterSlide : SlideFragment() {
     }
 
     private fun saveData() {
-        val settings = Settings()
-        settings.isFirstStart = false
-        settings.firstName = firstName!!.text.toString()
-        settings.lastName = lastName!!.text.toString()
+        SettingsRepository.setFirstStart(false)
+        SettingsRepository.setFirstName(firstName!!.text.toString())
+        SettingsRepository.setLastName(lastName!!.text.toString())
         BluetoothAdapter.getDefaultAdapter().name = username!!.text.toString()
-
-        SQLite.get().delete(SettingsTable.TABLE)
-        SQLite.get().insert(SettingsTable.TABLE, settings)
-        SQLite.get().notifyTableChanged(SettingsTable.TABLE)
     }
 }

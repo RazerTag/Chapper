@@ -28,11 +28,6 @@
         <activity android:name="org.chapper.chapper.presentation.screen.chat.ChatActivity"/>
         <activity android:name="org.chapper.chapper.presentation.screen.settings.SettingsActivity"/>
         <activity android:name="org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity"/>
-
-        <provider
-            android:name=".data.sqlite.ChapperContentProvider"
-            android:authorities="org.chapper.chapper"
-            android:exported="false"/>
     </application>
 
 </manifest>
