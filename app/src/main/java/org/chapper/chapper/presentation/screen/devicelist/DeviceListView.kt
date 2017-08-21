@@ -1,6 +1,5 @@
 package org.chapper.chapper.presentation.screen.devicelist
 
-import android.content.Intent
 import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 
@@ -12,7 +11,9 @@ interface DeviceListView {
 
     fun registerReceiver(listener: BluetoothDiscoveryBroadcastReceiver.ActionListener)
 
-    fun deviceFound(intent: Intent)
-    fun discoveryStarted(intent: Intent)
-    fun discoveryFinished(intent: Intent)
+    fun showNoOneNearBlock()
+    fun hideNoOneNearBlock()
+
+    fun setRefreshingTitle()
+    fun setSectionNameTitle()
 }

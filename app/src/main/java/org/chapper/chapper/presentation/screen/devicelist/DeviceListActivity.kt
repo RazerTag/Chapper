@@ -68,7 +68,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         mPairedDeviceArrayAdapter = DeviceListAdapter(arrayListOf(), object : DeviceListAdapter.OnItemClickListener {
             override fun onItemClick(device: Device) {
-                onDeviceSelect(device.bluetoothAddress)
+                onDeviceSelect(device.bluetoothName, device.bluetoothAddress)
             }
         })
         mRecyclerView.adapter = mPairedDeviceArrayAdapter
@@ -76,6 +76,22 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     override fun addDevice(device: Device) {
         mPairedDeviceArrayAdapter.addDevice(device)
+    }
+
+    override fun showNoOneNearBlock() {
+        mNoOneNearBlock.visibility = View.VISIBLE
+    }
+
+    override fun hideNoOneNearBlock() {
+        mNoOneNearBlock.visibility = View.INVISIBLE
+    }
+
+    override fun setRefreshingTitle() {
+        mToolbar.title = getString(R.string.refreshing)
+    }
+
+    override fun setSectionNameTitle() {
+        mToolbar.title = getString(R.string.search_for_devices)
     }
 
     override fun registerReceiver(listener: BluetoothDiscoveryBroadcastReceiver.ActionListener) {
@@ -89,29 +105,6 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         this.registerReceiver(mReceiver, filter)
-    }
-
-    override fun deviceFound(intent: Intent) {
-        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-
-        if (device.bondState != BluetoothDevice.BOND_BONDED) {
-            val deviceModel = Device()
-            if (device.name == null || device.name == "") return
-            else deviceModel.bluetoothName = device.name
-            deviceModel.bluetoothAddress = device.address
-
-            mNoOneNearBlock.visibility = View.INVISIBLE
-            addDevice(deviceModel)
-        }
-    }
-
-    override fun discoveryStarted(intent: Intent) {
-        mToolbar.title = getString(R.string.refreshing)
-        mNoOneNearBlock.visibility = View.VISIBLE
-    }
-
-    override fun discoveryFinished(intent: Intent) {
-        mToolbar.title = getString(R.string.search_for_devices)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -156,12 +149,13 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
         mBtAdapter!!.startDiscovery()
     }
 
-    fun onDeviceSelect(address: String) {
+    fun onDeviceSelect(name: String, address: String) {
         if (mBtAdapter!!.isDiscovering)
             mBtAdapter!!.cancelDiscovery()
 
         val intent = Intent()
-        intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address.toString())
+        intent.putExtra(BluetoothState.DEVICE_NAME, name)
+        intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address)
 
         setResult(Activity.RESULT_OK, intent)
         finish()

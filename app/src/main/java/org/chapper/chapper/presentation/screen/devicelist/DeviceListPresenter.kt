@@ -1,6 +1,8 @@
 package org.chapper.chapper.presentation.screen.devicelist
 
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
+import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 
 class DeviceListPresenter(private val viewState: DeviceListView) {
@@ -16,11 +18,11 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
             }
 
             override fun onDiscoveryStarted(intent: Intent) {
-                discoveryStarted(intent)
+                discoveryStarted()
             }
 
             override fun onDiscoveryFinished(intent: Intent) {
-                discoveryFinished(intent)
+                discoveryFinished()
             }
         }
 
@@ -28,14 +30,26 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
     }
 
     fun deviceFound(intent: Intent) {
-        viewState.deviceFound(intent)
+        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+
+        if (device.bondState != BluetoothDevice.BOND_BONDED) {
+            val deviceModel = Device()
+
+            if (device.name == null || device.name == "") return
+            else deviceModel.bluetoothName = device.name
+            deviceModel.bluetoothAddress = device.address
+
+            viewState.hideNoOneNearBlock()
+            viewState.addDevice(deviceModel)
+        }
     }
 
-    fun discoveryStarted(intent: Intent) {
-        viewState.discoveryStarted(intent)
+    fun discoveryStarted() {
+        viewState.setRefreshingTitle()
+        viewState.showNoOneNearBlock()
     }
 
-    fun discoveryFinished(intent: Intent) {
-        viewState.discoveryFinished(intent)
+    fun discoveryFinished() {
+        viewState.setSectionNameTitle()
     }
 }

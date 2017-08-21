@@ -5,10 +5,10 @@ import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcas
 interface ChatListView {
     fun initToolbar()
     fun initDrawer()
-    fun initLoadingDrawer()
     fun showDialogs()
 
     fun startSearchDevicesListActivity()
+    fun startEnableBluetoothDiscoverableActivity()
     fun shareWithFriends()
     fun startSettingsActivity()
     fun openFaqInBrowser()
@@ -17,6 +17,8 @@ interface ChatListView {
     fun btNotAvailable()
     fun btNotEnabled()
     fun btEnabled()
+
+    fun showToast(text: String)
 
     fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener)
 }

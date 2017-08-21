@@ -19,4 +19,6 @@
     <string name="refresh">Обновить</string>
     <string name="refreshing">Обновление…</string>
     <string name="no_one_near">Рядом никого нет :(</string>
+    <string name="enable_discoverable">Включить обнаружение</string>
+    <string name="chat_created">Чат создан</string>
 </resources>

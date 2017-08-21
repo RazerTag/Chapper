@@ -19,6 +19,7 @@ class DrawerBuilderFactory(val context: Context,
                 .withSelectedItem(-1)
                 .addDrawerItems(
                         PrimaryDrawerItem().withName(context.getString(R.string.search_for_devices)).withIcon(R.drawable.access_point_black).withSelectable(false),
+                        PrimaryDrawerItem().withName(context.getString(R.string.enable_discoverable)).withIcon(R.drawable.lightbulb_on).withSelectable(false),
                         DividerDrawerItem(),
                         PrimaryDrawerItem().withName(context.getString(R.string.invite_friends)).withIcon(R.drawable.account_plus).withSelectable(false),
                         PrimaryDrawerItem().withName(context.getString(R.string.settings)).withIcon(R.drawable.settings).withSelectable(false),

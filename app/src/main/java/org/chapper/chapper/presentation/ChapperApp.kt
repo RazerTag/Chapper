@@ -1,6 +1,7 @@
 package org.chapper.chapper.presentation
 
 import android.app.Application
+import app.akexorcist.bluetotohspp.library.BluetoothState
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.table.SettingsTable
@@ -14,6 +15,9 @@ class ChapperApp : Application() {
         initSQLTables()
 
         BluetoothFactory.initBluetoothSSP(applicationContext)
+        val mBt = BluetoothFactory.sBt
+        mBt.setupService()
+        mBt.startService(BluetoothState.DEVICE_ANDROID)
     }
 
     private fun initSQLTables() {

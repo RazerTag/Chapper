@@ -21,4 +21,6 @@
     <string name="refresh">Refresh</string>
     <string name="refreshing">Refreshing…</string>
     <string name="no_one_near">No one near :(</string>
+    <string name="enable_discoverable">Enable discoverable</string>
+    <string name="chat_created">Chat created</string>
 </resources>

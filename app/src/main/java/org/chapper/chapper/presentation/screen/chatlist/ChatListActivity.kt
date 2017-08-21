@@ -1,6 +1,5 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
@@ -13,7 +12,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
@@ -47,8 +45,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
 
     private var mDrawer: Drawer by Delegates.notNull()
 
-    private var mBt: BluetoothSPP by Delegates.notNull()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
@@ -67,11 +63,9 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
             startSearchDevicesListActivity()
         }
 
-        mChatListPresenter.registerReceiver()
-
-        mBt = BluetoothSPP(applicationContext)
-        mBt.setupService()
-        mBt.startService(BluetoothState.DEVICE_ANDROID)
+        mChatListPresenter.registerBluetoothStateReceiver()
+        mChatListPresenter.onDataReceivedListener()
+        mChatListPresenter.bluetoothConnectionListener()
     }
 
     override fun initToolbar() {
@@ -83,26 +77,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
     }
 
     override fun initDrawer() {
-        val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
-                this.currentFocus,
-                SettingsTable.SETTINGS.firstName,
-                SettingsTable.SETTINGS.lastName)
-
-        val account = drawerBuilderFactory.getHeaderBuilder()
-                .withActivity(this)
-                .build()
-
-        mDrawer = drawerBuilderFactory.getDrawerBuilder()
-                .withActivity(this)
-                .withAccountHeader(account)
-                .build()
-
-        mDrawer.setOnDrawerItemClickListener { _, position, _ ->
-            mChatListPresenter.handleDrawerItemClickListener(position)
-        }
-    }
-
-    override fun initLoadingDrawer() {
         val drawerBuilderFactory = DrawerBuilderFactory(applicationContext,
                 this.currentFocus,
                 SettingsTable.SETTINGS.firstName,
@@ -182,6 +156,12 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
         startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE)
     }
 
+    override fun startEnableBluetoothDiscoverableActivity() {
+        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+        startActivity(intent)
+    }
+
     override fun shareWithFriends() {
         share(getString(R.string.sharing_text))
     }
@@ -200,7 +180,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
 
     override fun btNotAvailable() {
         mToolbar.title = getString(R.string.bluetooth_not_available)
-        initLoadingDrawer()
+        initDrawer()
     }
 
     override fun btNotEnabled() {
@@ -213,13 +193,11 @@ class ChatListActivity : AppCompatActivity(), ChatListView, BasicTableObserver {
         initDrawer()
     }
 
+    override fun showToast(text: String) {
+        toast(text)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                BluetoothState.REQUEST_CONNECT_DEVICE -> {
-                    mBt.connect(data)
-                }
-            }
-        }
+        mChatListPresenter.activityResult(requestCode, resultCode, data)
     }
 }
