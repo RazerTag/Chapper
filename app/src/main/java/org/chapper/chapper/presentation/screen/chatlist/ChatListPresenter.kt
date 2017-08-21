@@ -6,14 +6,11 @@ import android.content.Intent
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
-import com.raizlabs.android.dbflow.runtime.DirectModelNotifier
-import com.raizlabs.android.dbflow.structure.BaseModel
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
-import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.util.BluetoothHelper
@@ -47,34 +44,6 @@ class ChatListPresenter(private val viewState: ChatListView) {
             }
         }
         return false
-    }
-
-    fun getModelListenerSettings(): DirectModelNotifier.ModelChangedListener<Settings> {
-        return object : DirectModelNotifier.ModelChangedListener<Settings> {
-            override fun onModelChanged(model: Settings, action: BaseModel.Action) {
-                viewState.initDrawer()
-                viewState.showDialogs()
-            }
-
-            override fun onTableChanged(tableChanged: Class<*>?, action: BaseModel.Action) {
-                viewState.initDrawer()
-                viewState.showDialogs()
-            }
-        }
-    }
-
-    fun getModelListenerChat(): DirectModelNotifier.ModelChangedListener<Chat> {
-        return object : DirectModelNotifier.ModelChangedListener<Chat> {
-            override fun onTableChanged(tableChanged: Class<*>?, action: BaseModel.Action) {
-                viewState.initDrawer()
-                viewState.showDialogs()
-            }
-
-            override fun onModelChanged(model: Chat, action: BaseModel.Action) {
-                viewState.initDrawer()
-                viewState.showDialogs()
-            }
-        }
     }
 
     fun activityResult(requestCode: Int, resultCode: Int, data: Intent) {
