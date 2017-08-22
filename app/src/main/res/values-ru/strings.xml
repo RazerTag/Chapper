@@ -21,4 +21,6 @@
     <string name="no_one_near">Рядом никого нет :(</string>
     <string name="enable_discoverable">Включить обнаружение</string>
     <string name="chat_created">Чат создан</string>
+    <string name="message">Сообщение</string>
+    <string name="send">Отправить</string>
 </resources>

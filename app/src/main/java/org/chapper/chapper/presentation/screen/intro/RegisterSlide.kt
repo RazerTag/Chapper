@@ -34,9 +34,9 @@ class RegisterSlide : SlideFragment() {
         return view
     }
 
-    override fun backgroundColor(): Int = R.color.colorSecondary
+    override fun backgroundColor(): Int = R.color.color_secondary
 
-    override fun buttonsColor(): Int = R.color.colorAccent
+    override fun buttonsColor(): Int = R.color.color_accent
 
     override fun canMoveFurther(): Boolean {
         return !firstName!!.text.isEmpty()

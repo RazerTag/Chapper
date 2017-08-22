@@ -36,6 +36,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     private var mReceiver: BroadcastReceiver by Delegates.notNull()
     private var mBtAdapter: BluetoothAdapter? = null
+
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mPairedDeviceArrayAdapter: DeviceListAdapter by Delegates.notNull()
 
