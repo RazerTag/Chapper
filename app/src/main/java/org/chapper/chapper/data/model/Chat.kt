@@ -12,16 +12,19 @@ data class Chat(
         @Unique
         var id: Int = 0,
 
-        @Column()
+        @Column
+        var photo: String = "",
+
+        @Column
         var firstName: String = "",
 
-        @Column()
+        @Column
         var lastName: String = "",
 
-        @Column()
+        @Column
         var username: String = "",
 
-        @Column()
+        @Column
         var bluetoothMacAddress: String = ""
 ) {
     val lastMessage = Message()

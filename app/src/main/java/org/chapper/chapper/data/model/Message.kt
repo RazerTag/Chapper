@@ -16,7 +16,7 @@ data class Message(
         var id: Int = 0,
 
         @Column
-        var chatId: String = "",
+        var chatId: Int = 0,
 
         @Column
         var status: MessageStatus = MessageStatus.INCOMING_UNREAD,
