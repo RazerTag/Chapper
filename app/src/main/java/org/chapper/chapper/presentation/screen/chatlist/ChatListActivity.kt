@@ -66,8 +66,10 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
 
         mFlowObserver.addModelChangeListener { table, action, primaryKeyValues ->
-            initDrawer()
-            showDialogs()
+            runOnUiThread {
+                initDrawer()
+                showDialogs()
+            }
         }
 
         if (SettingsRepository.isFirstStart())
