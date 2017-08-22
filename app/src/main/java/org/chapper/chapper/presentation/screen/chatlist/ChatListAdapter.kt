@@ -19,4 +19,10 @@ class ChatListAdapter(private val mChats: List<Chat>) : RecyclerView.Adapter<Cha
     }
 
     override fun getItemCount(): Int = mChats.size
+
+    fun changeDataSet(chats: List<Chat>) {
+        ArrayList(mChats).clear()
+        ArrayList(mChats).addAll(chats)
+        notifyDataSetChanged()
+    }
 }

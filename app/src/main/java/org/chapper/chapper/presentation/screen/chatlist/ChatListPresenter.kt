@@ -6,11 +6,13 @@ import android.content.Intent
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
+import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
+import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.util.BluetoothHelper
@@ -19,7 +21,7 @@ class ChatListPresenter(private val viewState: ChatListView) {
     fun init() {
         viewState.initToolbar()
         viewState.initDrawer()
-        viewState.showDialogs()
+        viewState.showChats()
     }
 
     fun handleDrawerItemClickListener(position: Int): Boolean {
@@ -54,7 +56,6 @@ class ChatListPresenter(private val viewState: ChatListView) {
                     val address = data.getStringExtra(BluetoothState.EXTRA_DEVICE_ADDRESS)
 
                     BluetoothHelper.connect(address)
-                    //addChat(name, address)
                 }
             }
         }
@@ -110,6 +111,19 @@ class ChatListPresenter(private val viewState: ChatListView) {
 
             } else if (data != null) {
 
+            }
+        }
+    }
+
+    fun databaseChangesListener(observer: FlowContentObserver) {
+        observer.addModelChangeListener { table, action, primaryKeyValues ->
+            when (table) {
+                Settings::class.java -> {
+                    viewState.initDrawer()
+                }
+                Chat::class.java -> {
+                    viewState.changeChatList()
+                }
             }
         }
     }

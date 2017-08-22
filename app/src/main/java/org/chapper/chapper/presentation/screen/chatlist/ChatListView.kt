@@ -5,8 +5,8 @@ import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcas
 interface ChatListView {
     fun initToolbar()
     fun initDrawer()
-    fun showDialogs()
-    fun initFlowManager()
+    fun showChats()
+    fun changeChatList()
 
     fun startSearchDevicesListActivity()
     fun startEnableBluetoothDiscoverableActivity()
