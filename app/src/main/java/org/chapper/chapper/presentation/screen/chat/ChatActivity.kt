@@ -21,6 +21,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
         setContentView(R.layout.activity_chat)
 
         mPresenter = ChatPresenter(this)
+
+        mPresenter.init()
     }
 
     override fun showMessages() {
@@ -28,7 +30,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = ChatAdapter(MessageRepository
                 .getMessages(intent
-                        .getIntExtra(Extra.CHAT_ID_EXTRA, 1)))
+                        .getStringExtra(Extra.CHAT_ID_EXTRA)))
         mRecyclerView.adapter = mAdapter
     }
 }

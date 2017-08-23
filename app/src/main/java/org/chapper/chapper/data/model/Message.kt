@@ -7,6 +7,7 @@ import com.raizlabs.android.dbflow.annotation.Unique
 import com.raizlabs.android.dbflow.structure.BaseModel
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.database.AppDatabase
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Table(database = AppDatabase::class)
@@ -16,7 +17,7 @@ data class Message(
         var id: Int = 0,
 
         @Column
-        var chatId: Int = 0,
+        var chatId: String = "",
 
         @Column
         var status: MessageStatus = MessageStatus.INCOMING_UNREAD,
@@ -27,5 +28,10 @@ data class Message(
         @Column
         var date: Date = Date()
 ) : BaseModel() {
-    val timeString = ""
+    val timeString: String = SimpleDateFormat("HH:mm").format(date)
+
+    fun isMine(): Boolean {
+        return !(status == MessageStatus.INCOMING_READ
+                || status == MessageStatus.INCOMING_UNREAD)
+    }
 }

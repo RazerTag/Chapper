@@ -16,12 +16,15 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import org.chapper.chapper.Extra
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
+import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
+import org.chapper.chapper.presentation.screen.chat.ChatActivity
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
@@ -59,6 +62,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
         mPresenter.databaseChangesListener(mFlowObserver)
 
         if (SettingsRepository.isFirstStart())
@@ -70,7 +74,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mPresenter.registerBluetoothStateReceiver()
         mPresenter.onDataReceivedListener()
-        mPresenter.bluetoothConnectionListener()
+        mPresenter.bluetoothConnectionListener(applicationContext)
     }
 
     override fun initToolbar() {
@@ -135,8 +139,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     override fun onStop() {
         super.onStop()
-
-        mFlowObserver.unregisterForContentChanges(applicationContext)
     }
 
     override fun onDestroy() {
@@ -144,12 +146,19 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mRecyclerView.adapter = null
         unregisterReceiver(mBtReceiverState)
+        mFlowObserver.unregisterForContentChanges(applicationContext)
     }
 
     override fun showChats() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatListAdapter(ChatRepository.getChats())
+        mAdapter = ChatListAdapter(ChatRepository.getChats(), object : ChatListAdapter.OnItemClickListener {
+            override fun onItemClick(chat: Chat) {
+                val intent = Intent(applicationContext, ChatActivity::class.java)
+                intent.putExtra(Extra.CHAT_ID_EXTRA, chat.id)
+                startActivity(intent)
+            }
+        })
         mRecyclerView.adapter = mAdapter
     }
 
@@ -206,6 +215,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        mPresenter.activityResult(requestCode, resultCode, data)
+        mPresenter.activityResult(applicationContext, requestCode, resultCode, data)
     }
 }

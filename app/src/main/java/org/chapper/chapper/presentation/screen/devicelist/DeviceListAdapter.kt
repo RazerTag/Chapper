@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Device
+import org.chapper.chapper.data.repository.ChatRepository
 
 class DeviceListAdapter(private val mDevices: ArrayList<Device>, private val listener: OnItemClickListener) : RecyclerView.Adapter<DeviceHolder>() {
     interface OnItemClickListener {
@@ -19,7 +20,8 @@ class DeviceListAdapter(private val mDevices: ArrayList<Device>, private val lis
 
     override fun onBindViewHolder(holder: DeviceHolder?, position: Int) {
         val device = mDevices[position]
-        holder!!.bind(device, listener)
+        if (!ChatRepository.contains(device.bluetoothAddress))
+            holder!!.bind(device, listener)
     }
 
     override fun getItemCount(): Int = mDevices.size

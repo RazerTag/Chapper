@@ -6,7 +6,11 @@ import android.view.ViewGroup
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
-class ChatListAdapter(private val mChats: List<Chat>) : RecyclerView.Adapter<ChatHolder>() {
+class ChatListAdapter(private val mChats: MutableList<Chat>, private val listener: ChatListAdapter.OnItemClickListener) : RecyclerView.Adapter<ChatHolder>() {
+    interface OnItemClickListener {
+        fun onItemClick(chat: Chat)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatHolder {
         val itemView = LayoutInflater.from(parent!!.context)
                 .inflate(R.layout.item_chat, parent, false)
@@ -15,14 +19,14 @@ class ChatListAdapter(private val mChats: List<Chat>) : RecyclerView.Adapter<Cha
 
     override fun onBindViewHolder(holder: ChatHolder?, position: Int) {
         val chat = mChats[position]
-        holder!!.bind(chat)
+        holder!!.bind(chat, listener)
     }
 
     override fun getItemCount(): Int = mChats.size
 
-    fun changeDataSet(chats: List<Chat>) {
-        ArrayList(mChats).clear()
-        ArrayList(mChats).addAll(chats)
+    fun changeDataSet(chats: MutableList<Chat>) {
+        mChats.clear()
+        mChats.addAll(chats)
         notifyDataSetChanged()
     }
 }

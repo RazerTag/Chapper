@@ -8,6 +8,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
+import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.Chat
@@ -48,7 +49,7 @@ class ChatListPresenter(private val viewState: ChatListView) {
         return false
     }
 
-    fun activityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    fun activityResult(context: Context, requestCode: Int, resultCode: Int, data: Intent) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 BluetoothState.REQUEST_CONNECT_DEVICE -> {
@@ -56,6 +57,7 @@ class ChatListPresenter(private val viewState: ChatListView) {
                     val address = data.getStringExtra(BluetoothState.EXTRA_DEVICE_ADDRESS)
 
                     BluetoothHelper.connect(address)
+                    addChat(context, name, address)
                 }
             }
         }
@@ -85,15 +87,33 @@ class ChatListPresenter(private val viewState: ChatListView) {
         val chat = Chat()
         chat.username = username
         chat.bluetoothMacAddress = address
-        chat.firstName = "Loading..."
-        val message = Message()
-        message.text = context.getString(R.string.chat_created)
+        chat.firstName = context.getString(R.string.loading)
         chat.insert()
+        Message(chatId = chat.id,
+                text = context.getString(R.string.chat_created),
+                status = MessageStatus.ACTION)
+                .insert()
+        Message(chatId = chat.id,
+                text = "Hello, man!",
+                status = MessageStatus.INCOMING_READ)
+                .insert()
+        Message(chatId = chat.id,
+                text = "How are you?",
+                status = MessageStatus.INCOMING_READ)
+                .insert()
+        Message(chatId = chat.id,
+                text = "Hey! It's working!",
+                status = MessageStatus.OUTGOING_READ)
+                .insert()
+        Message(chatId = chat.id,
+                text = "I am superman!",
+                status = MessageStatus.OUTGOING_UNREAD)
+                .insert()
     }
 
-    fun bluetoothConnectionListener() {
+    fun bluetoothConnectionListener(context: Context) {
         BluetoothFactory.sBt.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
-            override fun onDeviceConnected(name: String?, address: String?) {
+            override fun onDeviceConnected(name: String, address: String) {
             }
 
             override fun onDeviceDisconnected() {
@@ -122,6 +142,9 @@ class ChatListPresenter(private val viewState: ChatListView) {
                     viewState.initDrawer()
                 }
                 Chat::class.java -> {
+                    viewState.changeChatList()
+                }
+                Message::class.java -> {
                     viewState.changeChatList()
                 }
             }

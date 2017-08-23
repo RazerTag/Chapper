@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/message_background_incoming"
+        android:background="@drawable/message_background_with_angle_incoming"
         android:maxWidth="250dp"
         android:padding="10dp"
         android:text="Lol kek 12312312312321312323 12323 2312321323213 21312321 3213232313 231231232312332132"

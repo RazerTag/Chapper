@@ -27,7 +27,7 @@ import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 class DeviceListActivity : AppCompatActivity(), DeviceListView {
-    var mDeviceListPresenter: DeviceListPresenter by Delegates.notNull()
+    private var mPresenter: DeviceListPresenter by Delegates.notNull()
 
     private val REQUEST_CODE_COARSE_LOCATION_PERMISSIONS = 1
 
@@ -43,13 +43,13 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
-        mDeviceListPresenter = DeviceListPresenter(this)
+        mPresenter = DeviceListPresenter(this)
 
-        mDeviceListPresenter.init()
+        mPresenter.init()
 
         setResult(Activity.RESULT_CANCELED, Intent())
 
-        mDeviceListPresenter.registerReceiver()
+        mPresenter.registerReceiver()
 
         mBtAdapter = BluetoothAdapter.getDefaultAdapter()
 

@@ -16,14 +16,14 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val mNewMessagesCounter: TextView by bindView(R.id.new_messages_counter)
     val mLastMessageTime: TextView by bindView(R.id.last_message_time)
 
-    fun bind(chat: Chat) {
+    fun bind(chat: Chat, listener: ChatListAdapter.OnItemClickListener) {
         // TODO: Make images with Glide
         mProfileImage.setImageResource(R.drawable.account_black)
 
         mChatName.text = "${chat.firstName} ${chat.lastName}"
-        mChatPreview.text = ChatRepository.getChat(chat.id)!!.lastMessage.text
+        mChatPreview.text = ChatRepository.getChat(chat.id).getLastMessage().text
 
-        val newMessages = ChatRepository.getChat(chat.id)!!.newMessagesNumber
+        val newMessages = ChatRepository.getChat(chat.id).newMessagesNumber
         if (newMessages != 0) {
             mNewMessagesCounter.text = newMessages.toString()
             mNewMessagesCounter.visibility = View.VISIBLE
@@ -31,6 +31,10 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             mNewMessagesCounter.visibility = View.INVISIBLE
         }
 
-        mLastMessageTime.text = ChatRepository.getChat(chat.id)!!.lastMessage.timeString
+        mLastMessageTime.text = ChatRepository.getChat(chat.id).getLastMessage().timeString
+
+        itemView.setOnClickListener {
+            listener.onItemClick(chat)
+        }
     }
 }
