@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/message_background_incoming"
         android:padding="5dp"
         android:textColor="@color/color_black_text"/>

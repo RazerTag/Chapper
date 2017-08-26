@@ -31,7 +31,8 @@ data class Message(
     fun getTimeString(): String = SimpleDateFormat("HH:mm").format(date)
 
     fun isMine(): Boolean {
-        return !(status == MessageStatus.INCOMING_READ
-                || status == MessageStatus.INCOMING_UNREAD)
+        return (status == MessageStatus.OUTGOING_READ
+                || status == MessageStatus.OUTGOING_UNREAD
+                || status == MessageStatus.OUTGOING_NOT_SENT)
     }
 }
