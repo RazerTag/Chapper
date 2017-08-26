@@ -16,7 +16,8 @@ import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import org.chapper.chapper.presentation.util.BluetoothHelper
 
-class ChatListPresenter(private val viewState: ChatListView) {
+class
+ChatListPresenter(private val viewState: ChatListView) {
     fun init() {
         viewState.initToolbar()
         viewState.initDrawer()

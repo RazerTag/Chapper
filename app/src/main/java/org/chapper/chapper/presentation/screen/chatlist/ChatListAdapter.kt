@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
-class ChatListAdapter(private val mChats: MutableList<Chat>, private val listener: ChatListAdapter.OnItemClickListener) : RecyclerView.Adapter<ChatHolder>() {
+class ChatListAdapter(
+        private val mChats: MutableList<Chat>,
+        private val listener: ChatListAdapter.OnItemClickListener
+) : RecyclerView.Adapter<ChatHolder>() {
     interface OnItemClickListener {
         fun onItemClick(chat: Chat)
     }

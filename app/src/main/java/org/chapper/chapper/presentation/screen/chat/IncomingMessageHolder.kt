@@ -13,6 +13,6 @@ class IncomingMessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun bind(message: Message) {
         mMessageText.text = message.text
-        mMessageTime.text = message.timeString
+        mMessageTime.text = message.getTimeString()
     }
 }

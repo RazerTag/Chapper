@@ -28,7 +28,7 @@ data class Message(
         @Column
         var date: Date = Date()
 ) : BaseModel() {
-    val timeString: String = SimpleDateFormat("HH:mm").format(date)
+    fun getTimeString(): String = SimpleDateFormat("HH:mm").format(date)
 
     fun isMine(): Boolean {
         return !(status == MessageStatus.INCOMING_READ

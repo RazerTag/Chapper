@@ -17,12 +17,16 @@ class OutgoingMessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun bind(message: Message) {
         mMessageText.text = message.text
-        mMessageTime.text = message.timeString
-        if (message.status == MessageStatus.OUTGOING_READ)
-            mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check_all)
-        else if (message.status == MessageStatus.OUTGOING_UNREAD)
-            mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check)
-        else
-            mMessageStatus.image = itemView.resources.getDrawable(R.drawable.clock)
+        mMessageTime.text = message.getTimeString()
+        when (message.status) {
+            MessageStatus.OUTGOING_READ ->
+                mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check_all)
+
+            MessageStatus.OUTGOING_UNREAD ->
+                mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check)
+
+            else ->
+                mMessageStatus.image = itemView.resources.getDrawable(R.drawable.clock)
+        }
     }
 }

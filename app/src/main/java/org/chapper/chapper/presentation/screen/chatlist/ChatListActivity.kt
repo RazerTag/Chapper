@@ -137,7 +137,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     override fun showChats() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatListAdapter(ChatRepository.getChats(), object : ChatListAdapter.OnItemClickListener {
+        mAdapter = ChatListAdapter(ChatRepository.getChatsSorted(), object : ChatListAdapter.OnItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
                 intent.putExtra(Extra.CHAT_ID_EXTRA, chat.id)
@@ -149,7 +149,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     override fun changeChatList() {
         runOnUiThread {
-            mAdapter.changeDataSet(ChatRepository.getChats())
+            mAdapter.changeDataSet(ChatRepository.getChatsSorted())
         }
     }
 
