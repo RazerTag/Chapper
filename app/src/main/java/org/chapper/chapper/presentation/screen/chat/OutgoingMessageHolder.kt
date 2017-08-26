@@ -20,7 +20,9 @@ class OutgoingMessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         mMessageTime.text = message.timeString
         if (message.status == MessageStatus.OUTGOING_READ)
             mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check_all)
-        else
+        else if (message.status == MessageStatus.OUTGOING_UNREAD)
             mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check)
+        else
+            mMessageStatus.image = itemView.resources.getDrawable(R.drawable.clock)
     }
 }

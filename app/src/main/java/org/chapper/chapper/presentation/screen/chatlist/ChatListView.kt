@@ -1,7 +1,5 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
-import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
-
 interface ChatListView {
     fun initToolbar()
     fun initDrawer()
@@ -20,6 +18,4 @@ interface ChatListView {
     fun btEnabled()
 
     fun showToast(text: String)
-
-    fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener)
 }

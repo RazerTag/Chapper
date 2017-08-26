@@ -2,7 +2,6 @@ package org.chapper.chapper.presentation.screen.chatlist
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
@@ -16,14 +15,14 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
-import org.chapper.chapper.Extra
 import org.chapper.chapper.R
+import org.chapper.chapper.data.Extra
+import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.SettingsRepository
-import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import org.chapper.chapper.presentation.screen.chat.ChatActivity
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
@@ -48,8 +47,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     private var mFlowObserver: FlowContentObserver by Delegates.notNull()
 
-    private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
@@ -59,10 +56,10 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mPresenter.bluetoothStatusAction()
 
         mFlowObserver = FlowContentObserver()
-
         mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, AppAction::class.java)
         mPresenter.databaseChangesListener(mFlowObserver)
 
         if (SettingsRepository.isFirstStart())
@@ -71,10 +68,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mSearchDevicesFloatButton.setOnClickListener {
             startSearchDevicesListActivity()
         }
-
-        mPresenter.registerBluetoothStateReceiver()
-        mPresenter.onDataReceivedListener()
-        mPresenter.bluetoothConnectionListener(applicationContext)
     }
 
     override fun initToolbar() {
@@ -105,13 +98,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                 mPresenter.handleDrawerItemClickListener(position)
             }
         }
-    }
-
-    override fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener) {
-        mBtReceiverState = BluetoothStateBroadcastReceiver(listener)
-
-        registerReceiver(mBtReceiverState
-                , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -145,7 +131,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         super.onDestroy()
 
         mRecyclerView.adapter = null
-        unregisterReceiver(mBtReceiverState)
         mFlowObserver.unregisterForContentChanges(applicationContext)
     }
 

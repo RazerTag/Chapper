@@ -10,6 +10,12 @@ object ChatRepository {
     fun getChat(chatId: String): Chat =
             (select from Chat::class where (Chat_Table.id eq chatId)).querySingle() ?: Chat()
 
+    fun getChat(name: String, address: String): Chat =
+            (select from Chat::class
+                    where (Chat_Table.username eq name)
+                    and (Chat_Table.bluetoothMacAddress eq address))
+                    .querySingle() ?: Chat()
+
     fun contains(address: String): Boolean =
             (select from Chat::class where (Chat_Table.bluetoothMacAddress eq address))
                     .list.size != 0

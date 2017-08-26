@@ -9,7 +9,7 @@ import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.model.Message
 import kotlin.properties.Delegates
 
-class ChatAdapter(private val mMessages: List<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ACTION = 1
     private val INCOMING_TYPE = 2
     private val INCOMING_FIRST_TYPE = 3
@@ -102,5 +102,11 @@ class ChatAdapter(private val mMessages: List<Message>) : RecyclerView.Adapter<R
                 else OUTGOING_FIRST_TYPE
             }
         }
+    }
+
+    fun changeDataSet(messages: MutableList<Message>) {
+        mMessages.clear()
+        mMessages.addAll(messages)
+        notifyDataSetChanged()
     }
 }
