@@ -12,9 +12,9 @@ import java.util.*
 
 @Table(database = AppDatabase::class)
 data class Message(
-        @PrimaryKey(autoincrement = true)
+        @PrimaryKey
         @Unique
-        var id: Int = 0,
+        var id: String = UUID.randomUUID().toString(),
 
         @Column
         var chatId: String = "",
