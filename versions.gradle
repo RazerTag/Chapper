@@ -12,4 +12,5 @@ ext {
     bluetoothsppVersion = '1.0.0'
     daggerVersion = '2.11'
     dbflowVersion = '4.0.5'
+    imagePickerVersion = '1.2.0'
 }

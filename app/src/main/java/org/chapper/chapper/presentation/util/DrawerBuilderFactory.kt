@@ -1,6 +1,7 @@
 package org.chapper.chapper.presentation.util
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -9,6 +10,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import org.chapper.chapper.R
+import org.chapper.chapper.data.repository.SettingsRepository
 
 class DrawerBuilderFactory(val context: Context,
                            val focus: View?,
@@ -41,15 +43,22 @@ class DrawerBuilderFactory(val context: Context,
     }
 
     fun getHeaderBuilder(): AccountHeaderBuilder {
+        val profile = ProfileDrawerItem()
+                .withName("$firstName $lastName")
+                .withEmail(BluetoothHelper.getBluetoothAddress(context))
+
+        val image: Bitmap? = SettingsRepository.getProfilePhoto(context)
+        if (image == null)
+            profile.withIcon(context.getDrawable(R.drawable.account_white))
+        else
+            profile.withIcon(image)
+
         return AccountHeaderBuilder()
                 .withHeaderBackground(R.drawable.wallpaper)
                 .withSelectionListEnabled(false)
                 .withProfileImagesClickable(false)
                 .addProfiles(
-                        ProfileDrawerItem()
-                                .withName("$firstName $lastName")
-                                .withEmail(BluetoothHelper.getBluetoothAddress(context))
-                                .withIcon(context.getDrawable(R.drawable.camera_white))
+                        profile
                 )
     }
 }

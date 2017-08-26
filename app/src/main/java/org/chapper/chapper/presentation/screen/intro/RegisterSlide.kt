@@ -20,9 +20,9 @@ class RegisterSlide : SlideFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_register_slide, container, false)
 
-        firstName = view.findViewById<EditText>(R.id.first_name)
-        lastName = view.findViewById<EditText>(R.id.last_name)
-        username = view.findViewById<EditText>(R.id.username)
+        firstName = view.findViewById(R.id.first_name)
+        lastName = view.findViewById(R.id.last_name)
+        username = view.findViewById(R.id.username)
 
         if (BluetoothHelper.bluetoothAdapter != null) {
             username!!.setText(BluetoothHelper.bluetoothName)
@@ -53,7 +53,6 @@ class RegisterSlide : SlideFragment() {
     }
 
     private fun saveData() {
-        SettingsRepository.setFirstStart(false)
         SettingsRepository.setFirstName(firstName!!.text.toString())
         SettingsRepository.setLastName(lastName!!.text.toString())
         BluetoothAdapter.getDefaultAdapter().name = username!!.text.toString()

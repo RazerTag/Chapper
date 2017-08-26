@@ -55,6 +55,8 @@ class IntroActivity : MaterialIntroActivity() {
                 .build())
 
         addSlide(RegisterSlide())
+
+        addSlide(ImagePickSlide())
     }
 
     override fun onBackPressed() {
