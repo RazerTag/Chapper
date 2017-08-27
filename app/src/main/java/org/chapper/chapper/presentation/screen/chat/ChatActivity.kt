@@ -64,7 +64,9 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     override fun changeMessageList() {
         runOnUiThread {
-            mAdapter.changeDataSet(MessageRepository.getMessages(chatId))
+            val messages = MessageRepository.getMessages(chatId)
+            mAdapter.changeDataSet(messages)
+            mRecyclerView.smoothScrollToPosition(messages.size - 1)
         }
     }
 }
