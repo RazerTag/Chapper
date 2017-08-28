@@ -23,7 +23,7 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         mChatName.text = ChatRepository.getName(chat)
         mChatPreview.text = ChatRepository.getChat(chat.id).getLastMessage().text
 
-        val newMessages = ChatRepository.getChat(chat.id).newMessagesNumber
+        val newMessages = ChatRepository.getChat(chat.id).getNewMessagesNumber()
         if (newMessages != 0) {
             mNewMessagesCounter.text = newMessages.toString()
             mNewMessagesCounter.visibility = View.VISIBLE

@@ -4,10 +4,7 @@ import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.annotation.Unique
-import com.raizlabs.android.dbflow.kotlinextensions.eq
-import com.raizlabs.android.dbflow.kotlinextensions.from
-import com.raizlabs.android.dbflow.kotlinextensions.select
-import com.raizlabs.android.dbflow.kotlinextensions.where
+import com.raizlabs.android.dbflow.kotlinextensions.*
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.database.AppDatabase
 import org.chapper.chapper.data.repository.MessageRepository
@@ -35,7 +32,7 @@ data class Chat(
         var bluetoothMacAddress: String = ""
 ) {
     fun getLastMessage(): Message = MessageRepository.getMessages(id).lastOrNull() ?: Message()
-    val newMessagesNumber: Int = (select from Message::class where
-            (Message_Table.status eq MessageStatus.INCOMING_UNREAD))
-            .count().toInt()
+    fun getNewMessagesNumber(): Int = (select from Message::class
+            where (Message_Table.status eq MessageStatus.INCOMING_UNREAD))
+            .list.size
 }

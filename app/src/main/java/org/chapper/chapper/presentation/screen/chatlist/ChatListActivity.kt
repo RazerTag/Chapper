@@ -123,10 +123,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
 

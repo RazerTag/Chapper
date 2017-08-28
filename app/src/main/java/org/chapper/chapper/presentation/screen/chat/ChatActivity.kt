@@ -13,6 +13,7 @@ import butterknife.bindView
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Extra
+import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -24,7 +25,8 @@ import kotlin.properties.Delegates
 class ChatActivity : AppCompatActivity(), ChatView {
     private var mPresenter: ChatPresenter by Delegates.notNull()
 
-    private var chatId: String by Delegates.notNull()
+    private var mChatId: String by Delegates.notNull()
+    private var mChat: Chat by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mChatName: TextView by bindView(R.id.chatName)
@@ -52,19 +54,25 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.databaseChangesListener(mFlowObserver)
 
         mSendButton.setOnClickListener {
-            mPresenter.sendMessage(chatId, mMessageEditText.text.toString())
+            mPresenter.sendMessage(mChatId, mMessageEditText.text.toString())
             mMessageEditText.setText("")
         }
+
+        mPresenter.readMessages(mChatId)
+        mPresenter.sendMessagesReadCode()
     }
 
     override fun initChat() {
-        chatId = intent.getStringExtra(Extra.CHAT_ID_EXTRA)
+        mChatId = intent.getStringExtra(Extra.CHAT_ID_EXTRA)
+        mChat = ChatRepository.getChat(mChatId)
+
+        if (BluetoothFactory.sBt.connectedDeviceAddress != mChat.bluetoothMacAddress)
+            BluetoothFactory.sBt.connect(mChat.bluetoothMacAddress)
     }
 
     override fun initToolbar() {
         setSupportActionBar(mToolbar)
-        val chat = ChatRepository.getChat(chatId)
-        mChatName.text = ChatRepository.getName(chat)
+        mChatName.text = ChatRepository.getName(mChat)
         mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
         mToolbar.setNavigationOnClickListener {
             finish()
@@ -84,9 +92,16 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     override fun changeMessageList() {
         runOnUiThread {
-            val messages = MessageRepository.getMessages(chatId)
+            val messages = MessageRepository.getMessages(mChatId)
             mAdapter.changeDataSet(messages)
             mRecyclerView.smoothScrollToPosition(messages.size - 1)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mRecyclerView.adapter = null
+        mFlowObserver.unregisterForContentChanges(applicationContext)
     }
 }
