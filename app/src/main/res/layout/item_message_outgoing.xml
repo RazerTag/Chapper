@@ -31,8 +31,11 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/message_background_outgoing"
         android:maxWidth="250dp"
-        android:padding="10dp"
-        android:text="Lol kek 12312312312321312323 12323 2312321323213 21312321 3213232313 231231232312332132"
+        android:paddingBottom="5dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingTop="5dp"
+        android:text="Да пошел ты."
         android:textColor="@color/md_white_1000"/>
 
 </LinearLayout>

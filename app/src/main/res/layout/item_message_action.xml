@@ -10,7 +10,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:background="@drawable/message_background_incoming"
-        android:padding="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="11dp"
+        android:paddingRight="11dp"
+        android:paddingTop="5dp"
         android:textColor="@color/color_black_text"/>
 
 </RelativeLayout>
