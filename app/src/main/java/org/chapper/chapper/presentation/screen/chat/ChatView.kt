@@ -5,5 +5,7 @@ interface ChatView {
     fun initToolbar()
     fun showMessages()
 
+    fun getChatId(): String
+
     fun changeMessageList()
 }

@@ -54,11 +54,11 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.databaseChangesListener(mFlowObserver)
 
         mSendButton.setOnClickListener {
-            mPresenter.sendMessage(mChatId, mMessageEditText.text.toString())
+            mPresenter.sendMessage(mMessageEditText.text.toString())
             mMessageEditText.setText("")
         }
 
-        mPresenter.readMessages(mChatId)
+        mPresenter.readMessages()
         mPresenter.sendMessagesReadCode()
     }
 
@@ -89,6 +89,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
                         .getStringExtra(Extra.CHAT_ID_EXTRA)))
         mRecyclerView.adapter = mAdapter
     }
+
+    override fun getChatId(): String = mChatId
 
     override fun changeMessageList() {
         runOnUiThread {

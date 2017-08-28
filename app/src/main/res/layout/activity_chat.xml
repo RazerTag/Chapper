@@ -39,7 +39,9 @@
             android:layout_weight="0"
             android:background="@drawable/shadow"
             android:elevation="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp">
 
             <EditText
                 android:id="@+id/messageEditText"
@@ -47,7 +49,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/message"/>
+                android:hint="@string/message"
+                android:maxHeight="150dp"/>
 
             <ImageButton
                 android:id="@+id/sendButton"

@@ -18,9 +18,9 @@ class ChatPresenter(private val viewState: ChatView) {
         viewState.showMessages()
     }
 
-    fun sendMessage(chatId: String, text: String) {
+    fun sendMessage(text: String) {
         if (text.isNotEmpty()) {
-            val message = Message(chatId = chatId,
+            val message = Message(chatId = viewState.getChatId(),
                     status = MessageStatus.OUTGOING_NOT_SENT,
                     text = text)
             Observable.just(text)
@@ -39,6 +39,7 @@ class ChatPresenter(private val viewState: ChatView) {
                 }
                 Message::class.java -> {
                     viewState.changeMessageList()
+                    readMessages()
                     sendMessagesReadCode()
                 }
                 AppAction::class.java -> {
@@ -48,9 +49,9 @@ class ChatPresenter(private val viewState: ChatView) {
         }
     }
 
-    fun readMessages(chatId: String) {
-        Observable.just(chatId)
-                .doOnNext { MessageRepository.readIncomingMessages(chatId) }
+    fun readMessages() {
+        Observable.just("")
+                .doOnNext { MessageRepository.readIncomingMessages(viewState.getChatId()) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }
