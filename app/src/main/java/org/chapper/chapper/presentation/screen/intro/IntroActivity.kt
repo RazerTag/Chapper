@@ -3,6 +3,7 @@ package org.chapper.chapper.presentation.screen.intro
 import agency.tango.materialintroscreen.MaterialIntroActivity
 import agency.tango.materialintroscreen.SlideFragmentBuilder
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import org.chapper.chapper.R
 
@@ -12,6 +13,8 @@ class IntroActivity : MaterialIntroActivity() {
         super.onCreate(savedInstanceState)
         enableLastSlideAlphaExitTransition(false)
         hideBackButton()
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         addSlide(SlideFragmentBuilder()
                 .backgroundColor(R.color.colorPrimary)
