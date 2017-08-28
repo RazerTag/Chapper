@@ -32,16 +32,14 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
     fun deviceFound(intent: Intent) {
         val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
 
-        if (device.bondState != BluetoothDevice.BOND_BONDED) {
-            val deviceModel = Device()
+        val deviceModel = Device()
 
-            if (device.name == null || device.name == "") return
-            else deviceModel.bluetoothName = device.name
-            deviceModel.bluetoothAddress = device.address
+        if (device.name == null || device.name == "") return
+        else deviceModel.bluetoothName = device.name
+        deviceModel.bluetoothAddress = device.address
 
-            viewState.hideNoOneNearBlock()
-            viewState.addDevice(deviceModel)
-        }
+        viewState.hideNoOneNearBlock()
+        viewState.addDevice(deviceModel)
     }
 
     fun discoveryStarted() {

@@ -11,6 +11,8 @@ import rx.schedulers.Schedulers
 
 class ChatPresenter(private val viewState: ChatView) {
     fun init() {
+        viewState.initChat()
+        viewState.initToolbar()
         viewState.showMessages()
     }
 

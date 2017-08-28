@@ -10,17 +10,17 @@ import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.repository.ChatRepository
 
 class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-    val mProfileImage: CircleImageView by bindView(R.id.profile_image)
-    val mChatName: TextView by bindView(R.id.chat_name)
-    val mChatPreview: TextView by bindView(R.id.chat_preview)
-    val mNewMessagesCounter: TextView by bindView(R.id.new_messages_counter)
-    val mLastMessageTime: TextView by bindView(R.id.last_message_time)
+    private val mProfileImage: CircleImageView by bindView(R.id.profile_image)
+    private val mChatName: TextView by bindView(R.id.chat_name)
+    private val mChatPreview: TextView by bindView(R.id.chat_preview)
+    private val mNewMessagesCounter: TextView by bindView(R.id.new_messages_counter)
+    private val mLastMessageTime: TextView by bindView(R.id.last_message_time)
 
     fun bind(chat: Chat, listener: ChatListAdapter.OnItemClickListener) {
         // TODO: Make images with Glide
         mProfileImage.setImageResource(R.drawable.account_grey)
 
-        mChatName.text = "${chat.firstName} ${chat.lastName}"
+        mChatName.text = ChatRepository.getName(chat)
         mChatPreview.text = ChatRepository.getChat(chat.id).getLastMessage().text
 
         val newMessages = ChatRepository.getChat(chat.id).newMessagesNumber

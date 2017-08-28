@@ -27,4 +27,12 @@ object ChatRepository {
     fun contains(address: String): Boolean =
             (select from Chat::class where (Chat_Table.bluetoothMacAddress eq address))
                     .list.size != 0
+
+    fun getName(chat: Chat): String {
+        return if (chat.firstName.isEmpty() || chat.lastName.isEmpty()) {
+            chat.username
+        } else {
+            "${chat.firstName} ${chat.lastName}"
+        }
+    }
 }

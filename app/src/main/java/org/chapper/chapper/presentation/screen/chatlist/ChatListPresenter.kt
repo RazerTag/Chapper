@@ -52,11 +52,8 @@ ChatListPresenter(private val viewState: ChatListView) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 BluetoothState.REQUEST_CONNECT_DEVICE -> {
-                    val name = data.getStringExtra(BluetoothState.DEVICE_NAME)
                     val address = data.getStringExtra(BluetoothState.EXTRA_DEVICE_ADDRESS)
-
                     BluetoothHelper.connect(address)
-                    addChat(context, name, address)
                 }
             }
         }

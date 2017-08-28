@@ -32,7 +32,7 @@ class App : Application(), AppView {
         mBt.startService(BluetoothState.DEVICE_ANDROID)
 
         mPresenter.registerBluetoothStateReceiver()
-        mPresenter.bluetoothConnectionListener()
+        mPresenter.bluetoothConnectionListener(applicationContext)
         mPresenter.onDataReceivedListener()
     }
 

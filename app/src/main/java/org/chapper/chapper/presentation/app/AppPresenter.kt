@@ -1,9 +1,14 @@
 package org.chapper.chapper.presentation.app
 
+import android.content.Context
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import com.raizlabs.android.dbflow.kotlinextensions.insert
+import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
+import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.AppAction
+import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
@@ -29,16 +34,17 @@ class AppPresenter(private val viewState: AppView) {
             val address = BluetoothFactory.sBt.connectedDeviceAddress
             if (message != null) {
                 val id = ChatRepository.getChat(name, address).id
-                Message(chatId = id, text = message)
+                Message(chatId = id, text = message).insert()
             } else if (data != null) {
                 // TODO : Do it later
             }
         }
     }
 
-    fun bluetoothConnectionListener() {
+    fun bluetoothConnectionListener(context: Context) {
         BluetoothFactory.sBt.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String, address: String) {
+                addChat(context, name, address)
             }
 
             override fun onDeviceDisconnected() {
@@ -48,5 +54,17 @@ class AppPresenter(private val viewState: AppView) {
                 bluetoothStatusAction()
             }
         })
+    }
+
+    fun addChat(context: Context, username: String, address: String) {
+        val chat = Chat()
+        chat.username = username
+        chat.bluetoothMacAddress = address
+        chat.firstName = context.getString(R.string.loading)
+        chat.insert()
+        Message(chatId = chat.id,
+                text = context.getString(R.string.chat_created),
+                status = MessageStatus.ACTION)
+                .insert()
     }
 }
