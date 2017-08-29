@@ -42,6 +42,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+        window.setBackgroundDrawableResource(R.drawable.background)
         mPresenter = ChatPresenter(this)
 
         mPresenter.init()

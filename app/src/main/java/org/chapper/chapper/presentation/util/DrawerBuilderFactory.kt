@@ -10,6 +10,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import org.chapper.chapper.R
+import org.chapper.chapper.data.ResourceGetter
 import org.chapper.chapper.data.repository.SettingsRepository
 
 class DrawerBuilderFactory(val context: Context,
@@ -49,7 +50,7 @@ class DrawerBuilderFactory(val context: Context,
 
         val image: Bitmap? = SettingsRepository.getProfilePhoto(context)
         if (image == null)
-            profile.withIcon(context.getDrawable(R.drawable.account_white))
+            profile.withIcon(ResourceGetter.getDrawable(context, R.drawable.account_white))
         else
             profile.withIcon(image)
 

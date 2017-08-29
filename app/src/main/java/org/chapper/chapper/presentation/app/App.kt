@@ -3,7 +3,6 @@ package org.chapper.chapper.presentation.app
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.content.IntentFilter
-import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.kotlinextensions.from
 import com.raizlabs.android.dbflow.kotlinextensions.insert
@@ -27,9 +26,7 @@ class App : Application(), AppView {
         initSQLTables()
 
         BluetoothFactory.initBluetoothSSP(applicationContext)
-        val mBt = BluetoothFactory.sBt
-        mBt.setupService()
-        mBt.startService(BluetoothState.DEVICE_ANDROID)
+        mPresenter.bluetoothStatusAction()
 
         mPresenter.registerBluetoothStateReceiver()
         mPresenter.bluetoothConnectionListener(applicationContext)
