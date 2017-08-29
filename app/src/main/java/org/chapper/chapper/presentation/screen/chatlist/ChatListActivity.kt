@@ -160,6 +160,9 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     override fun showNoChats(chats: MutableList<Chat>) {
         if (chats.isEmpty())
             mNoChats.visibility = View.VISIBLE
+        else {
+            mNoChats.visibility = View.INVISIBLE
+        }
     }
 
     override fun startSearchDevicesListActivity() {

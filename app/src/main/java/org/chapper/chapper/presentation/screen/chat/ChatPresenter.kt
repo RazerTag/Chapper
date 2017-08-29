@@ -3,7 +3,6 @@ package org.chapper.chapper.presentation.screen.chat
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.Values
-import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -26,7 +25,7 @@ class ChatPresenter(private val viewState: ChatView) {
                     text = text)
             Observable.just(text)
                     .doOnNext { message.insert() }
-                    .doOnNext { BluetoothFactory.sBt.send(text, true) }
+                    .doOnNext { BluetoothUsecase.send(text) }
                     .observeOn(Schedulers.newThread())
                     .subscribe()
         }

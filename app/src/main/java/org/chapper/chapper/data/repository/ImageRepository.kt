@@ -2,12 +2,11 @@ package org.chapper.chapper.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import kotlin.properties.Delegates
+
 
 object ImageRepository {
     fun saveImage(context: Context, chatId: String, bitmap: Bitmap) {
@@ -42,5 +41,20 @@ object ImageRepository {
             }
         }
         return b
+    }
+
+    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val blob = ByteArrayOutputStream()
+        bitmap.compress(CompressFormat.PNG, 0 /* Ignored for PNGs */, blob)
+        return blob.toByteArray()
+    }
+
+    fun byteArrayToBitmap(byteArray: ByteArray): Bitmap? {
+        try {
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

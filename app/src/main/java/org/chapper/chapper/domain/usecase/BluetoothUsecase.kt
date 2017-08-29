@@ -45,4 +45,12 @@ object BluetoothUsecase {
             e.printStackTrace()
         }
     }
+
+    fun send(bytes: ByteArray) {
+        try {
+            BluetoothFactory.sBt.send(bytes, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
