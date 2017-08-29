@@ -196,6 +196,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        mPresenter.activityResult(applicationContext, requestCode, resultCode, data)
+        mPresenter.activityResult(requestCode, resultCode, data)
     }
 }

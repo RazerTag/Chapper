@@ -8,6 +8,7 @@ import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import rx.Observable
 import rx.schedulers.Schedulers
 
@@ -58,7 +59,7 @@ class ChatPresenter(private val viewState: ChatView) {
 
     fun sendMessagesReadCode() {
         Observable.just("")
-                .doOnNext { BluetoothFactory.sBt.send(Values.MESSAGES_READ, true) }
+                .doOnNext { BluetoothUsecase.send(Values.MESSAGES_READ) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }

@@ -13,13 +13,13 @@ import butterknife.bindView
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Extra
-import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import kotlin.properties.Delegates
 
 class ChatActivity : AppCompatActivity(), ChatView {
@@ -67,8 +67,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mChatId = intent.getStringExtra(Extra.CHAT_ID_EXTRA)
         mChat = ChatRepository.getChat(mChatId)
 
-        if (BluetoothFactory.sBt.connectedDeviceAddress != mChat.bluetoothMacAddress)
-            BluetoothFactory.sBt.connect(mChat.bluetoothMacAddress)
+        BluetoothUsecase.connect(mChat.bluetoothMacAddress)
     }
 
     override fun initToolbar() {

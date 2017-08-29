@@ -2,14 +2,12 @@ package org.chapper.chapper.presentation.app
 
 import android.content.Context
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
-import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.Values
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
-import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -20,19 +18,9 @@ import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcas
 
 class AppPresenter(private val viewState: AppView) {
     fun bluetoothStatusAction() {
-        val status = BluetoothUsecase().checkStatus()
         AppAction(type = ActionType.BLUETOOTH_ACTION).insert()
 
-        when (status) {
-            BluetoothStatus.ENABLED -> {
-                val mBt = BluetoothFactory.sBt
-                mBt.setupService()
-                mBt.startService(BluetoothState.DEVICE_ANDROID)
-                mBt.autoConnect("")
-            }
-            else -> { // Nothing
-            }
-        }
+        BluetoothUsecase.setupService()
     }
 
     fun registerBluetoothStateReceiver() {
@@ -58,7 +46,7 @@ class AppPresenter(private val viewState: AppView) {
 
                     else -> {
                         Message(chatId = id, text = message).insert()
-                        BluetoothFactory.sBt.send(Values.MESSAGE_RECEIVED, true)
+                        BluetoothUsecase.send(Values.MESSAGE_RECEIVED)
                     }
                 }
             } else if (data != null) {
