@@ -11,9 +11,10 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
-        versionName "1.0"
+        versionCode 6
+        versionName "0.1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled false
     }
     buildTypes {
         release {
@@ -36,6 +37,7 @@ repositories {
     mavenCentral()
     maven { url 'https://dl.bintray.com/underdark/android/' }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "http://drgames.fr/maven2/" }
 }
 
 apply from: '../versions.gradle'
@@ -45,9 +47,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 
     // Kotlin & Anko
@@ -69,10 +68,6 @@ dependencies {
 
     // Gson
     compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
-
-    // Glide
-    compile "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     // RXJava
     compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"

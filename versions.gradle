@@ -13,4 +13,6 @@ ext {
     daggerVersion = '2.11'
     dbflowVersion = '4.0.5'
     imagePickerVersion = '1.2.0'
+    bluetoothLibraryVersion = '2.0.4-SNAPSHOT'
+    multidexVersion = '1.0.1'
 }
