@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
@@ -42,6 +43,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mAdapter: ChatListAdapter by Delegates.notNull()
+    private val mNoChats: View by bindView(R.id.noChats)
 
     private val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
 
@@ -133,7 +135,8 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     override fun showChats() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mAdapter = ChatListAdapter(ChatRepository.getChatsSorted(), object : ChatListAdapter.OnItemClickListener {
+        val chats = ChatRepository.getChatsSorted()
+        mAdapter = ChatListAdapter(chats, object : ChatListAdapter.OnItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
                 intent.putExtra(Extra.CHAT_ID_EXTRA, chat.id)
@@ -141,12 +144,22 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
             }
         })
         mRecyclerView.adapter = mAdapter
+
+        showNoChats(chats)
     }
 
     override fun changeChatList() {
         runOnUiThread {
-            mAdapter.changeDataSet(ChatRepository.getChatsSorted())
+            val chats = ChatRepository.getChatsSorted()
+            mAdapter.changeDataSet(chats)
+
+            showNoChats(chats)
         }
+    }
+
+    override fun showNoChats(chats: MutableList<Chat>) {
+        if (chats.isEmpty())
+            mNoChats.visibility = View.VISIBLE
     }
 
     override fun startSearchDevicesListActivity() {

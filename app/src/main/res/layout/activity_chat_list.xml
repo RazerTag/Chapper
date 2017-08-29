@@ -47,6 +47,8 @@
             android:src="@drawable/access_point_white"
             app:backgroundTint="@color/colorPrimary"/>
 
+        <include layout="@layout/no_chats"/>
+
     </RelativeLayout>
 
 </LinearLayout>

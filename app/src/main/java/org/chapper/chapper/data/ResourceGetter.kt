@@ -12,4 +12,12 @@ object ResourceGetter {
             context.resources.getDrawable(id)
         }
     }
+
+    fun getColor(context: Context, id: Int): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.resources.getColor(id, context.theme)
+        } else {
+            context.resources.getColor(id)
+        }
+    }
 }

@@ -21,12 +21,37 @@ class DrawerBuilderFactory(val context: Context,
         return DrawerBuilder()
                 .withSelectedItem(-1)
                 .addDrawerItems(
-                        PrimaryDrawerItem().withName(context.getString(R.string.search_for_devices)).withIcon(R.drawable.access_point_black).withSelectable(false),
-                        PrimaryDrawerItem().withName(context.getString(R.string.enable_discoverable)).withIcon(R.drawable.lightbulb_on).withSelectable(false),
+                        PrimaryDrawerItem()
+                                .withName(context.getString(R.string.search_for_devices))
+                                .withIcon(R.drawable.access_point_black)
+                                .withSelectable(false)
+                                .withDescriptionTextColor(ResourceGetter.getColor(context, R.color.color_grey_text))
+                                .withIconColor(ResourceGetter.getColor(context, R.color.color_grey_text)),
+                        PrimaryDrawerItem()
+                                .withName(context.getString(R.string.enable_discoverable))
+                                .withIcon(R.drawable.lightbulb_on)
+                                .withSelectable(false)
+                                .withDescriptionTextColor(ResourceGetter.getColor(context, R.color.color_grey_text))
+                                .withIconColor(ResourceGetter.getColor(context, R.color.color_grey_text)),
                         DividerDrawerItem(),
-                        PrimaryDrawerItem().withName(context.getString(R.string.invite_friends)).withIcon(R.drawable.account_plus).withSelectable(false),
-                        PrimaryDrawerItem().withName(context.getString(R.string.settings)).withIcon(R.drawable.settings).withSelectable(false),
-                        PrimaryDrawerItem().withName(context.getString(R.string.faq)).withIcon(R.drawable.help_circle).withSelectable(false)
+                        PrimaryDrawerItem()
+                                .withName(context.getString(R.string.invite_friends))
+                                .withIcon(R.drawable.account_plus)
+                                .withSelectable(false)
+                                .withDescriptionTextColor(ResourceGetter.getColor(context, R.color.color_grey_text))
+                                .withIconColor(ResourceGetter.getColor(context, R.color.color_grey_text)),
+                        PrimaryDrawerItem()
+                                .withName(context.getString(R.string.settings))
+                                .withIcon(R.drawable.settings)
+                                .withSelectable(false)
+                                .withDescriptionTextColor(ResourceGetter.getColor(context, R.color.color_grey_text))
+                                .withIconColor(ResourceGetter.getColor(context, R.color.color_grey_text)),
+                        PrimaryDrawerItem()
+                                .withName(context.getString(R.string.faq))
+                                .withIcon(R.drawable.help_circle)
+                                .withSelectable(false)
+                                .withDescriptionTextColor(ResourceGetter.getColor(context, R.color.color_grey_text))
+                                .withIconColor(ResourceGetter.getColor(context, R.color.color_grey_text))
                 )
                 .withOnDrawerListener(object : Drawer.OnDrawerListener {
                     override fun onDrawerOpened(drawerView: View) {
@@ -50,7 +75,7 @@ class DrawerBuilderFactory(val context: Context,
 
         val image: Bitmap? = SettingsRepository.getProfilePhoto(context)
         if (image == null)
-            profile.withIcon(ResourceGetter.getDrawable(context, R.drawable.account_white))
+            profile.withIcon(ResourceGetter.getDrawable(context, R.drawable.account_circle_white))
         else
             profile.withIcon(image)
 

@@ -24,4 +24,5 @@
     <string name="message">Сообщение</string>
     <string name="send">Отправить</string>
     <string name="loading">Загрузка…</string>
+    <string name="it_empty">Здесь пусто.\nЧтобы добавить новые устройства, нажмите на зелёную кнопку внизу.</string>
 </resources>

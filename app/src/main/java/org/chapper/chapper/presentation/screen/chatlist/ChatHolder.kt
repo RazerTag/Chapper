@@ -18,7 +18,7 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(chat: Chat, listener: ChatListAdapter.OnItemClickListener) {
         // TODO: Make images with Glide
-        mProfileImage.setImageResource(R.drawable.account_grey)
+        mProfileImage.setImageResource(R.drawable.account_circle_grey)
 
         mChatName.text = ChatRepository.getName(chat)
         mChatPreview.text = ChatRepository.getChat(chat.id).getLastMessage().text

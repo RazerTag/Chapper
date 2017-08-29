@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_text_black">#000</color>
-    <color name="color_text_gray">#000</color>
 
     <color name="colorPrimary">#00aa5b</color>
     <color name="colorPrimaryLight">#55dd89</color>
@@ -18,4 +17,5 @@
 
     <color name="color_white_text">#fff</color>
     <color name="color_black_text">#000</color>
+    <color name="color_grey_text">#242424</color>
 </resources>
