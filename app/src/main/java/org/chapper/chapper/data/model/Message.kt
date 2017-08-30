@@ -35,4 +35,6 @@ data class Message(
                 || status == MessageStatus.OUTGOING_UNREAD
                 || status == MessageStatus.OUTGOING_NOT_SENT)
     }
+
+    fun isAction(): Boolean = status == MessageStatus.ACTION
 }

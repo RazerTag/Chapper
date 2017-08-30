@@ -20,7 +20,7 @@ class DeviceListAdapter(private val mDevices: ArrayList<Device>, private val lis
 
     override fun onBindViewHolder(holder: DeviceHolder?, position: Int) {
         val device = mDevices[position]
-        if (!ChatRepository.contains(device.bluetoothAddress))
+        if (!ChatRepository.contains(device.bluetoothAddress) && device !in mDevices)
             holder!!.bind(device, listener)
     }
 

@@ -1,8 +1,8 @@
 package org.chapper.chapper.presentation.screen.chat
 
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.MessageStatus
-import org.chapper.chapper.data.Values
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -58,7 +58,7 @@ class ChatPresenter(private val viewState: ChatView) {
 
     fun sendMessagesReadCode() {
         Observable.just("")
-                .doOnNext { BluetoothUsecase.send(Values.MESSAGES_READ) }
+                .doOnNext { BluetoothUsecase.send(Constants.MESSAGES_READ) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }

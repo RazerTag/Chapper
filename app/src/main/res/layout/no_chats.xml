@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/no_one_near"
-        android:src="@drawable/account_search"/>
+        android:src="@drawable/account_search_grey"/>
 
     <TextView
         android:id="@+id/noOneNearTextView"

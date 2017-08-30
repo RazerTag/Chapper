@@ -5,8 +5,8 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.MessageStatus
-import org.chapper.chapper.data.Values
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
@@ -40,13 +40,13 @@ class AppPresenter(private val viewState: AppView) {
             val id = ChatRepository.getChat(name, address).id
             if (message != null) {
                 when (message) {
-                    Values.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
+                    Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
 
-                    Values.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
+                    Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
 
                     else -> {
                         Message(chatId = id, text = message).insert()
-                        BluetoothUsecase.send(Values.MESSAGE_RECEIVED)
+                        BluetoothUsecase.send(Constants.MESSAGE_RECEIVED)
                     }
                 }
             } else if (data != null) {

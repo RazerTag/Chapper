@@ -79,26 +79,27 @@ class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Ad
 
     override fun getItemViewType(position: Int): Int {
         val message = mMessages[position]
+        val messageB = mMessages[position - 1]
         return when (message.status) {
             MessageStatus.ACTION -> ACTION
             MessageStatus.INCOMING_UNREAD -> {
-                if (!mMessages[position - 1].isMine()) INCOMING_TYPE
+                if (!messageB.isMine() && !messageB.isAction()) INCOMING_TYPE
                 else INCOMING_FIRST_TYPE
             }
             MessageStatus.INCOMING_READ -> {
-                if (!mMessages[position - 1].isMine()) INCOMING_TYPE
+                if (!messageB.isMine() && !messageB.isAction()) INCOMING_TYPE
                 else INCOMING_FIRST_TYPE
             }
             MessageStatus.OUTGOING_NOT_SENT -> {
-                if (mMessages[position - 1].isMine()) OUTGOING_TYPE
+                if (messageB.isMine() && !messageB.isAction()) OUTGOING_TYPE
                 else OUTGOING_FIRST_TYPE
             }
             MessageStatus.OUTGOING_UNREAD -> {
-                if (mMessages[position - 1].isMine()) OUTGOING_TYPE
+                if (messageB.isMine() && !messageB.isAction()) OUTGOING_TYPE
                 else OUTGOING_FIRST_TYPE
             }
             MessageStatus.OUTGOING_READ -> {
-                if (mMessages[position - 1].isMine()) OUTGOING_TYPE
+                if (messageB.isMine() && !messageB.isAction()) OUTGOING_TYPE
                 else OUTGOING_FIRST_TYPE
             }
         }
