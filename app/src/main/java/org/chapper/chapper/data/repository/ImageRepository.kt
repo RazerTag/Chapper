@@ -14,9 +14,7 @@ object ImageRepository {
         try {
             fos = context.openFileOutput(chatId, Context.MODE_PRIVATE)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             fos.close()

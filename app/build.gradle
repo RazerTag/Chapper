@@ -11,8 +11,8 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName "0.1.6"
+        versionCode 8
+        versionName "0.1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -40,7 +40,6 @@ repositories {
     mavenCentral()
     maven { url 'https://dl.bintray.com/underdark/android/' }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    maven { url "http://drgames.fr/maven2/" }
 }
 
 apply from: '../versions.gradle'

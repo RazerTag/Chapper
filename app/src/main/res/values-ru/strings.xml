@@ -25,4 +25,8 @@
     <string name="send">Отправить</string>
     <string name="loading">Загрузка…</string>
     <string name="it_empty">Здесь пусто.\nЧтобы добавить новые устройства, нажмите на зелёную кнопку внизу.</string>
+    <string name="connected">подключён</string>
+    <string name="nearby">поблизости</string>
+    <string name="offline">не в сети</string>
+    <string name="refreshing_small">обновление…</string>
 </resources>

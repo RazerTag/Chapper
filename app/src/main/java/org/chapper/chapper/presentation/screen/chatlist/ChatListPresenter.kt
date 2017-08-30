@@ -81,7 +81,7 @@ ChatListPresenter(private val viewState: ChatListView) {
     }
 
     fun databaseChangesListener(observer: FlowContentObserver) {
-        observer.addModelChangeListener { table, action, primaryKeyValues ->
+        observer.addModelChangeListener { table, _, _ ->
             when (table) {
                 Settings::class.java -> {
                     viewState.initDrawer()

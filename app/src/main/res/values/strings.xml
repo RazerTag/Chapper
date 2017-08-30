@@ -27,4 +27,8 @@
     <string name="send">Send</string>
     <string name="loading">Loading…</string>
     <string name="it_empty">It\'s empty</string>
+    <string name="connected">connected</string>
+    <string name="nearby">nearby</string>
+    <string name="offline">offline</string>
+    <string name="refreshing_small">refresing…</string>
 </resources>

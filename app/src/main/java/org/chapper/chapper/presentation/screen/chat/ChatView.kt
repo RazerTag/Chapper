@@ -8,4 +8,11 @@ interface ChatView {
     fun getChatId(): String
 
     fun changeMessageList()
+
+    fun startRefreshing()
+
+    fun statusConnected()
+    fun statusNearby()
+    fun statusOffline()
+    fun statusRefresing()
 }

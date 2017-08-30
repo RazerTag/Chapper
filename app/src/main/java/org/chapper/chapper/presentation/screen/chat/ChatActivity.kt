@@ -32,6 +32,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mChatName: TextView by bindView(R.id.chatName)
+    private val mChatStatus: TextView by bindView(R.id.chatStatus)
     private val mChatPhoto: CircleImageView by bindView(R.id.chatPhoto)
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
@@ -49,6 +50,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter = ChatPresenter(this)
 
         mPresenter.init()
+        mPresenter.setupStatus(mChat.bluetoothMacAddress)
+        mPresenter.bluetoothConnectionListener(mChat.bluetoothMacAddress)
 
         mFlowObserver = FlowContentObserver()
         mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
@@ -113,5 +116,27 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
         mRecyclerView.adapter = null
         mFlowObserver.unregisterForContentChanges(applicationContext)
+        mPresenter.unregisterReceiver(applicationContext)
+    }
+
+    override fun startRefreshing() {
+        mPresenter.startDiscovery(applicationContext, mChat.bluetoothMacAddress)
+
+    }
+
+    override fun statusConnected() {
+        mChatStatus.text = getString(R.string.connected)
+    }
+
+    override fun statusNearby() {
+        mChatStatus.text = getString(R.string.nearby)
+    }
+
+    override fun statusOffline() {
+        mChatStatus.text = getString(R.string.offline)
+    }
+
+    override fun statusRefresing() {
+        mChatStatus.text = getString(R.string.refreshing_small)
     }
 }
