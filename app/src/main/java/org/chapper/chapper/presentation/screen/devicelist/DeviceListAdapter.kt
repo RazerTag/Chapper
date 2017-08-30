@@ -20,15 +20,16 @@ class DeviceListAdapter(private val mDevices: ArrayList<Device>, private val lis
 
     override fun onBindViewHolder(holder: DeviceHolder?, position: Int) {
         val device = mDevices[position]
-        if (!ChatRepository.contains(device.bluetoothAddress) && device !in mDevices)
-            holder!!.bind(device, listener)
+        holder!!.bind(device, listener)
     }
 
     override fun getItemCount(): Int = mDevices.size
 
     fun addDevice(device: Device) {
-        mDevices.add(device)
-        notifyDataSetChanged()
+        if (!ChatRepository.contains(device.bluetoothAddress) && !mDevices.contains(device)) {
+            mDevices.add(device)
+            notifyDataSetChanged()
+        }
     }
 
     fun clear() {

@@ -79,7 +79,11 @@ class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Ad
 
     override fun getItemViewType(position: Int): Int {
         val message = mMessages[position]
-        val messageB = mMessages[position - 1]
+
+        var messageB = Message()
+        if (position > 0)
+            messageB = mMessages[position - 1]
+
         return when (message.status) {
             MessageStatus.ACTION -> ACTION
             MessageStatus.INCOMING_UNREAD -> {

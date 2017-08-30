@@ -14,7 +14,7 @@ android {
         versionCode 6
         versionName "0.1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled false
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -24,6 +24,9 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+    }
+    dexOptions {
+        preDexLibraries = false
     }
 }
 
