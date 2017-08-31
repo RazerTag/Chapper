@@ -40,7 +40,8 @@ data class Chat(
 ) {
     fun getLastMessage(): Message = MessageRepository.getMessages(id).lastOrNull() ?: Message()
     fun getNewMessagesNumber(): Int = (select from Message::class
-            where (Message_Table.status eq MessageStatus.INCOMING_UNREAD))
+            where (Message_Table.chatId eq id)
+            and (Message_Table.status eq MessageStatus.INCOMING_UNREAD))
             .list.size
 
     fun getLastConnectionString(context: Context): String {

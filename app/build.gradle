@@ -11,8 +11,8 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 9
-        versionName "0.1.9"
+        versionCode 11
+        versionName "0.1.11"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

@@ -63,6 +63,10 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, AppAction::class.java)
         mPresenter.databaseChangesListener(mFlowObserver)
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         if (SettingsRepository.isFirstStart())
             startActivity<IntroActivity>()
