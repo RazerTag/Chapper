@@ -67,7 +67,7 @@ class ImagePickSlide : SlideFragment() {
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    Constants.WRITE_EXTERNAL_STORAGE)
+                    Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS)
             return
         }
 
@@ -76,7 +76,7 @@ class ImagePickSlide : SlideFragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
-            Constants.WRITE_EXTERNAL_STORAGE -> {
+            Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS -> {
                 if ((grantResults.isNotEmpty()) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     pick()
                 }

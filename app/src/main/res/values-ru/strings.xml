@@ -29,4 +29,6 @@
     <string name="nearby">поблизости</string>
     <string name="offline">не в сети</string>
     <string name="refreshing_small">обновление…</string>
+    <string name="last_connection_in">последнее подключение в</string>
+    <string name="last_connection">последнее подключение</string>
 </resources>

@@ -11,28 +11,40 @@ import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
-import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
+import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
-import org.chapper.chapper.domain.usecase.BluetoothUsecase
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import rx.Observable
 import rx.schedulers.Schedulers
+import java.util.*
+import kotlin.properties.Delegates
 
 class ChatPresenter(private val viewState: ChatView) {
+    var mChatId: String by Delegates.notNull()
+    var mChat: Chat by Delegates.notNull()
+
     private var mReceiver: BroadcastReceiver? = null
     var isConnected = false
     var isNearby = false
 
-    fun init() {
-        viewState.initChat()
+    fun init(intent: Intent) {
+        initChat(intent)
         viewState.initToolbar()
         viewState.showMessages()
     }
 
+    private fun initChat(intent: Intent) {
+        mChatId = intent.getStringExtra(Constants.CHAT_ID_EXTRA)
+        mChat = ChatRepository.getChat(mChatId)
+
+        BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+    }
+
     fun setupStatus(currentAddress: String) {
-        if (BluetoothFactory.sBt.connectedDeviceAddress == currentAddress) {
+        if (BluetoothFactory.sBtSPP.connectedDeviceAddress == currentAddress) {
             statusConnected()
         } else {
             viewState.startRefreshing()
@@ -57,20 +69,14 @@ class ChatPresenter(private val viewState: ChatView) {
         isNearby = false
     }
 
-    private fun statusRefreshing() {
-        viewState.statusRefresing()
-        isConnected = false
-        isNearby = false
-    }
-
     fun sendMessage(text: String) {
         if (text.isNotEmpty()) {
-            val message = Message(chatId = viewState.getChatId(),
+            val message = Message(chatId = mChatId,
                     status = MessageStatus.OUTGOING_NOT_SENT,
                     text = text)
             Observable.just(text)
                     .doOnNext { message.insert() }
-                    .doOnNext { BluetoothUsecase.send(text) }
+                    .doOnNext { BluetoothUseCase.send(text) }
                     .observeOn(Schedulers.newThread())
                     .subscribe()
         }
@@ -87,38 +93,37 @@ class ChatPresenter(private val viewState: ChatView) {
                     readMessages()
                     sendMessagesReadCode()
                 }
-                AppAction::class.java -> {
-                    //bluetoothStatusAction()
-                }
             }
         }
     }
 
     fun readMessages() {
         Observable.just("")
-                .doOnNext { MessageRepository.readIncomingMessages(viewState.getChatId()) }
+                .doOnNext { MessageRepository.readIncomingMessages(mChatId) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }
 
     fun sendMessagesReadCode() {
         Observable.just("")
-                .doOnNext { BluetoothUsecase.send(Constants.MESSAGES_READ) }
+                .doOnNext { BluetoothUseCase.send(Constants.MESSAGES_READ) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }
 
-    fun bluetoothConnectionListener(currentAddress: String) {
-        BluetoothFactory.sBt.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
+    fun bluetoothConnectionListener() {
+        BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String, address: String) {
-                if (address == currentAddress) {
+                if (address == mChat.bluetoothMacAddress) {
                     statusConnected()
+                    mChat.lastConnection = Date()
                 }
             }
 
             override fun onDeviceDisconnected() {
                 if (isConnected) {
                     statusOffline()
+                    mChat.lastConnection = Date()
                     viewState.startRefreshing()
                 }
             }
@@ -129,19 +134,19 @@ class ChatPresenter(private val viewState: ChatView) {
         })
     }
 
-    fun startDiscovery(context: Context, currentAddress: String) {
+    fun startDiscovery(context: Context) {
         val listener = object : BluetoothDiscoveryBroadcastReceiver.ActionListener {
             override fun onDeviceFound(intent: Intent) {
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                if (device.address == currentAddress && !isConnected) {
+                if (device.address == mChat.bluetoothMacAddress && !isConnected) {
                     statusNearby()
-                    BluetoothFactory.sBt.cancelDiscovery()
+                    BluetoothFactory.sBtSPP.cancelDiscovery()
                 }
             }
 
             override fun onDiscoveryStarted(intent: Intent) {
                 if (!isConnected) {
-                    statusRefreshing()
+                    statusOffline()
                 }
             }
 
@@ -163,7 +168,7 @@ class ChatPresenter(private val viewState: ChatView) {
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         context.registerReceiver(mReceiver, filter)
 
-        BluetoothFactory.sBt.startDiscovery()
+        BluetoothFactory.sBtSPP.startDiscovery()
     }
 
     fun unregisterReceiver(context: Context) {

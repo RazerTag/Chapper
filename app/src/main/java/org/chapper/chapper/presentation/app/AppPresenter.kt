@@ -13,14 +13,14 @@ import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
-import org.chapper.chapper.domain.usecase.BluetoothUsecase
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
 class AppPresenter(private val viewState: AppView) {
     fun bluetoothStatusAction() {
         AppAction(type = ActionType.BLUETOOTH_ACTION).insert()
 
-        BluetoothUsecase.setupService()
+        BluetoothUseCase.setupService()
     }
 
     fun registerBluetoothStateReceiver() {
@@ -34,9 +34,9 @@ class AppPresenter(private val viewState: AppView) {
     }
 
     fun onDataReceivedListener() {
-        BluetoothFactory.sBt.setOnDataReceivedListener { data, message ->
-            val name = BluetoothFactory.sBt.connectedDeviceName
-            val address = BluetoothFactory.sBt.connectedDeviceAddress
+        BluetoothFactory.sBtSPP.setOnDataReceivedListener { data, message ->
+            val name = BluetoothFactory.sBtSPP.connectedDeviceName
+            val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
             val id = ChatRepository.getChat(name, address).id
             if (message != null) {
                 when (message) {
@@ -46,7 +46,7 @@ class AppPresenter(private val viewState: AppView) {
 
                     else -> {
                         Message(chatId = id, text = message).insert()
-                        BluetoothUsecase.send(Constants.MESSAGE_RECEIVED)
+                        BluetoothUseCase.send(Constants.MESSAGE_RECEIVED)
                     }
                 }
             } else if (data != null) {
@@ -56,7 +56,7 @@ class AppPresenter(private val viewState: AppView) {
     }
 
     fun bluetoothConnectionListener(context: Context) {
-        BluetoothFactory.sBt.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
+        BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String, address: String) {
                 addChat(context, name, address)
             }

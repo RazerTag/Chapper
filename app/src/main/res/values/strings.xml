@@ -16,7 +16,7 @@
     <string name="last_name">Last name</string>
     <string name="username">Username</string>
     <string name="what_is_your_name">What is your name?</string>
-    <string name="firstname_lastname_visible">The firstname and lastname are only visible to friends.</string>
+    <string name="firstname_lastname_visible">The first name and last name are only visible to friends.</string>
     <string name="username_visible">Username is the name of your Bluetooth.\nIt is visible to all nearby.</string>
     <string name="refresh">Refresh</string>
     <string name="refreshing">Refreshing…</string>
@@ -30,5 +30,7 @@
     <string name="connected">connected</string>
     <string name="nearby">nearby</string>
     <string name="offline">offline</string>
-    <string name="refreshing_small">refresing…</string>
+    <string name="refreshing_small">refreshing…</string>
+    <string name="last_connection_in">last connection in</string>
+    <string name="last_connection">last connection</string>
 </resources>

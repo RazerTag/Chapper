@@ -1,5 +1,6 @@
 package org.chapper.chapper.data.model
 
+import android.text.format.DateUtils
 import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
@@ -28,7 +29,13 @@ data class Message(
         @Column
         var date: Date = Date()
 ) : BaseModel() {
-    fun getTimeString(): String = SimpleDateFormat("HH:mm").format(date)
+    fun getTimeString(): String {
+        return if (DateUtils.isToday(date.time)) {
+            SimpleDateFormat("HH:mm").format(date)
+        } else {
+            SimpleDateFormat("MMM d").format(date)
+        }
+    }
 
     fun isMine(): Boolean {
         return (status == MessageStatus.OUTGOING_READ

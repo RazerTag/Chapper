@@ -1,12 +1,32 @@
 package org.chapper.chapper.domain.usecase
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Context
+import android.provider.Settings
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 
-object BluetoothUsecase {
+object BluetoothUseCase {
+    val bluetoothName: String
+        get() {
+            return if (BluetoothFactory.sBtAdapter != null) {
+                BluetoothAdapter.getDefaultAdapter().name
+            } else {
+                ""
+            }
+        }
+
+    fun getBluetoothAddress(context: Context): String {
+        return if (BluetoothFactory.sBtAdapter != null) {
+            Settings.Secure.getString(context.contentResolver, "bluetooth_address")
+        } else {
+            ""
+        }
+    }
+
     fun checkStatus(): BluetoothStatus {
-        val bt = BluetoothFactory.sBt
+        val bt = BluetoothFactory.sBtSPP
 
         return if (bt.isBluetoothAvailable) {
             if (bt.isBluetoothEnabled) BluetoothStatus.ENABLED
@@ -15,7 +35,7 @@ object BluetoothUsecase {
     }
 
     fun connect(address: String) {
-        val bt = BluetoothFactory.sBt
+        val bt = BluetoothFactory.sBtSPP
 
         if (bt.connectedDeviceAddress != address
                 && checkStatus() == BluetoothStatus.ENABLED)
@@ -29,7 +49,7 @@ object BluetoothUsecase {
     fun setupService() {
         if (checkStatus() == BluetoothStatus.ENABLED) {
             try {
-                val bt = BluetoothFactory.sBt
+                val bt = BluetoothFactory.sBtSPP
                 bt.setupService()
                 bt.startService(BluetoothState.DEVICE_ANDROID)
             } catch (e: Exception) {
@@ -40,7 +60,7 @@ object BluetoothUsecase {
 
     fun send(text: String) {
         try {
-            BluetoothFactory.sBt.send(text, true)
+            BluetoothFactory.sBtSPP.send(text, true)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -48,7 +68,7 @@ object BluetoothUsecase {
 
     fun send(bytes: ByteArray) {
         try {
-            BluetoothFactory.sBt.send(bytes, true)
+            BluetoothFactory.sBtSPP.send(bytes, true)
         } catch (e: Exception) {
             e.printStackTrace()
         }

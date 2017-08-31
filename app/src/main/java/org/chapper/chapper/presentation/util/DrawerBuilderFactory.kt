@@ -12,6 +12,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ResourceGetter
 import org.chapper.chapper.data.repository.SettingsRepository
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 
 class DrawerBuilderFactory(val context: Context,
                            val focus: View?,
@@ -71,7 +72,7 @@ class DrawerBuilderFactory(val context: Context,
     fun getHeaderBuilder(): AccountHeaderBuilder {
         val profile = ProfileDrawerItem()
                 .withName("$firstName $lastName")
-                .withEmail(BluetoothHelper.getBluetoothAddress(context))
+                .withEmail(BluetoothUseCase.getBluetoothAddress(context))
 
         val image: Bitmap? = SettingsRepository.getProfilePhoto(context)
         if (image == null)

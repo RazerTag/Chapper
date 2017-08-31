@@ -10,14 +10,16 @@ import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.model.Message
 import org.jetbrains.anko.image
 
-class OutgoingMessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val mMessageText: TextView by bindView(R.id.message_text)
     private val mMessageTime: TextView by bindView(R.id.message_time)
     private val mMessageStatus: ImageView by bindView(R.id.message_status)
 
     fun bind(message: Message) {
         mMessageText.text = message.text
-        mMessageTime.text = message.getTimeString()
+        if (!message.isAction())
+            mMessageTime.text = message.getTimeString()
+
         when (message.status) {
             MessageStatus.OUTGOING_READ ->
                 mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check_all)
@@ -25,8 +27,12 @@ class OutgoingMessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             MessageStatus.OUTGOING_UNREAD ->
                 mMessageStatus.image = itemView.resources.getDrawable(R.drawable.check)
 
-            else ->
+            MessageStatus.OUTGOING_NOT_SENT ->
                 mMessageStatus.image = itemView.resources.getDrawable(R.drawable.clock)
+
+            else -> {
+                // Nothing
+            }
         }
     }
 }

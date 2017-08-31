@@ -17,7 +17,7 @@ import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
-import org.chapper.chapper.data.Extra
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -139,7 +139,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mAdapter = ChatListAdapter(chats, object : ChatListAdapter.OnItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
-                intent.putExtra(Extra.CHAT_ID_EXTRA, chat.id)
+                intent.putExtra(Constants.CHAT_ID_EXTRA, chat.id)
                 startActivity(intent)
             }
         })

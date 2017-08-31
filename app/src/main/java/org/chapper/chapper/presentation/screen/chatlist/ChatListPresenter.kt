@@ -13,7 +13,7 @@ import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
-import org.chapper.chapper.domain.usecase.BluetoothUsecase
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 
 class
 ChatListPresenter(private val viewState: ChatListView) {
@@ -52,14 +52,14 @@ ChatListPresenter(private val viewState: ChatListView) {
             when (requestCode) {
                 BluetoothState.REQUEST_CONNECT_DEVICE -> {
                     val address = data.getStringExtra(BluetoothState.EXTRA_DEVICE_ADDRESS)
-                    BluetoothUsecase.connect(address)
+                    BluetoothUseCase.connect(address)
                 }
             }
         }
     }
 
     fun bluetoothStatusAction() {
-        val status = BluetoothUsecase.checkStatus()
+        val status = BluetoothUseCase.checkStatus()
 
         when (status) {
             BluetoothStatus.NOT_AVAILABLE -> viewState.btNotAvailable()

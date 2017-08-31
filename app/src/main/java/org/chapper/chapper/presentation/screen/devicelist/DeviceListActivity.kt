@@ -21,6 +21,7 @@ import android.view.View
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.jetbrains.anko.toast
@@ -28,8 +29,6 @@ import kotlin.properties.Delegates
 
 class DeviceListActivity : AppCompatActivity(), DeviceListView {
     private var mPresenter: DeviceListPresenter by Delegates.notNull()
-
-    private val REQUEST_CODE_COARSE_LOCATION_PERMISSIONS = 1
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mNoOneNearBlock: View by bindView(R.id.noOneNear)
@@ -135,7 +134,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
         val hasPermission = ActivityCompat.checkSelfPermission(this@DeviceListActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (hasPermission == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this@DeviceListActivity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                    REQUEST_CODE_COARSE_LOCATION_PERMISSIONS)
+                    Constants.COARSE_LOCATION_PERMISSIONS)
             return
         }
 
@@ -164,7 +163,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
-            REQUEST_CODE_COARSE_LOCATION_PERMISSIONS -> {
+            Constants.COARSE_LOCATION_PERMISSIONS -> {
                 if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     doDiscovery()
                 } else {

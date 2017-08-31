@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import org.chapper.chapper.R
+import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.repository.SettingsRepository
-import org.chapper.chapper.presentation.util.BluetoothHelper
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 
 class RegisterSlide : SlideFragment() {
     private var firstName: EditText? = null
@@ -24,8 +25,8 @@ class RegisterSlide : SlideFragment() {
         lastName = view.findViewById(R.id.last_name)
         username = view.findViewById(R.id.username)
 
-        if (BluetoothHelper.bluetoothAdapter != null) {
-            username!!.setText(BluetoothHelper.bluetoothName)
+        if (BluetoothFactory.sBtAdapter != null) {
+            username!!.setText(BluetoothUseCase.bluetoothName)
         } else {
             username!!.hint = getString(R.string.bluetooth_not_available)
             username!!.inputType = InputType.TYPE_NULL

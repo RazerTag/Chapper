@@ -13,22 +13,16 @@ import butterknife.bindView
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
-import org.chapper.chapper.data.Extra
-import org.chapper.chapper.data.model.AppAction
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
-import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
-import org.chapper.chapper.domain.usecase.BluetoothUsecase
 import kotlin.properties.Delegates
 
 class ChatActivity : AppCompatActivity(), ChatView {
     private var mPresenter: ChatPresenter by Delegates.notNull()
-
-    private var mChatId: String by Delegates.notNull()
-    private var mChat: Chat by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mChatName: TextView by bindView(R.id.chatName)
@@ -49,15 +43,13 @@ class ChatActivity : AppCompatActivity(), ChatView {
         window.setBackgroundDrawableResource(R.drawable.background)
         mPresenter = ChatPresenter(this)
 
-        mPresenter.init()
-        mPresenter.setupStatus(mChat.bluetoothMacAddress)
-        mPresenter.bluetoothConnectionListener(mChat.bluetoothMacAddress)
+        mPresenter.init(intent)
+        mPresenter.setupStatus(mPresenter.mChat.bluetoothMacAddress)
+        mPresenter.bluetoothConnectionListener()
 
         mFlowObserver = FlowContentObserver()
-        mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
-        mFlowObserver.registerForContentChanges(applicationContext, AppAction::class.java)
         mPresenter.databaseChangesListener(mFlowObserver)
 
         mSendButton.setOnClickListener {
@@ -69,18 +61,11 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.sendMessagesReadCode()
     }
 
-    override fun initChat() {
-        mChatId = intent.getStringExtra(Extra.CHAT_ID_EXTRA)
-        mChat = ChatRepository.getChat(mChatId)
-
-        BluetoothUsecase.connect(mChat.bluetoothMacAddress)
-    }
-
     override fun initToolbar() {
         setSupportActionBar(mToolbar)
-        mChatName.text = ChatRepository.getName(mChat)
+        mChatName.text = ChatRepository.getName(mPresenter.mChat)
 
-        val photo = ImageRepository.getImage(applicationContext, mChatId)
+        val photo = ImageRepository.getImage(applicationContext, mPresenter.mChatId)
         if (photo != null)
             mChatPhoto.setImageBitmap(photo)
 
@@ -97,15 +82,13 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mRecyclerView.layoutManager = layout
         mAdapter = ChatAdapter(MessageRepository
                 .getMessages(intent
-                        .getStringExtra(Extra.CHAT_ID_EXTRA)))
+                        .getStringExtra(Constants.CHAT_ID_EXTRA)))
         mRecyclerView.adapter = mAdapter
     }
 
-    override fun getChatId(): String = mChatId
-
     override fun changeMessageList() {
         runOnUiThread {
-            val messages = MessageRepository.getMessages(mChatId)
+            val messages = MessageRepository.getMessages(mPresenter.mChatId)
             mAdapter.changeDataSet(messages)
             mRecyclerView.smoothScrollToPosition(messages.size - 1)
         }
@@ -120,7 +103,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     }
 
     override fun startRefreshing() {
-        mPresenter.startDiscovery(applicationContext, mChat.bluetoothMacAddress)
+        mPresenter.startDiscovery(applicationContext)
 
     }
 
@@ -133,10 +116,6 @@ class ChatActivity : AppCompatActivity(), ChatView {
     }
 
     override fun statusOffline() {
-        mChatStatus.text = getString(R.string.offline)
-    }
-
-    override fun statusRefresing() {
-        mChatStatus.text = getString(R.string.refreshing_small)
+        mChatStatus.text = mPresenter.mChat.getLastConnectionString(applicationContext)
     }
 }
