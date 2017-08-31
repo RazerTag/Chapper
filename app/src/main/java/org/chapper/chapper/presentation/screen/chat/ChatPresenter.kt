@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.MessageStatus
@@ -26,7 +27,7 @@ class ChatPresenter(private val viewState: ChatView) {
     var mChatId: String by Delegates.notNull()
     var mChat: Chat by Delegates.notNull()
 
-    var mReceiver: BroadcastReceiver by Delegates.notNull()
+    var mReceiver: BroadcastReceiver? = null
 
     var isConnected = false
     var isNearby = false
@@ -112,19 +113,24 @@ class ChatPresenter(private val viewState: ChatView) {
                 .subscribe()
     }
 
+    fun updateLastConnectionDate() {
+        mChat.lastConnection = Date()
+        mChat.save()
+    }
+
     fun bluetoothConnectionListener() {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String, address: String) {
                 if (address == mChat.bluetoothMacAddress) {
                     statusConnected()
-                    mChat.lastConnection = Date()
+                    updateLastConnectionDate()
                 }
             }
 
             override fun onDeviceDisconnected() {
                 if (isConnected) {
                     statusOffline()
-                    mChat.lastConnection = Date()
+                    updateLastConnectionDate()
                     viewState.startRefreshing()
                 }
             }
@@ -170,5 +176,10 @@ class ChatPresenter(private val viewState: ChatView) {
         context.registerReceiver(mReceiver, filter)
 
         BluetoothFactory.sBtSPP.startDiscovery()
+    }
+
+    fun unregisterReceiver(context: Context) {
+        if (mReceiver != null)
+            context.unregisterReceiver(mReceiver)
     }
 }

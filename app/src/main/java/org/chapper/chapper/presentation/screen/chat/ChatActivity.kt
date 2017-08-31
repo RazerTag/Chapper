@@ -112,7 +112,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
         mRecyclerView.adapter = null
         mFlowObserver.unregisterForContentChanges(applicationContext)
-        applicationContext.unregisterReceiver(mPresenter.mReceiver)
+        mPresenter.unregisterReceiver(applicationContext)
     }
 
     override fun startRefreshing() {

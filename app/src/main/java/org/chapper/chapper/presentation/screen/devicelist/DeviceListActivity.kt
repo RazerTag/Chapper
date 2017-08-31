@@ -105,7 +105,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
             BluetoothFactory.sBtAdapter!!.cancelDiscovery()
         }
 
-        applicationContext.unregisterReceiver(mPresenter.mReceiver)
+        mPresenter.unregisterReceiver(applicationContext)
     }
 
     private fun doDiscovery() {

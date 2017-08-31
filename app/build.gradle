@@ -11,8 +11,8 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 8
-        versionName "0.1.8"
+        versionCode 9
+        versionName "0.1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -84,8 +84,6 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
 
     compile "com.github.Mariovc:ImagePicker:$imagePickerVersion"
-
-    compile "com.karumi:dexter:$dexterVersion"
 }
 
 kapt {

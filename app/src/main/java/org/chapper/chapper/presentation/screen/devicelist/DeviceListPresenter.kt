@@ -8,14 +8,35 @@ import android.content.Intent
 import android.content.IntentFilter
 import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
-import kotlin.properties.Delegates
 
 class DeviceListPresenter(private val viewState: DeviceListView) {
-    var mReceiver: BroadcastReceiver by Delegates.notNull()
+    var mReceiver: BroadcastReceiver? = null
 
     fun init() {
         viewState.initToolbar()
         viewState.initDevices()
+    }
+
+    fun deviceFound(intent: Intent) {
+        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+
+        val deviceModel = Device()
+
+        if (device.name == null || device.name == "") return
+        else deviceModel.bluetoothName = device.name
+        deviceModel.bluetoothAddress = device.address
+
+        viewState.hideNoOneNearBlock()
+        viewState.addDevice(deviceModel)
+    }
+
+    fun discoveryStarted() {
+        viewState.setRefreshingTitle()
+        viewState.showNoOneNearBlock()
+    }
+
+    fun discoveryFinished() {
+        viewState.setSectionNameTitle()
     }
 
     fun registerReceiver(context: Context) {
@@ -45,25 +66,10 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
         context.registerReceiver(mReceiver, filter)
     }
 
-    fun deviceFound(intent: Intent) {
-        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-
-        val deviceModel = Device()
-
-        if (device.name == null || device.name == "") return
-        else deviceModel.bluetoothName = device.name
-        deviceModel.bluetoothAddress = device.address
-
-        viewState.hideNoOneNearBlock()
-        viewState.addDevice(deviceModel)
-    }
-
-    fun discoveryStarted() {
-        viewState.setRefreshingTitle()
-        viewState.showNoOneNearBlock()
-    }
-
-    fun discoveryFinished() {
-        viewState.setSectionNameTitle()
+    fun unregisterReceiver(context: Context) {
+        fun unregisterReceiver(context: Context) {
+            if (mReceiver != null)
+                context.unregisterReceiver(mReceiver)
+        }
     }
 }
