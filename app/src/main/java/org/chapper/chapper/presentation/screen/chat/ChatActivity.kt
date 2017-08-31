@@ -1,6 +1,9 @@
 package org.chapper.chapper.presentation.screen.chat
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -19,6 +22,7 @@ import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 class ChatActivity : AppCompatActivity(), ChatView {
@@ -53,8 +57,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.databaseChangesListener(mFlowObserver)
 
         mSendButton.setOnClickListener {
-            mPresenter.sendMessage(mMessageEditText.text.toString())
-            mMessageEditText.setText("")
+            sendMessage()
         }
 
         mPresenter.readMessages()
@@ -94,17 +97,26 @@ class ChatActivity : AppCompatActivity(), ChatView {
         }
     }
 
+    override fun sendMessage() {
+        if (isCoarseLocationPermissionDenied()) {
+            requestCoarseLocationPermission()
+            return
+        }
+
+        mPresenter.sendMessage(mMessageEditText.text.toString())
+        mMessageEditText.setText("")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
         mRecyclerView.adapter = null
         mFlowObserver.unregisterForContentChanges(applicationContext)
-        mPresenter.unregisterReceiver(applicationContext)
+        applicationContext.unregisterReceiver(mPresenter.mReceiver)
     }
 
     override fun startRefreshing() {
         mPresenter.startDiscovery(applicationContext)
-
     }
 
     override fun statusConnected() {
@@ -117,5 +129,27 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     override fun statusOffline() {
         mChatStatus.text = mPresenter.mChat.getLastConnectionString(applicationContext)
+    }
+
+    override fun isCoarseLocationPermissionDenied(): Boolean {
+        val status = ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+        return status == PackageManager.PERMISSION_DENIED
+    }
+
+    override fun requestCoarseLocationPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                Constants.COARSE_LOCATION_PERMISSIONS)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            Constants.COARSE_LOCATION_PERMISSIONS -> {
+                if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    sendMessage()
+                } else {
+                    toast(resources.getString(R.string.error))
+                }
+            }
+        }
     }
 }

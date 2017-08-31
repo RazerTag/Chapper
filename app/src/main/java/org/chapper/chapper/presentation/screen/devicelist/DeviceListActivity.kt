@@ -2,11 +2,7 @@ package org.chapper.chapper.presentation.screen.devicelist
 
 import android.Manifest
 import android.app.Activity
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -22,8 +18,8 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
+import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Device
-import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -32,9 +28,6 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mNoOneNearBlock: View by bindView(R.id.noOneNear)
-
-    private var mReceiver: BroadcastReceiver by Delegates.notNull()
-    private var mBtAdapter: BluetoothAdapter? = null
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mPairedDeviceArrayAdapter: DeviceListAdapter by Delegates.notNull()
@@ -48,9 +41,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         setResult(Activity.RESULT_CANCELED, Intent())
 
-        mPresenter.registerReceiver()
-
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter()
+        mPresenter.registerReceiver(applicationContext)
 
         doDiscovery()
     }
@@ -94,19 +85,6 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
         mToolbar.title = getString(R.string.search_for_devices)
     }
 
-    override fun registerReceiver(listener: BluetoothDiscoveryBroadcastReceiver.ActionListener) {
-        mReceiver = BluetoothDiscoveryBroadcastReceiver(listener)
-
-        var filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        this.registerReceiver(mReceiver, filter)
-
-        filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        this.registerReceiver(mReceiver, filter)
-
-        filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        this.registerReceiver(mReceiver, filter)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_refresh, menu)
         return super.onCreateOptionsMenu(menu)
@@ -123,18 +101,17 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mBtAdapter != null) {
-            mBtAdapter!!.cancelDiscovery()
+        if (BluetoothFactory.sBtAdapter != null) {
+            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
         }
 
-        this.unregisterReceiver(mReceiver)
+        applicationContext.unregisterReceiver(mPresenter.mReceiver)
     }
 
     private fun doDiscovery() {
-        val hasPermission = ActivityCompat.checkSelfPermission(this@DeviceListActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
-        if (hasPermission == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this@DeviceListActivity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                    Constants.COARSE_LOCATION_PERMISSIONS)
+        // Check permission
+        if (isCoarseLocationPermissionDenied()) {
+            requestCoarseLocationPermission()
             return
         }
 
@@ -142,16 +119,16 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         mPairedDeviceArrayAdapter.clear()
 
-        if (mBtAdapter!!.isDiscovering) {
-            mBtAdapter!!.cancelDiscovery()
+        if (BluetoothFactory.sBtAdapter!!.isDiscovering) {
+            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
         }
 
-        mBtAdapter!!.startDiscovery()
+        BluetoothFactory.sBtAdapter!!.startDiscovery()
     }
 
     fun onDeviceSelect(name: String, address: String) {
-        if (mBtAdapter!!.isDiscovering)
-            mBtAdapter!!.cancelDiscovery()
+        if (BluetoothFactory.sBtAdapter!!.isDiscovering)
+            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
 
         val intent = Intent()
         intent.putExtra(BluetoothState.DEVICE_NAME, name)
@@ -159,6 +136,16 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    override fun isCoarseLocationPermissionDenied(): Boolean {
+        val status = ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION)
+        return status == PackageManager.PERMISSION_DENIED
+    }
+
+    override fun requestCoarseLocationPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                Constants.COARSE_LOCATION_PERMISSIONS)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

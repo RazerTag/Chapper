@@ -6,9 +6,14 @@ interface ChatView {
 
     fun changeMessageList()
 
+    fun sendMessage()
+
     fun startRefreshing()
 
     fun statusConnected()
     fun statusNearby()
     fun statusOffline()
+
+    fun isCoarseLocationPermissionDenied(): Boolean
+    fun requestCoarseLocationPermission()
 }

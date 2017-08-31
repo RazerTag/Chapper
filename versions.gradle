@@ -13,4 +13,5 @@ ext {
     daggerVersion = '2.11'
     dbflowVersion = '4.0.5'
     imagePickerVersion = '1.2.0'
+    dexterVersion = '4.1.0'
 }

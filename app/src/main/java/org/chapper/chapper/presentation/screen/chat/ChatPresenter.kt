@@ -26,7 +26,8 @@ class ChatPresenter(private val viewState: ChatView) {
     var mChatId: String by Delegates.notNull()
     var mChat: Chat by Delegates.notNull()
 
-    private var mReceiver: BroadcastReceiver? = null
+    var mReceiver: BroadcastReceiver by Delegates.notNull()
+
     var isConnected = false
     var isNearby = false
 
@@ -169,10 +170,5 @@ class ChatPresenter(private val viewState: ChatView) {
         context.registerReceiver(mReceiver, filter)
 
         BluetoothFactory.sBtSPP.startDiscovery()
-    }
-
-    fun unregisterReceiver(context: Context) {
-        if (mReceiver != null)
-            context.unregisterReceiver(mReceiver)
     }
 }

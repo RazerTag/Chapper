@@ -84,6 +84,8 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
 
     compile "com.github.Mariovc:ImagePicker:$imagePickerVersion"
+
+    compile "com.karumi:dexter:$dexterVersion"
 }
 
 kapt {

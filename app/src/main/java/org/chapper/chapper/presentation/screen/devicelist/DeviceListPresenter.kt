@@ -1,17 +1,24 @@
 package org.chapper.chapper.presentation.screen.devicelist
 
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
+import kotlin.properties.Delegates
 
 class DeviceListPresenter(private val viewState: DeviceListView) {
+    var mReceiver: BroadcastReceiver by Delegates.notNull()
+
     fun init() {
         viewState.initToolbar()
         viewState.initDevices()
     }
 
-    fun registerReceiver() {
+    fun registerReceiver(context: Context) {
         val listener = object : BluetoothDiscoveryBroadcastReceiver.ActionListener {
             override fun onDeviceFound(intent: Intent) {
                 deviceFound(intent)
@@ -26,7 +33,16 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
             }
         }
 
-        viewState.registerReceiver(listener)
+        mReceiver = BluetoothDiscoveryBroadcastReceiver(listener)
+
+        var filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        context.registerReceiver(mReceiver, filter)
+
+        filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        context.registerReceiver(mReceiver, filter)
+
+        filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        context.registerReceiver(mReceiver, filter)
     }
 
     fun deviceFound(intent: Intent) {
