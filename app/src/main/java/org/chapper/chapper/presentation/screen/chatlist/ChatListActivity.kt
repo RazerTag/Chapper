@@ -15,6 +15,7 @@ import android.view.View
 import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
+import com.raizlabs.android.dbflow.kotlinextensions.delete
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
@@ -29,10 +30,7 @@ import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
 import org.chapper.chapper.presentation.screen.intro.IntroActivity
 import org.chapper.chapper.presentation.screen.settings.SettingsActivity
 import org.chapper.chapper.presentation.util.DrawerBuilderFactory
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.share
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import kotlin.properties.Delegates
 
 class ChatListActivity : AppCompatActivity(), ChatListView {
@@ -145,6 +143,23 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
                 intent.putExtra(Constants.CHAT_ID_EXTRA, chat.id)
                 startActivity(intent)
+            }
+
+            override fun onItemLongClick(chat: Chat): Boolean {
+                val countries = listOf(getString(R.string.delete))
+                selector(getString(R.string.select_action), countries, { _, i ->
+                    when (i) {
+                        0 -> {
+                            alert(getString(R.string.are_you_sure)) {
+                                yesButton {
+                                    chat.delete()
+                                }
+                                noButton {}
+                            }.show()
+                        }
+                    }
+                })
+                return true
             }
         })
         mRecyclerView.adapter = mAdapter

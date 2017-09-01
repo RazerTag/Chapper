@@ -31,4 +31,7 @@
     <string name="refreshing_small">обновление…</string>
     <string name="last_connection_in">последнее подключение в</string>
     <string name="last_connection">последнее подключение</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="select_action">Выберите действие</string>
+    <string name="delete">Удалить</string>
 </resources>

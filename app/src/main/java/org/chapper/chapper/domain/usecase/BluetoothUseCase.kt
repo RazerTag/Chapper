@@ -4,8 +4,10 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.provider.Settings
 import app.akexorcist.bluetotohspp.library.BluetoothState
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
+import org.chapper.chapper.data.repository.SettingsRepository
 
 object BluetoothUseCase {
     val bluetoothName: String
@@ -72,5 +74,23 @@ object BluetoothUseCase {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun shareUserData() {
+        shareFirstName()
+        shareLastName()
+        sharePhoto()
+    }
+
+    private fun shareFirstName() {
+        send(Constants.FIRST_NAME + SettingsRepository.getFirstName())
+    }
+
+    private fun shareLastName() {
+        send(Constants.LAST_NAME + SettingsRepository.getLastName())
+    }
+
+    private fun sharePhoto() {
+        // TODO : Do this method
     }
 }

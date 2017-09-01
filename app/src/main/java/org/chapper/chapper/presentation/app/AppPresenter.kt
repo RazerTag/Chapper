@@ -3,6 +3,7 @@ package org.chapper.chapper.presentation.app
 import android.content.Context
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import com.raizlabs.android.dbflow.kotlinextensions.insert
+import com.raizlabs.android.dbflow.kotlinextensions.save
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants
@@ -37,20 +38,29 @@ class AppPresenter(private val viewState: AppView) {
         BluetoothFactory.sBtSPP.setOnDataReceivedListener { data, message ->
             val name = BluetoothFactory.sBtSPP.connectedDeviceName
             val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
-            val id = ChatRepository.getChat(name, address).id
+            val chat = ChatRepository.getChat(name, address)
+            val id = chat.id
             if (message != null) {
-                when (message) {
-                    Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
+                when {
+                    message == Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
 
-                    Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
+                    message == Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
+
+                    message.contains(Constants.FIRST_NAME) -> {
+                        chat.firstName = message.replace(Constants.FIRST_NAME, "")
+                        chat.save()
+                    }
+
+                    message.contains(Constants.LAST_NAME) -> {
+                        chat.lastName = message.replace(Constants.LAST_NAME, "")
+                        chat.save()
+                    }
 
                     else -> {
                         Message(chatId = id, text = message).insert()
                         BluetoothUseCase.send(Constants.MESSAGE_RECEIVED)
                     }
                 }
-            } else if (data != null) {
-                // TODO : Do it later
             }
         }
     }
@@ -58,7 +68,10 @@ class AppPresenter(private val viewState: AppView) {
     fun bluetoothConnectionListener(context: Context) {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String, address: String) {
-                addChat(context, name, address)
+                if (!ChatRepository.contains(address)) {
+                    addChat(context, name, address)
+                    BluetoothUseCase.shareUserData()
+                }
             }
 
             override fun onDeviceDisconnected() {
@@ -71,16 +84,14 @@ class AppPresenter(private val viewState: AppView) {
     }
 
     fun addChat(context: Context, username: String, address: String) {
-        if (!ChatRepository.contains(address)) {
-            val chat = Chat()
-            chat.username = username
-            chat.bluetoothMacAddress = address
-            chat.firstName = context.getString(R.string.loading)
-            chat.insert()
-            Message(chatId = chat.id,
-                    text = context.getString(R.string.chat_created),
-                    status = MessageStatus.ACTION)
-                    .insert()
-        }
+        val chat = Chat()
+        chat.username = username
+        chat.bluetoothMacAddress = address
+        chat.firstName = context.getString(R.string.loading)
+        chat.insert()
+        Message(chatId = chat.id,
+                text = context.getString(R.string.chat_created),
+                status = MessageStatus.ACTION)
+                .insert()
     }
 }

@@ -36,5 +36,9 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             listener.onItemClick(chat)
         }
+
+        itemView.setOnLongClickListener {
+            listener.onItemLongClick(chat)
+        }
     }
 }

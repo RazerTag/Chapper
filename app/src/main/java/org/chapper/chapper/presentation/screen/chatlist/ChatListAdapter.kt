@@ -12,6 +12,8 @@ class ChatListAdapter(
 ) : RecyclerView.Adapter<ChatHolder>() {
     interface OnItemClickListener {
         fun onItemClick(chat: Chat)
+
+        fun onItemLongClick(chat: Chat): Boolean
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatHolder {
