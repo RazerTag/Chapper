@@ -8,6 +8,7 @@ import com.raizlabs.android.dbflow.annotation.Unique
 import com.raizlabs.android.dbflow.structure.BaseModel
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.database.AppDatabase
+import org.chapper.chapper.domain.usecase.DateUseCase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,12 +30,12 @@ data class Message(
         @Column
         var date: Date = Date()
 ) : BaseModel() {
-    fun getTimeString(): String {
-        return if (DateUtils.isToday(date.time)) {
-            SimpleDateFormat("HH:mm").format(date)
-        } else {
-            SimpleDateFormat("MMM d").format(date)
-        }
+    fun getTimeString(): String = when {
+        DateUtils.isToday(date.time) -> SimpleDateFormat("HH:mm").format(date)
+
+        DateUseCase.isDateInCurrentWeek(date) -> SimpleDateFormat("EEE").format(date)
+
+        else -> SimpleDateFormat("MMM d").format(date)
     }
 
     fun isMine(): Boolean {

@@ -3,26 +3,42 @@ package org.chapper.chapper.domain.usecase
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.provider.Settings
-import app.akexorcist.bluetotohspp.library.BluetoothState
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.repository.SettingsRepository
 
 object BluetoothUseCase {
-    val bluetoothName: String
-        get() {
-            return if (BluetoothFactory.sBtAdapter != null) {
-                BluetoothAdapter.getDefaultAdapter().name
-            } else {
-                ""
-            }
+    fun startService() {
+        val bt = BluetoothFactory.sBtSPP
+
+        if (!bt.isBluetoothAvailable)
+            return
+
+        if (!bt.isBluetoothEnabled)
+            return
+
+        bt.setupService()
+        bt.startService(true)
+    }
+
+    fun stopService() {
+        val bt = BluetoothFactory.sBtSPP
+        bt.stopService()
+    }
+
+    fun getBluetoothName(): String {
+        return try {
+            BluetoothAdapter.getDefaultAdapter().name
+        } catch (e: Exception) {
+            ""
         }
+    }
 
     fun getBluetoothAddress(context: Context): String {
-        return if (BluetoothFactory.sBtAdapter != null) {
+        return try {
             Settings.Secure.getString(context.contentResolver, "bluetooth_address")
-        } else {
+        } catch (e: Exception) {
             ""
         }
     }
@@ -46,18 +62,6 @@ object BluetoothUseCase {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-    }
-
-    fun setupService() {
-        if (checkStatus() == BluetoothStatus.ENABLED) {
-            try {
-                val bt = BluetoothFactory.sBtSPP
-                bt.setupService()
-                bt.startService(BluetoothState.DEVICE_ANDROID)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
     }
 
     fun send(text: String) {
@@ -92,5 +96,24 @@ object BluetoothUseCase {
 
     private fun sharePhoto() {
         // TODO : Do this method
+    }
+
+    fun isDiscovering(): Boolean {
+        if (BluetoothFactory.sBtAdapter != null) {
+            return BluetoothFactory.sBtAdapter!!.isDiscovering
+        }
+        return false
+    }
+
+    fun startDiscovery() {
+        if (BluetoothFactory.sBtAdapter != null) {
+            BluetoothFactory.sBtAdapter!!.startDiscovery()
+        }
+    }
+
+    fun cancelDiscovery() {
+        if (BluetoothFactory.sBtAdapter != null) {
+            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
+        }
     }
 }

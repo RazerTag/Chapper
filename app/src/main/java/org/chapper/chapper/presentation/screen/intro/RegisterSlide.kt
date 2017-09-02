@@ -26,7 +26,7 @@ class RegisterSlide : SlideFragment() {
         username = view.findViewById(R.id.username)
 
         if (BluetoothFactory.sBtAdapter != null) {
-            username!!.setText(BluetoothUseCase.bluetoothName)
+            username!!.setText(BluetoothUseCase.getBluetoothName())
         } else {
             username!!.hint = getString(R.string.bluetooth_not_available)
             username!!.inputType = InputType.TYPE_NULL

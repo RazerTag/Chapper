@@ -18,8 +18,8 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
-import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Device
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
@@ -101,9 +101,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (BluetoothFactory.sBtAdapter != null) {
-            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
-        }
+        BluetoothUseCase.cancelDiscovery()
 
         mPresenter.unregisterReceiver(applicationContext)
     }
@@ -119,16 +117,16 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
 
         mPairedDeviceArrayAdapter.clear()
 
-        if (BluetoothFactory.sBtAdapter!!.isDiscovering) {
-            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
+        if (BluetoothUseCase.isDiscovering()) {
+            BluetoothUseCase.cancelDiscovery()
         }
 
-        BluetoothFactory.sBtAdapter!!.startDiscovery()
+        BluetoothUseCase.startDiscovery()
     }
 
     fun onDeviceSelect(name: String, address: String) {
-        if (BluetoothFactory.sBtAdapter!!.isDiscovering)
-            BluetoothFactory.sBtAdapter!!.cancelDiscovery()
+        if (BluetoothUseCase.isDiscovering())
+            BluetoothUseCase.cancelDiscovery()
 
         val intent = Intent()
         intent.putExtra(BluetoothState.DEVICE_NAME, name)

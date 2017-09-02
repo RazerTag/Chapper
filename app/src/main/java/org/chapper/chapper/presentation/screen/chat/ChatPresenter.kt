@@ -147,7 +147,7 @@ class ChatPresenter(private val viewState: ChatView) {
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 if (device.address == mChat.bluetoothMacAddress && !isConnected) {
                     statusNearby()
-                    BluetoothFactory.sBtSPP.cancelDiscovery()
+                    BluetoothUseCase.cancelDiscovery()
                 }
             }
 
@@ -175,7 +175,7 @@ class ChatPresenter(private val viewState: ChatView) {
         filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         context.registerReceiver(mReceiver, filter)
 
-        BluetoothFactory.sBtSPP.startDiscovery()
+        BluetoothUseCase.startDiscovery()
     }
 
     fun unregisterReceiver(context: Context) {

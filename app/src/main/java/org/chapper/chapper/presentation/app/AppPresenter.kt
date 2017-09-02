@@ -9,6 +9,7 @@ import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
+import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
@@ -21,7 +22,11 @@ class AppPresenter(private val viewState: AppView) {
     fun bluetoothStatusAction() {
         AppAction(type = ActionType.BLUETOOTH_ACTION).insert()
 
-        BluetoothUseCase.setupService()
+        if (BluetoothUseCase.checkStatus() == BluetoothStatus.ENABLED) {
+            BluetoothUseCase.startService()
+        } else {
+            BluetoothUseCase.stopService()
+        }
     }
 
     fun registerBluetoothStateReceiver() {
@@ -47,13 +52,19 @@ class AppPresenter(private val viewState: AppView) {
                     message == Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
 
                     message.contains(Constants.FIRST_NAME) -> {
-                        chat.firstName = message.replace(Constants.FIRST_NAME, "")
-                        chat.save()
+                        val text = message.replace(Constants.FIRST_NAME, "")
+                        if (text.isNotEmpty()) {
+                            chat.firstName = text
+                            chat.save()
+                        }
                     }
 
                     message.contains(Constants.LAST_NAME) -> {
-                        chat.lastName = message.replace(Constants.LAST_NAME, "")
-                        chat.save()
+                        val text = message.replace(Constants.LAST_NAME, "")
+                        if (text.isNotEmpty()) {
+                            chat.lastName = text
+                            chat.save()
+                        }
                     }
 
                     else -> {

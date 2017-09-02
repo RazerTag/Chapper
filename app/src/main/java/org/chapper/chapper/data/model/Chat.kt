@@ -11,6 +11,7 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.database.AppDatabase
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.domain.usecase.DateUseCase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,11 +45,11 @@ data class Chat(
             and (Message_Table.status eq MessageStatus.INCOMING_UNREAD))
             .list.size
 
-    fun getLastConnectionString(context: Context): String {
-        return if (DateUtils.isToday(lastConnection.time)) {
-            "${context.getString(R.string.last_connection_in)} ${SimpleDateFormat("HH:mm").format(lastConnection)}"
-        } else {
-            "${context.getString(R.string.last_connection)} ${SimpleDateFormat("MMM d").format(lastConnection)}"
-        }
+    fun getLastConnectionString(context: Context): String = when {
+        DateUtils.isToday(lastConnection.time) -> "${context.getString(R.string.last_connection_in)} ${SimpleDateFormat("HH:mm").format(lastConnection)}"
+
+        DateUseCase.isDateInCurrentWeek(lastConnection) -> "${context.getString(R.string.last_connection_in)} ${SimpleDateFormat("EEE").format(lastConnection)}"
+
+        else -> "${context.getString(R.string.last_connection)} ${SimpleDateFormat("d MMM").format(lastConnection)}"
     }
 }

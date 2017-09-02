@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.kotlinextensions.select
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Settings
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import kotlin.properties.Delegates
 
@@ -35,7 +36,9 @@ class App : Application(), AppView {
 
     override fun onTerminate() {
         super.onTerminate()
+
         FlowManager.destroy()
+        BluetoothUseCase.stopService()
     }
 
     private fun initSQLTables() {
