@@ -36,6 +36,7 @@ class ChatPresenter(private val viewState: ChatView) {
         initChat(intent)
         viewState.initToolbar()
         viewState.showMessages()
+        statusOffline()
     }
 
     private fun initChat(intent: Intent) {

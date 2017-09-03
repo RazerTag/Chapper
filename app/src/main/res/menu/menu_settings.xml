@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_change_name"
+        android:orderInCategory="1"
+        android:title="@string/change_name"/>
+
+    <item
+        android:id="@+id/action_change_photo"
+        android:orderInCategory="2"
+        android:title="@string/change_profile_photo"/>
+
+</menu>

@@ -34,4 +34,10 @@
     <string name="are_you_sure">Вы уверены?</string>
     <string name="select_action">Выберите действие</string>
     <string name="delete">Удалить</string>
+    <string name="messages">Сообщения</string>
+    <string name="send_by_enter">Отправка по Enter</string>
+    <string name="information">Информация</string>
+    <string name="change_name">Изменить имя</string>
+    <string name="change_profile_photo">Изменить фото профиля</string>
+    <string name="save">Сохранить</string>
 </resources>

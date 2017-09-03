@@ -36,4 +36,10 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="select_action">Select action</string>
     <string name="delete">Delete</string>
+    <string name="messages">Messages</string>
+    <string name="send_by_enter">Send by Enter</string>
+    <string name="information">Information</string>
+    <string name="change_name">Change name</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="save">Save</string>
 </resources>

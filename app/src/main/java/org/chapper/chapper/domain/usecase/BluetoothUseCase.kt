@@ -43,6 +43,14 @@ object BluetoothUseCase {
         }
     }
 
+    fun setBluetoothName(name: String) {
+        return try {
+            BluetoothAdapter.getDefaultAdapter().name = "name"
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun checkStatus(): BluetoothStatus {
         val bt = BluetoothFactory.sBtSPP
 
