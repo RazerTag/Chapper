@@ -121,7 +121,7 @@ class ChatPresenter(private val viewState: ChatView) {
 
     fun bluetoothConnectionListener() {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
-            override fun onDeviceConnected(name: String, address: String) {
+            override fun onDeviceConnected(name: String?, address: String?) {
                 if (address == mChat.bluetoothMacAddress) {
                     statusConnected()
                     updateLastConnectionDate()

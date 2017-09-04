@@ -37,6 +37,9 @@ idea {
 }
 
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     mavenCentral()
     maven { url 'https://dl.bintray.com/underdark/android/' }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
@@ -65,9 +68,6 @@ dependencies {
     // KottenKnife
     compile "com.jakewharton:kotterknife:$kottenknifeVersion"
 
-    // BluetoothSPP
-    compile "com.akexorcist:bluetoothspp:$bluetoothsppVersion"
-
     // Gson
     compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 
@@ -84,6 +84,8 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
 
     compile "com.github.Mariovc:ImagePicker:$imagePickerVersion"
+
+    compile(name: 'bluetoothspp', ext: 'aar')
 }
 
 kapt {

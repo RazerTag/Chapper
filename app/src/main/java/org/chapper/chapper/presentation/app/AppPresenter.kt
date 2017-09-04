@@ -40,12 +40,14 @@ class AppPresenter(private val viewState: AppView) {
     }
 
     fun onDataReceivedListener() {
-        BluetoothFactory.sBtSPP.setOnDataReceivedListener { data, message ->
+        BluetoothFactory.sBtSPP.setOnDataReceivedListener { _, message ->
             val name = BluetoothFactory.sBtSPP.connectedDeviceName
             val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
-            val chat = ChatRepository.getChat(name, address)
-            val id = chat.id
-            if (message != null) {
+
+            if (message != null && name != null && address != null) {
+                val chat = ChatRepository.getChat(name, address)
+                val id = chat.id
+
                 when {
                     message == Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
 
@@ -78,10 +80,12 @@ class AppPresenter(private val viewState: AppView) {
 
     fun bluetoothConnectionListener(context: Context) {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
-            override fun onDeviceConnected(name: String, address: String) {
-                if (!ChatRepository.contains(address)) {
-                    addChat(context, name, address)
-                    BluetoothUseCase.shareUserData()
+            override fun onDeviceConnected(name: String?, address: String?) {
+                if (name != null && address != null) {
+                    if (!ChatRepository.contains(address)) {
+                        addChat(context, name, address)
+                        BluetoothUseCase.shareUserData()
+                    }
                 }
             }
 
