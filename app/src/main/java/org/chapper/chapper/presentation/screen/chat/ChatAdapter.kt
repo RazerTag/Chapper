@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.chapper.chapper.R
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.model.Message
+import org.chapper.chapper.data.status.MessageStatus
 import kotlin.properties.Delegates
 
 class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

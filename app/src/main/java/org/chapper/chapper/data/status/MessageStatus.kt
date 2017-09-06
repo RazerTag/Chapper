@@ -1,4 +1,4 @@
-package org.chapper.chapper.data
+package org.chapper.chapper.data.status
 
 enum class MessageStatus {
     ACTION,

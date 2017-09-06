@@ -7,7 +7,6 @@ import com.raizlabs.android.dbflow.kotlinextensions.save
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.AppAction
@@ -15,6 +14,7 @@ import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
@@ -49,6 +49,10 @@ class AppPresenter(private val viewState: AppView) {
                 val id = chat.id
 
                 when {
+                    message == Constants.TYPING -> {
+                        /*Nothing*/
+                    }
+
                     message == Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
 
                     message == Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
@@ -82,10 +86,8 @@ class AppPresenter(private val viewState: AppView) {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String?, address: String?) {
                 if (name != null && address != null) {
-                    if (!ChatRepository.contains(address)) {
-                        addChat(context, name, address)
-                        BluetoothUseCase.shareUserData()
-                    }
+                    addChat(context, name, address)
+                    BluetoothUseCase.shareUserData()
                 }
             }
 
@@ -99,14 +101,16 @@ class AppPresenter(private val viewState: AppView) {
     }
 
     fun addChat(context: Context, username: String, address: String) {
-        val chat = Chat()
-        chat.username = username
-        chat.bluetoothMacAddress = address
-        chat.firstName = context.getString(R.string.loading)
-        chat.insert()
-        Message(chatId = chat.id,
-                text = context.getString(R.string.chat_created),
-                status = MessageStatus.ACTION)
-                .insert()
+        if (!ChatRepository.contains(address)) {
+            val chat = Chat()
+            chat.username = username
+            chat.bluetoothMacAddress = address
+            chat.firstName = context.getString(R.string.loading)
+            chat.insert()
+            Message(chatId = chat.id,
+                    text = context.getString(R.string.chat_created),
+                    status = MessageStatus.ACTION)
+                    .insert()
+        }
     }
 }

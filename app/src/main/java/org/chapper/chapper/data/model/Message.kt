@@ -6,8 +6,8 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.annotation.Unique
 import com.raizlabs.android.dbflow.structure.BaseModel
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.database.AppDatabase
+import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.DateUseCase
 import java.text.SimpleDateFormat
 import java.util.*

@@ -40,4 +40,6 @@
     <string name="change_name">Изменить имя</string>
     <string name="change_profile_photo">Изменить фото профиля</string>
     <string name="save">Сохранить</string>
+    <string name="visible_devices">Видимые устройства</string>
+    <string name="typing">набирает…</string>
 </resources>

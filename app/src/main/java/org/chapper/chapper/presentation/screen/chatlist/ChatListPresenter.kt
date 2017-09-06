@@ -7,12 +7,12 @@ import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
+import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 
 class

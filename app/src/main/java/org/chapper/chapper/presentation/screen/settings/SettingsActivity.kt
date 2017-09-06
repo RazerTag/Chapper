@@ -12,8 +12,13 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.TextView
 import butterknife.bindView
+import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
+import org.chapper.chapper.data.model.AppAction
+import org.chapper.chapper.data.model.Chat
+import org.chapper.chapper.data.model.Message
+import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.SettingsRepository
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.customView
@@ -34,12 +39,21 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
     private val mUsernameView: View by bindView(R.id.usernameView)
 
+    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         mPresenter = SettingsPresenter(this)
 
         mPresenter.init(applicationContext)
+
+        mFlowObserver = FlowContentObserver()
+        mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
+        mFlowObserver.registerForContentChanges(applicationContext, AppAction::class.java)
+        mPresenter.databaseChangesListener(applicationContext, mFlowObserver)
 
         mUsernameView.setOnClickListener {
             alert {

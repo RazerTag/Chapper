@@ -42,4 +42,6 @@
     <string name="change_name">Change name</string>
     <string name="change_profile_photo">Change profile photo</string>
     <string name="save">Save</string>
+    <string name="visible_devices">Visible devices</string>
+    <string name="typing">typing…</string>
 </resources>

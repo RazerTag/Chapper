@@ -8,8 +8,12 @@ interface ChatView {
 
     fun sendMessage()
 
+    fun showRefresher()
+    fun hideRefresher()
+
     fun startRefreshing()
 
+    fun statusTyping()
     fun statusConnected()
     fun statusNearby()
     fun statusOffline()

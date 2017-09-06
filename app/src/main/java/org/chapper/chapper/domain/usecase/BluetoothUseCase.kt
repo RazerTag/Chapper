@@ -3,9 +3,11 @@ package org.chapper.chapper.domain.usecase
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.provider.Settings
+import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
+import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.repository.SettingsRepository
 
 object BluetoothUseCase {
@@ -44,8 +46,9 @@ object BluetoothUseCase {
     }
 
     fun setBluetoothName(name: String) {
-        return try {
+        try {
             BluetoothAdapter.getDefaultAdapter().name = name
+            AppAction(type = ActionType.CHANGED_NAME).insert()
         } catch (e: Exception) {
             e.printStackTrace()
         }

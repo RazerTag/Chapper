@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -22,7 +25,9 @@ import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.jetbrains.anko.toast
+import tk.wasdennnoch.progresstoolbar.ProgressToolbar
 import kotlin.properties.Delegates
 
 class ChatActivity : AppCompatActivity(), ChatView {
@@ -38,6 +43,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     private val mSendButton: ImageButton by bindView(R.id.sendButton)
     private val mMessageEditText: EditText by bindView(R.id.messageEditText)
+
+    private val mRefresher: ProgressToolbar by bindView(R.id.refresher)
 
     private var mFlowObserver: FlowContentObserver by Delegates.notNull()
 
@@ -60,8 +67,20 @@ class ChatActivity : AppCompatActivity(), ChatView {
             sendMessage()
         }
 
+        mMessageEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                BluetoothUseCase.send(Constants.TYPING)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        })
+
         mPresenter.readMessages()
         mPresenter.sendMessagesReadCode()
+
+        mPresenter.onDataReceivedListener()
     }
 
     override fun initToolbar() {
@@ -115,8 +134,20 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.unregisterReceiver(applicationContext)
     }
 
+    override fun showRefresher() {
+        mRefresher.visibility = View.VISIBLE
+    }
+
+    override fun hideRefresher() {
+        mRefresher.visibility = View.INVISIBLE
+    }
+
     override fun startRefreshing() {
         mPresenter.startDiscovery(applicationContext)
+    }
+
+    override fun statusTyping() {
+        mChatStatus.text = getString(R.string.typing)
     }
 
     override fun statusConnected() {

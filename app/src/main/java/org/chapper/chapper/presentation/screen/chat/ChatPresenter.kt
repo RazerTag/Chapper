@@ -9,17 +9,18 @@ import android.content.IntentFilter
 import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.chapper.chapper.data.Constants
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
-import rx.Observable
-import rx.schedulers.Schedulers
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -29,6 +30,9 @@ class ChatPresenter(private val viewState: ChatView) {
 
     var mReceiver: BroadcastReceiver? = null
 
+    private val mTypingCalls: Queue<String> = ArrayDeque()
+
+    var isTyping = false
     var isConnected = false
     var isNearby = false
 
@@ -56,20 +60,57 @@ class ChatPresenter(private val viewState: ChatView) {
 
     private fun statusConnected() {
         viewState.statusConnected()
+        hideRefresher()
         isConnected = true
         isNearby = true
     }
 
     private fun statusNearby() {
         viewState.statusNearby()
+        showRefresher()
         isConnected = false
         isNearby = true
     }
 
     private fun statusOffline() {
         viewState.statusOffline()
+        showRefresher()
         isConnected = false
         isNearby = false
+    }
+
+    private fun typing() {
+        Observable.just("")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { startTyping() }
+                .observeOn(Schedulers.newThread())
+                .doOnNext { Thread.sleep(2500) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { stopTyping() }
+                .subscribe()
+    }
+
+    private fun startTyping() {
+        isTyping = true
+        mTypingCalls.add("")
+        viewState.statusTyping()
+    }
+
+    private fun stopTyping() {
+        isTyping = false
+        mTypingCalls.poll()
+        if (mTypingCalls.size == 0) {
+            statusConnected()
+        }
+    }
+
+    private fun showRefresher() {
+        viewState.showRefresher()
+    }
+
+    private fun hideRefresher() {
+        viewState.hideRefresher()
     }
 
     fun sendMessage(text: String) {
@@ -88,9 +129,6 @@ class ChatPresenter(private val viewState: ChatView) {
     fun databaseChangesListener(observer: FlowContentObserver) {
         observer.addModelChangeListener { table, _, _ ->
             when (table) {
-                Chat::class.java -> {
-                    //viewState.changeChatList()
-                }
                 Message::class.java -> {
                     viewState.changeMessageList()
                     readMessages()
@@ -137,7 +175,7 @@ class ChatPresenter(private val viewState: ChatView) {
             }
 
             override fun onDeviceConnectionFailed() {
-
+                BluetoothUseCase.connect(mChat.bluetoothMacAddress)
             }
         })
     }
@@ -182,5 +220,22 @@ class ChatPresenter(private val viewState: ChatView) {
     fun unregisterReceiver(context: Context) {
         if (mReceiver != null)
             context.unregisterReceiver(mReceiver)
+    }
+
+    fun onDataReceivedListener() {
+        BluetoothFactory.sBtSPP.setOnDataReceivedListener { _, message ->
+            val name = BluetoothFactory.sBtSPP.connectedDeviceName
+            val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
+
+            if (message != null && name != null && address != null) {
+                if (address == mChat.bluetoothMacAddress) {
+                    when (message) {
+                        Constants.TYPING -> {
+                            typing()
+                        }
+                    }
+                }
+            }
+        }
     }
 }

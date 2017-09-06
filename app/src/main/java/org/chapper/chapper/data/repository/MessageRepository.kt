@@ -1,9 +1,9 @@
 package org.chapper.chapper.data.repository
 
 import com.raizlabs.android.dbflow.kotlinextensions.*
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Message_Table
+import org.chapper.chapper.data.status.MessageStatus
 
 object MessageRepository {
     fun getMessages(chatId: String): MutableList<Message> =

@@ -6,8 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.bindView
 import org.chapper.chapper.R
-import org.chapper.chapper.data.MessageStatus
 import org.chapper.chapper.data.model.Message
+import org.chapper.chapper.data.status.MessageStatus
 import org.jetbrains.anko.image
 
 class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
