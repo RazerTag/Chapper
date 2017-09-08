@@ -66,7 +66,7 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
         context.registerReceiver(mReceiver, filter)
     }
 
-    fun unregisterReceiver(context: Context) {
+    fun unregisterReceiver() {
         fun unregisterReceiver(context: Context) {
             if (mReceiver != null)
                 context.unregisterReceiver(mReceiver)

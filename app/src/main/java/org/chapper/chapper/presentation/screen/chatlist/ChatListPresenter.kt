@@ -3,9 +3,9 @@ package org.chapper.chapper.presentation.screen.chatlist
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import app.akexorcist.bluetotohspp.library.BluetoothState
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.AppAction

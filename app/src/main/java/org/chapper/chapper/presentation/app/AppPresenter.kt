@@ -1,9 +1,9 @@
 package org.chapper.chapper.presentation.app
 
 import android.content.Context
-import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.kotlinextensions.save
+import me.annenkov.bluekitten.BluetoothSPP
 import org.chapper.chapper.R
 import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants

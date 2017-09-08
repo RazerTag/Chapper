@@ -6,12 +6,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import app.akexorcist.bluetotohspp.library.BluetoothSPP
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.annenkov.bluekitten.BluetoothSPP
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
@@ -158,6 +158,7 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     fun bluetoothConnectionListener() {
+        // TODO : Fix memory leak
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String?, address: String?) {
                 if (address == mChat.bluetoothMacAddress) {
@@ -175,7 +176,12 @@ class ChatPresenter(private val viewState: ChatView) {
             }
 
             override fun onDeviceConnectionFailed() {
-                BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                Observable.just("")
+                        .observeOn(Schedulers.newThread())
+                        .doOnNext { Thread.sleep(2500) }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext { BluetoothUseCase.connect(mChat.bluetoothMacAddress) }
+                        .subscribe()
             }
         })
     }

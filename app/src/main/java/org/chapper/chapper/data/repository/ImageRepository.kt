@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import kotlin.properties.Delegates
 
 
@@ -27,9 +29,7 @@ object ImageRepository {
         try {
             fis = context.openFileInput(chatId)
             b = BitmapFactory.decodeStream(fis)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             try {

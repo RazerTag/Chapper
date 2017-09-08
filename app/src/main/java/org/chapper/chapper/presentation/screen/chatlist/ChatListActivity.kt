@@ -12,11 +12,11 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import app.akexorcist.bluetotohspp.library.BluetoothState
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.kotlinextensions.delete
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.AppAction

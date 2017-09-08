@@ -2,7 +2,7 @@ package org.chapper.chapper.data.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
-import app.akexorcist.bluetotohspp.library.BluetoothSPP
+import me.annenkov.bluekitten.BluetoothSPP
 import kotlin.properties.Delegates
 
 object BluetoothFactory {

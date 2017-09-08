@@ -86,7 +86,7 @@ dependencies {
 
     compile "com.github.Mariovc:ImagePicker:$imagePickerVersion"
 
-    compile(name: 'bluetoothspp', ext: 'aar')
+    compile(name: 'bluekitten', ext: 'aar')
 
     compile "tk.wasdennnoch:progresstoolbar:$progresstoolbarVersion"
 }
