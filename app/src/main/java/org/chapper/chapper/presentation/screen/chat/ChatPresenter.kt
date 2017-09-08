@@ -40,7 +40,7 @@ class ChatPresenter(private val viewState: ChatView) {
         viewState.initToolbar()
         viewState.showMessages()
         statusOffline()
-        registerTypingReceiver(context)
+        registerReceivers(context)
     }
 
     private fun initChat(intent: Intent) {
@@ -185,7 +185,16 @@ class ChatPresenter(private val viewState: ChatView) {
         })
     }
 
-    fun startDiscovery(context: Context) {
+    fun startDiscovery() {
+        BluetoothUseCase.startDiscovery()
+    }
+
+    fun registerReceivers(context: Context) {
+        registerDiscoveryReceiver(context)
+        registerTypingReceiver(context)
+    }
+
+    private fun registerDiscoveryReceiver(context: Context) {
         val listener = object : BluetoothDiscoveryBroadcastReceiver.ActionListener {
             override fun onDeviceFound(intent: Intent) {
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
@@ -210,18 +219,9 @@ class ChatPresenter(private val viewState: ChatView) {
 
         mBtDiscoveryReceiver = BluetoothDiscoveryBroadcastReceiver(context, listener)
         mBtDiscoveryReceiver!!.registerContext()
-
-        BluetoothUseCase.startDiscovery()
     }
 
-    fun unregisterReceivers() {
-        if (mBtDiscoveryReceiver != null)
-            mBtDiscoveryReceiver!!.unregisterContext()
-        if (mTypingReceiver != null)
-            mTypingReceiver!!.unregisterContext()
-    }
-
-    fun registerTypingReceiver(context: Context) {
+    private fun registerTypingReceiver(context: Context) {
         val listener = object : TypingBroadcastReceiver.ActionListener {
             override fun onTyping() {
                 typing()
@@ -230,5 +230,12 @@ class ChatPresenter(private val viewState: ChatView) {
 
         mTypingReceiver = TypingBroadcastReceiver(context, listener)
         mTypingReceiver!!.registerContext()
+    }
+
+    fun unregisterReceivers() {
+        if (mBtDiscoveryReceiver != null)
+            mBtDiscoveryReceiver!!.unregisterContext()
+        if (mTypingReceiver != null)
+            mTypingReceiver!!.unregisterContext()
     }
 }

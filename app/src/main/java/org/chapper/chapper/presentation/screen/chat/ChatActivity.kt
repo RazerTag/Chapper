@@ -142,7 +142,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     }
 
     override fun startRefreshing() {
-        mPresenter.startDiscovery(applicationContext)
+        mPresenter.startDiscovery()
     }
 
     override fun statusTyping() {
