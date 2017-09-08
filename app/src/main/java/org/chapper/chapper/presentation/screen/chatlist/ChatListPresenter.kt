@@ -8,19 +8,22 @@ import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
-import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
 class
 ChatListPresenter(private val viewState: ChatListView) {
-    fun init() {
+    private var mReceiver: BluetoothStateBroadcastReceiver? = null
+
+    fun init(context: Context) {
         viewState.initToolbar()
         viewState.initDrawer()
         viewState.showChats()
+        registerTypingReceiver(context)
     }
 
     fun handleDrawerItemClickListener(position: Int): Boolean {
@@ -92,11 +95,24 @@ ChatListPresenter(private val viewState: ChatListView) {
                 Message::class.java -> {
                     viewState.changeChatList()
                 }
-                AppAction::class.java -> {
-                    viewState.changeChatList()
-                    bluetoothStatusAction()
-                }
             }
         }
+    }
+
+    private fun registerTypingReceiver(context: Context) {
+        val listener = object : BluetoothStateBroadcastReceiver.ActionListener {
+            override fun onBluetoothStatusAction() {
+                viewState.changeChatList()
+                bluetoothStatusAction()
+            }
+        }
+
+        mReceiver = BluetoothStateBroadcastReceiver(context, listener)
+        mReceiver!!.registerContext()
+    }
+
+    fun unregisterReceivers() {
+        if (mReceiver != null)
+            mReceiver!!.unregisterContext()
     }
 }

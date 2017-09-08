@@ -27,11 +27,11 @@ class App : Application(), AppView {
         initSQLTables()
 
         BluetoothFactory.initBluetoothSSP(applicationContext)
-        mPresenter.bluetoothStatusAction()
+        mPresenter.bluetoothStatusAction(applicationContext)
 
-        mPresenter.registerBluetoothStateReceiver()
+        mPresenter.registerBluetoothStateReceiver(applicationContext)
         mPresenter.bluetoothConnectionListener(applicationContext)
-        mPresenter.onDataReceivedListener()
+        mPresenter.onDataReceivedListener(applicationContext)
     }
 
     override fun onTerminate() {
@@ -48,7 +48,7 @@ class App : Application(), AppView {
     }
 
     override fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener) {
-        mBtReceiverState = BluetoothStateBroadcastReceiver(listener)
+        mBtReceiverState = BluetoothStateBroadcastReceiver(applicationContext, listener)
 
         registerReceiver(mBtReceiverState
                 , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))

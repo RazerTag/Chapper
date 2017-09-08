@@ -1,25 +1,24 @@
 package org.chapper.chapper.presentation.broadcastreceiver
 
-import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import org.chapper.chapper.data.Constants
 
-class BluetoothStateBroadcastReceiver(
-        private val context: Context,
-        private val listener: BluetoothStateBroadcastReceiver.ActionListener
-) : BroadcastReceiver() {
+class TypingBroadcastReceiver(private val context: Context, private val listener: ActionListener) : BroadcastReceiver() {
     interface ActionListener {
-        fun onBluetoothStatusAction()
+        fun onTyping()
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        listener.onBluetoothStatusAction()
+        when (intent.action) {
+            Constants.TYPING_TAG -> listener.onTyping()
+        }
     }
 
     fun registerContext() {
-        val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        val filter = IntentFilter(Constants.TYPING_TAG)
         context.registerReceiver(this, filter)
     }
 

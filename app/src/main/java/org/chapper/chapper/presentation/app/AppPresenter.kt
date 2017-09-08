@@ -1,15 +1,14 @@
 package org.chapper.chapper.presentation.app
 
 import android.content.Context
+import android.content.Intent
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import me.annenkov.bluekitten.BluetoothSPP
 import org.chapper.chapper.R
-import org.chapper.chapper.data.ActionType
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
-import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
@@ -19,8 +18,8 @@ import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 
 class AppPresenter(private val viewState: AppView) {
-    fun bluetoothStatusAction() {
-        AppAction(type = ActionType.BLUETOOTH_ACTION).insert()
+    fun bluetoothStatusAction(context: Context) {
+        context.sendBroadcast(Intent(Constants.TYPING_TAG))
 
         if (BluetoothUseCase.checkStatus() == BluetoothStatus.ENABLED) {
             BluetoothUseCase.startService()
@@ -29,17 +28,17 @@ class AppPresenter(private val viewState: AppView) {
         }
     }
 
-    fun registerBluetoothStateReceiver() {
+    fun registerBluetoothStateReceiver(context: Context) {
         val listener = object : BluetoothStateBroadcastReceiver.ActionListener {
             override fun onBluetoothStatusAction() {
-                bluetoothStatusAction()
+                bluetoothStatusAction(context)
             }
         }
 
         viewState.registerReceiver(listener)
     }
 
-    fun onDataReceivedListener() {
+    fun onDataReceivedListener(context: Context) {
         BluetoothFactory.sBtSPP.setOnDataReceivedListener { _, message ->
             val name = BluetoothFactory.sBtSPP.connectedDeviceName
             val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
@@ -50,7 +49,7 @@ class AppPresenter(private val viewState: AppView) {
 
                 when {
                     message == Constants.TYPING -> {
-                        /*Nothing*/
+                        context.sendBroadcast(Intent(Constants.TYPING_TAG))
                     }
 
                     message == Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
@@ -95,7 +94,7 @@ class AppPresenter(private val viewState: AppView) {
             }
 
             override fun onDeviceConnectionFailed() {
-                bluetoothStatusAction()
+                bluetoothStatusAction(context)
             }
         })
     }

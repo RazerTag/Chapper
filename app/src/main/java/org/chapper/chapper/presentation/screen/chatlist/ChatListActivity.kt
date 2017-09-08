@@ -19,7 +19,6 @@ import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
-import org.chapper.chapper.data.model.AppAction
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
@@ -52,14 +51,13 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         setContentView(R.layout.activity_chat_list)
         mPresenter = ChatListPresenter(this)
 
-        mPresenter.init()
+        mPresenter.init(applicationContext)
         mPresenter.bluetoothStatusAction()
 
         mFlowObserver = FlowContentObserver()
         mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
-        mFlowObserver.registerForContentChanges(applicationContext, AppAction::class.java)
         mPresenter.databaseChangesListener(mFlowObserver)
     }
 
@@ -132,6 +130,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mRecyclerView.adapter = null
         mFlowObserver.unregisterForContentChanges(applicationContext)
+        mPresenter.unregisterReceivers()
     }
 
     override fun showChats() {

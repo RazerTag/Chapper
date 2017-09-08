@@ -54,7 +54,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         window.setBackgroundDrawableResource(R.drawable.background)
         mPresenter = ChatPresenter(this)
 
-        mPresenter.init(intent)
+        mPresenter.init(applicationContext, intent)
         mPresenter.setupStatus(mPresenter.mChat.bluetoothMacAddress)
         mPresenter.bluetoothConnectionListener()
 
@@ -68,19 +68,18 @@ class ChatActivity : AppCompatActivity(), ChatView {
         }
 
         mMessageEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                BluetoothUseCase.send(Constants.TYPING)
-            }
+            override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0 != null && p0.isNotEmpty())
+                    BluetoothUseCase.send(Constants.TYPING)
+            }
         })
 
         mPresenter.readMessages()
         mPresenter.sendMessagesReadCode()
-
-        mPresenter.onDataReceivedListener()
     }
 
     override fun initToolbar() {
@@ -131,7 +130,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
         mRecyclerView.adapter = null
         mFlowObserver.unregisterForContentChanges(applicationContext)
-        mPresenter.unregisterReceiver(applicationContext)
+        mPresenter.unregisterReceivers()
     }
 
     override fun showRefresher() {

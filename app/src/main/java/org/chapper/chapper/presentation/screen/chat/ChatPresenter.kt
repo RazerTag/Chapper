@@ -1,11 +1,8 @@
 package org.chapper.chapper.presentation.screen.chat
 
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import io.reactivex.Observable
@@ -21,6 +18,7 @@ import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
+import org.chapper.chapper.presentation.broadcastreceiver.TypingBroadcastReceiver
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -28,7 +26,8 @@ class ChatPresenter(private val viewState: ChatView) {
     var mChatId: String by Delegates.notNull()
     var mChat: Chat by Delegates.notNull()
 
-    var mReceiver: BroadcastReceiver? = null
+    private var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver? = null
+    private var mTypingReceiver: TypingBroadcastReceiver? = null
 
     private val mTypingCalls: Queue<String> = ArrayDeque()
 
@@ -36,11 +35,12 @@ class ChatPresenter(private val viewState: ChatView) {
     var isConnected = false
     var isNearby = false
 
-    fun init(intent: Intent) {
+    fun init(context: Context, intent: Intent) {
         initChat(intent)
         viewState.initToolbar()
         viewState.showMessages()
         statusOffline()
+        registerTypingReceiver(context)
     }
 
     private fun initChat(intent: Intent) {
@@ -127,7 +127,7 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     fun databaseChangesListener(observer: FlowContentObserver) {
-        observer.addModelChangeListener { table, _, _ ->
+        observer.addModelChangeListener { table, action, primaryKeyValues ->
             when (table) {
                 Message::class.java -> {
                     viewState.changeMessageList()
@@ -158,7 +158,6 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     fun bluetoothConnectionListener() {
-        // TODO : Fix memory leak
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String?, address: String?) {
                 if (address == mChat.bluetoothMacAddress) {
@@ -209,39 +208,27 @@ class ChatPresenter(private val viewState: ChatView) {
             }
         }
 
-        mReceiver = BluetoothDiscoveryBroadcastReceiver(listener)
-
-        var filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        context.registerReceiver(mReceiver, filter)
-
-        filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        context.registerReceiver(mReceiver, filter)
-
-        filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        context.registerReceiver(mReceiver, filter)
+        mBtDiscoveryReceiver = BluetoothDiscoveryBroadcastReceiver(context, listener)
+        mBtDiscoveryReceiver!!.registerContext()
 
         BluetoothUseCase.startDiscovery()
     }
 
-    fun unregisterReceiver(context: Context) {
-        if (mReceiver != null)
-            context.unregisterReceiver(mReceiver)
+    fun unregisterReceivers() {
+        if (mBtDiscoveryReceiver != null)
+            mBtDiscoveryReceiver!!.unregisterContext()
+        if (mTypingReceiver != null)
+            mTypingReceiver!!.unregisterContext()
     }
 
-    fun onDataReceivedListener() {
-        BluetoothFactory.sBtSPP.setOnDataReceivedListener { _, message ->
-            val name = BluetoothFactory.sBtSPP.connectedDeviceName
-            val address = BluetoothFactory.sBtSPP.connectedDeviceAddress
-
-            if (message != null && name != null && address != null) {
-                if (address == mChat.bluetoothMacAddress) {
-                    when (message) {
-                        Constants.TYPING -> {
-                            typing()
-                        }
-                    }
-                }
+    fun registerTypingReceiver(context: Context) {
+        val listener = object : TypingBroadcastReceiver.ActionListener {
+            override fun onTyping() {
+                typing()
             }
         }
+
+        mTypingReceiver = TypingBroadcastReceiver(context, listener)
+        mTypingReceiver!!.registerContext()
     }
 }

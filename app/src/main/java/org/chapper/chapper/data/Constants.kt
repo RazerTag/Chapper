@@ -3,6 +3,9 @@ package org.chapper.chapper.data
 object Constants {
     const val CHAT_ID_EXTRA = "chat_id"
 
+    const val TYPING_TAG = "typing_tag"
+    const val BLUETOOTH_STATUS_TAG = "typing_tag"
+
     const val TYPING: String = "6a5df9fcac0cfa3b9b264f372dae311d"
     const val MESSAGE_RECEIVED: String = "c5946eb9400717fd6f40e26e36cdb498"
     const val MESSAGES_READ: String = "ecae13117d6f0584c25a9da6c8f8415e"
