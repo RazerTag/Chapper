@@ -26,14 +26,14 @@ class ChatPresenter(private val viewState: ChatView) {
     var mChatId: String by Delegates.notNull()
     var mChat: Chat by Delegates.notNull()
 
-    private var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver? = null
-    private var mTypingReceiver: TypingBroadcastReceiver? = null
+    private var isTyping = false
+    private var isConnected = false
+    private var isNearby = false
 
     private val mTypingCalls: Queue<String> = ArrayDeque()
 
-    var isTyping = false
-    var isConnected = false
-    var isNearby = false
+    private var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver by Delegates.notNull()
+    private var mTypingReceiver: TypingBroadcastReceiver by Delegates.notNull()
 
     fun init(context: Context, intent: Intent) {
         initChat(intent)
@@ -127,7 +127,7 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     fun databaseChangesListener(observer: FlowContentObserver) {
-        observer.addModelChangeListener { table, action, primaryKeyValues ->
+        observer.addModelChangeListener { table, _, _ ->
             when (table) {
                 Message::class.java -> {
                     viewState.changeMessageList()
@@ -194,6 +194,11 @@ class ChatPresenter(private val viewState: ChatView) {
         registerTypingReceiver(context)
     }
 
+    fun unregisterReceivers() {
+        mBtDiscoveryReceiver.unregisterContext()
+        mTypingReceiver.unregisterContext()
+    }
+
     private fun registerDiscoveryReceiver(context: Context) {
         val listener = object : BluetoothDiscoveryBroadcastReceiver.ActionListener {
             override fun onDeviceFound(intent: Intent) {
@@ -218,7 +223,7 @@ class ChatPresenter(private val viewState: ChatView) {
         }
 
         mBtDiscoveryReceiver = BluetoothDiscoveryBroadcastReceiver(context, listener)
-        mBtDiscoveryReceiver!!.registerContext()
+        mBtDiscoveryReceiver.registerContext()
     }
 
     private fun registerTypingReceiver(context: Context) {
@@ -229,13 +234,6 @@ class ChatPresenter(private val viewState: ChatView) {
         }
 
         mTypingReceiver = TypingBroadcastReceiver(context, listener)
-        mTypingReceiver!!.registerContext()
-    }
-
-    fun unregisterReceivers() {
-        if (mBtDiscoveryReceiver != null)
-            mBtDiscoveryReceiver!!.unregisterContext()
-        if (mTypingReceiver != null)
-            mTypingReceiver!!.unregisterContext()
+        mTypingReceiver.registerContext()
     }
 }

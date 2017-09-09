@@ -6,7 +6,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import org.chapper.chapper.data.Constants
 
-class TypingBroadcastReceiver(private val context: Context, private val listener: ActionListener) : BroadcastReceiver() {
+class TypingBroadcastReceiver(
+        private val context: Context,
+        private val listener: ActionListener
+) : BroadcastReceiver() {
     interface ActionListener {
         fun onTyping()
     }

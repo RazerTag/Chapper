@@ -3,21 +3,19 @@ package org.chapper.chapper.presentation.screen.chatlist
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import me.annenkov.bluekitten.BluetoothState
-import org.chapper.chapper.R
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
-import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
+import kotlin.properties.Delegates
 
 class
 ChatListPresenter(private val viewState: ChatListView) {
-    private var mReceiver: BluetoothStateBroadcastReceiver? = null
+    private var mReceiver: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
     fun init(context: Context) {
         viewState.initToolbar()
@@ -71,18 +69,6 @@ ChatListPresenter(private val viewState: ChatListView) {
         }
     }
 
-    fun addChat(context: Context, username: String, address: String) {
-        val chat = Chat()
-        chat.username = username
-        chat.bluetoothMacAddress = address
-        chat.firstName = context.getString(R.string.loading)
-        chat.insert()
-        Message(chatId = chat.id,
-                text = context.getString(R.string.chat_created),
-                status = MessageStatus.ACTION)
-                .insert()
-    }
-
     fun databaseChangesListener(observer: FlowContentObserver) {
         observer.addModelChangeListener { table, _, _ ->
             when (table) {
@@ -108,11 +94,10 @@ ChatListPresenter(private val viewState: ChatListView) {
         }
 
         mReceiver = BluetoothStateBroadcastReceiver(context, listener)
-        mReceiver!!.registerContext()
+        mReceiver.registerContext()
     }
 
     fun unregisterReceivers() {
-        if (mReceiver != null)
-            mReceiver!!.unregisterContext()
+        mReceiver.unregisterContext()
     }
 }

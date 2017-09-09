@@ -48,13 +48,14 @@ class AppPresenter(private val viewState: AppView) {
                 val id = chat.id
 
                 when {
-                    message == Constants.TYPING -> {
+                    message == Constants.TYPING ->
                         context.sendBroadcast(Intent(Constants.TYPING_TAG))
-                    }
 
-                    message == Constants.MESSAGES_READ -> MessageRepository.readOutgoingMessages(id)
+                    message == Constants.MESSAGES_READ ->
+                        MessageRepository.readOutgoingMessages(id)
 
-                    message == Constants.MESSAGE_RECEIVED -> MessageRepository.receiveMessages(id)
+                    message == Constants.MESSAGE_RECEIVED ->
+                        MessageRepository.receiveMessages(id)
 
                     message.contains(Constants.FIRST_NAME) -> {
                         val text = message.replace(Constants.FIRST_NAME, "")

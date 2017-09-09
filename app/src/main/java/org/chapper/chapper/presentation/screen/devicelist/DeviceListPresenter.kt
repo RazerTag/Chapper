@@ -5,9 +5,10 @@ import android.content.Context
 import android.content.Intent
 import org.chapper.chapper.data.model.Device
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
+import kotlin.properties.Delegates
 
 class DeviceListPresenter(private val viewState: DeviceListView) {
-    var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver? = null
+    var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver by Delegates.notNull()
 
     fun init() {
         viewState.initToolbar()
@@ -52,11 +53,10 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
         }
 
         mBtDiscoveryReceiver = BluetoothDiscoveryBroadcastReceiver(context, listener)
-        mBtDiscoveryReceiver!!.registerContext()
+        mBtDiscoveryReceiver.registerContext()
     }
 
     fun unregisterReceiver() {
-        if (mBtDiscoveryReceiver != null)
-            mBtDiscoveryReceiver!!.unregisterContext()
+        mBtDiscoveryReceiver.unregisterContext()
     }
 }
