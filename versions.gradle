@@ -12,7 +12,7 @@ ext {
     circleImageViewVersion = '2.1.0'
     bluetoothsppVersion = '1.0.0'
     daggerVersion = '2.11'
-    dbflowVersion = '4.0.5'
+    dbflowVersion = '4.1.1'
     imagePickerVersion = '1.2.0'
     dexterVersion = '4.1.0'
     progresstoolbarVersion = '1.0.3'
