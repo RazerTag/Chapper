@@ -15,6 +15,8 @@ class SettingsPresenter(private val viewState: SettingsView) {
         viewState.initName(SettingsRepository.getName())
         viewState.initAddress(SettingsRepository.getAddress(context))
         viewState.initUsername(SettingsRepository.getUsername())
+
+        viewState.setSendByEnter(SettingsRepository.isSendByEnter())
     }
 
     fun databaseChangesListener(context: Context, observer: FlowContentObserver) {

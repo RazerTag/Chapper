@@ -1,7 +1,7 @@
 <!-- drawable/check.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="19dp"
-        android:height="19dp"
+        android:width="18dp"
+        android:height="18dp"
         android:viewportHeight="24"
         android:viewportWidth="24">
     <path

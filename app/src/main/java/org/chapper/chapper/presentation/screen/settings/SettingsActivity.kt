@@ -1,7 +1,12 @@
 package org.chapper.chapper.presentation.screen.settings
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -12,9 +17,11 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.TextView
 import butterknife.bindView
+import com.mvc.imagepicker.ImagePicker
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.model.Settings
@@ -73,6 +80,10 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
                 }
             }.show()
         }
+
+        mSendByEnterSwitch.setOnCheckedChangeListener { _, b ->
+            SettingsRepository.setSendByEnter(b)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -110,6 +121,9 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
                     }
                 }.show()
             }
+            R.id.action_change_photo -> {
+                pickImage()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -118,7 +132,7 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
         setSupportActionBar(mToolbar)
         mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
         mToolbar.setNavigationOnClickListener {
-            finishActivity()
+            finish()
         }
     }
 
@@ -138,7 +152,41 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
         mUsername.text = text
     }
 
-    private fun finishActivity() {
-        finish()
+    override fun setSendByEnter(sendByEnter: Boolean) {
+        mSendByEnterSwitch.isChecked = sendByEnter
+    }
+
+    override fun pickImage() {
+        val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS)
+            return
+        }
+
+        ImagePicker.pickImage(this)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS -> {
+                if ((grantResults.isNotEmpty()) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    pickImage()
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            val bitmap: Bitmap = ImagePicker.getImageFromResult(applicationContext, requestCode, resultCode, data)!!
+
+            mPhoto.setImageBitmap(bitmap)
+            SettingsRepository.setProfilePhoto(applicationContext, bitmap)
+
+            mPresenter.init(applicationContext)
+        }
     }
 }

@@ -8,4 +8,8 @@ interface SettingsView {
     fun initName(text: String)
     fun initAddress(text: String)
     fun initUsername(text: String)
+
+    fun setSendByEnter(sendByEnter: Boolean)
+
+    fun pickImage()
 }

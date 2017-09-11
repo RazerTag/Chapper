@@ -89,6 +89,8 @@ dependencies {
     compile(name: 'bluekitten', ext: 'aar')
 
     compile "tk.wasdennnoch:progresstoolbar:$progresstoolbarVersion"
+
+    compile "com.intuit.sdp:sdp-android:$sdpVersion"
 }
 
 kapt {

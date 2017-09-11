@@ -19,5 +19,8 @@ data class Settings(
         var firstName: String = "",
 
         @Column
-        var lastName: String = ""
+        var lastName: String = "",
+
+        @Column
+        var isSendByEnter: Boolean = false
 )

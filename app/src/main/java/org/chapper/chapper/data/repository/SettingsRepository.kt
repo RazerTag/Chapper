@@ -23,6 +23,8 @@ object SettingsRepository {
 
     fun getLastName(): String = (select from Settings::class).querySingle()!!.lastName
 
+    fun isSendByEnter(): Boolean = (select from Settings::class).querySingle()!!.isSendByEnter
+
     fun setUsername(username: String) {
         BluetoothUseCase.setBluetoothName(username)
     }
@@ -46,6 +48,12 @@ object SettingsRepository {
     fun setLastName(lastName: String) {
         val settings = (select from Settings::class).querySingle()!!
         settings.lastName = lastName
+        settings.save()
+    }
+
+    fun setSendByEnter(sendByEnter: Boolean) {
+        val settings = (select from Settings::class).querySingle()!!
+        settings.isSendByEnter = sendByEnter
         settings.save()
     }
 }

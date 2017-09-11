@@ -17,13 +17,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import butterknife.bindView
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
-import de.hdodenhof.circleimageview.CircleImageView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
-import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.jetbrains.anko.toast
@@ -36,7 +34,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mChatName: TextView by bindView(R.id.chatName)
     private val mChatStatus: TextView by bindView(R.id.chatStatus)
-    private val mChatPhoto: CircleImageView by bindView(R.id.chatPhoto)
+    private val mChatPhoto: TextView by bindView(R.id.profile_image)
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mAdapter: ChatAdapter by Delegates.notNull()
@@ -86,9 +84,11 @@ class ChatActivity : AppCompatActivity(), ChatView {
         setSupportActionBar(mToolbar)
         mChatName.text = ChatRepository.getName(mPresenter.mChat)
 
-        val photo = ImageRepository.getImage(applicationContext, mPresenter.mChatId)
-        if (photo != null)
-            mChatPhoto.setImageBitmap(photo)
+        mChatPhoto.text = ChatRepository.getFirstCharsName(mPresenter.mChat)
+
+        /*val photo = ImageRepository.getImage(applicationContext, mPresenter.mChatId)
+        if (photo != null) TODO : Do set custom photo
+            mChatPhoto.setImageBitmap(photo)*/
 
         mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
         mToolbar.setNavigationOnClickListener {
