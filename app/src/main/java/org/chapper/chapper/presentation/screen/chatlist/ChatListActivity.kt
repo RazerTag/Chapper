@@ -15,13 +15,10 @@ import android.view.View
 import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.kotlinextensions.delete
-import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
-import org.chapper.chapper.data.model.Message
-import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.screen.chat.ChatActivity
@@ -44,8 +41,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     private val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
 
-    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
@@ -53,12 +48,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mPresenter.init(applicationContext)
         mPresenter.bluetoothStatusAction()
-
-        mFlowObserver = FlowContentObserver()
-        mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
-        mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
-        mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
-        mPresenter.databaseChangesListener(mFlowObserver)
     }
 
     override fun onResume() {
@@ -129,8 +118,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         super.onDestroy()
 
         mRecyclerView.adapter = null
-        mFlowObserver.unregisterForContentChanges(applicationContext)
-        mPresenter.unregisterReceivers()
+        mPresenter.destroy(applicationContext)
     }
 
     override fun showChats() {

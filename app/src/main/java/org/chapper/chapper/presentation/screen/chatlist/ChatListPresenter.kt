@@ -17,11 +17,18 @@ class
 ChatListPresenter(private val viewState: ChatListView) {
     private var mReceiver: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
+    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
+
     fun init(context: Context) {
         viewState.initToolbar()
         viewState.initDrawer()
         viewState.showChats()
-        registerTypingReceiver(context)
+
+        registerReceivers(context)
+    }
+
+    fun destroy(context: Context) {
+        unregisterReceivers(context)
     }
 
     fun handleDrawerItemClickListener(position: Int): Boolean {
@@ -69,7 +76,7 @@ ChatListPresenter(private val viewState: ChatListView) {
         }
     }
 
-    fun databaseChangesListener(observer: FlowContentObserver) {
+    private fun databaseChangesListener(observer: FlowContentObserver) {
         observer.addModelChangeListener { table, _, _ ->
             when (table) {
                 Settings::class.java -> {
@@ -85,6 +92,24 @@ ChatListPresenter(private val viewState: ChatListView) {
         }
     }
 
+    private fun registerReceivers(context: Context) {
+        registerFlowObserver(context)
+        registerTypingReceiver(context)
+    }
+
+    private fun unregisterReceivers(context: Context) {
+        mFlowObserver.unregisterForContentChanges(context)
+        mReceiver.unregisterContext()
+    }
+
+    private fun registerFlowObserver(context: Context) {
+        mFlowObserver = FlowContentObserver()
+        mFlowObserver.registerForContentChanges(context, Settings::class.java)
+        mFlowObserver.registerForContentChanges(context, Chat::class.java)
+        mFlowObserver.registerForContentChanges(context, Message::class.java)
+        databaseChangesListener(mFlowObserver)
+    }
+
     private fun registerTypingReceiver(context: Context) {
         val listener = object : BluetoothStateBroadcastReceiver.ActionListener {
             override fun onBluetoothStatusAction() {
@@ -95,9 +120,5 @@ ChatListPresenter(private val viewState: ChatListView) {
 
         mReceiver = BluetoothStateBroadcastReceiver(context, listener)
         mReceiver.registerContext()
-    }
-
-    fun unregisterReceivers() {
-        mReceiver.unregisterContext()
     }
 }

@@ -35,12 +35,20 @@ class ChatPresenter(private val viewState: ChatView) {
     private var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver by Delegates.notNull()
     private var mTypingReceiver: TypingBroadcastReceiver by Delegates.notNull()
 
+    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
+
     fun init(context: Context, intent: Intent) {
         initChat(intent)
         viewState.initToolbar()
         viewState.showMessages()
+
         statusOffline()
+
         registerReceivers(context)
+    }
+
+    fun destroy(context: Context) {
+        unregisterReceivers(context)
     }
 
     private fun initChat(intent: Intent) {
@@ -126,7 +134,7 @@ class ChatPresenter(private val viewState: ChatView) {
         }
     }
 
-    fun databaseChangesListener(observer: FlowContentObserver) {
+    private fun databaseChangesListener(observer: FlowContentObserver) {
         observer.addModelChangeListener { table, _, _ ->
             when (table) {
                 Message::class.java -> {
@@ -189,14 +197,23 @@ class ChatPresenter(private val viewState: ChatView) {
         BluetoothUseCase.startDiscovery()
     }
 
-    fun registerReceivers(context: Context) {
+    private fun registerReceivers(context: Context) {
+        registerFlowObserver(context)
         registerDiscoveryReceiver(context)
         registerTypingReceiver(context)
     }
 
-    fun unregisterReceivers() {
+    fun unregisterReceivers(context: Context) {
+        mFlowObserver.unregisterForContentChanges(context)
         mBtDiscoveryReceiver.unregisterContext()
         mTypingReceiver.unregisterContext()
+    }
+
+    private fun registerFlowObserver(context: Context) {
+        mFlowObserver = FlowContentObserver()
+        mFlowObserver.registerForContentChanges(context, Chat::class.java)
+        mFlowObserver.registerForContentChanges(context, Message::class.java)
+        databaseChangesListener(mFlowObserver)
     }
 
     private fun registerDiscoveryReceiver(context: Context) {

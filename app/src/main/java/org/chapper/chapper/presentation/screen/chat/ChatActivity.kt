@@ -16,11 +16,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import butterknife.bindView
-import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
-import org.chapper.chapper.data.model.Chat
-import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
@@ -44,8 +41,6 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
     private val mRefresher: ProgressToolbar by bindView(R.id.refresher)
 
-    private var mFlowObserver: FlowContentObserver by Delegates.notNull()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -55,11 +50,6 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.init(applicationContext, intent)
         mPresenter.setupStatus(mPresenter.mChat.bluetoothMacAddress)
         mPresenter.bluetoothConnectionListener()
-
-        mFlowObserver = FlowContentObserver()
-        mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
-        mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)
-        mPresenter.databaseChangesListener(mFlowObserver)
 
         mSendButton.setOnClickListener {
             sendMessage()
@@ -129,8 +119,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         super.onDestroy()
 
         mRecyclerView.adapter = null
-        mFlowObserver.unregisterForContentChanges(applicationContext)
-        mPresenter.unregisterReceivers()
+        mPresenter.destroy(applicationContext)
     }
 
     override fun showRefresher() {
