@@ -18,10 +18,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name="org.chapper.chapper.presentation.screen.chatlist.ChatListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -31,6 +31,10 @@
         <activity android:name="org.chapper.chapper.presentation.screen.chat.ChatActivity"/>
         <activity android:name="org.chapper.chapper.presentation.screen.settings.SettingsActivity"/>
         <activity android:name="org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity"/>
+
+        <service
+            android:name="org.chapper.chapper.data.bluetooth.BluetoothService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

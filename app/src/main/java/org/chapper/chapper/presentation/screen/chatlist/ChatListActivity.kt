@@ -47,7 +47,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mPresenter = ChatListPresenter(this)
 
         mPresenter.init(applicationContext)
-        mPresenter.bluetoothStatusAction()
     }
 
     override fun onResume() {

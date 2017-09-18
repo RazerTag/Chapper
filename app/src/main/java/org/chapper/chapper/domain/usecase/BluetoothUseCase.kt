@@ -2,6 +2,7 @@ package org.chapper.chapper.domain.usecase
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.Intent
 import android.provider.Settings
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
@@ -9,6 +10,16 @@ import org.chapper.chapper.data.bluetooth.BluetoothStatus
 import org.chapper.chapper.data.repository.SettingsRepository
 
 object BluetoothUseCase {
+    fun bluetoothStatusAction(context: Context) {
+        context.sendBroadcast(Intent(Constants.TYPING_TAG))
+
+        if (BluetoothUseCase.checkStatus() == BluetoothStatus.ENABLED) {
+            BluetoothUseCase.startService()
+        } else {
+            BluetoothUseCase.stopService()
+        }
+    }
+
     fun startService() {
         val bt = BluetoothFactory.sBtSPP
 

@@ -45,6 +45,11 @@ class ChatPresenter(private val viewState: ChatView) {
         statusOffline()
 
         registerReceivers(context)
+        setupStatus(mChat.bluetoothMacAddress)
+        bluetoothConnectionListener()
+
+        readMessages()
+        sendMessagesReadCode()
     }
 
     fun destroy(context: Context) {
@@ -58,7 +63,7 @@ class ChatPresenter(private val viewState: ChatView) {
         BluetoothUseCase.connect(mChat.bluetoothMacAddress)
     }
 
-    fun setupStatus(currentAddress: String) {
+    private fun setupStatus(currentAddress: String) {
         if (BluetoothFactory.sBtSPP.connectedDeviceAddress == currentAddress) {
             statusConnected()
         } else {
@@ -146,14 +151,14 @@ class ChatPresenter(private val viewState: ChatView) {
         }
     }
 
-    fun readMessages() {
+    private fun readMessages() {
         Observable.just("")
                 .doOnNext { MessageRepository.readIncomingMessages(mChatId) }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }
 
-    fun sendMessagesReadCode() {
+    private fun sendMessagesReadCode() {
         Observable.just("")
                 .doOnNext { BluetoothUseCase.send(Constants.MESSAGES_READ) }
                 .observeOn(Schedulers.newThread())
@@ -165,7 +170,7 @@ class ChatPresenter(private val viewState: ChatView) {
         mChat.save()
     }
 
-    fun bluetoothConnectionListener() {
+    private fun bluetoothConnectionListener() {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String?, address: String?) {
                 if (address == mChat.bluetoothMacAddress) {

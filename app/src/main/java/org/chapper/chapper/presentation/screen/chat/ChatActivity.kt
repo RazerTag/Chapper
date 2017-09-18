@@ -21,9 +21,11 @@ import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
+import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.jetbrains.anko.toast
 import tk.wasdennnoch.progresstoolbar.ProgressToolbar
 import kotlin.properties.Delegates
+
 
 class ChatActivity : AppCompatActivity(), ChatView {
     private var mPresenter: ChatPresenter by Delegates.notNull()
@@ -48,8 +50,6 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter = ChatPresenter(this)
 
         mPresenter.init(applicationContext, intent)
-        mPresenter.setupStatus(mPresenter.mChat.bluetoothMacAddress)
-        mPresenter.bluetoothConnectionListener()
 
         mSendButton.setOnClickListener {
             sendMessage()
@@ -65,9 +65,12 @@ class ChatActivity : AppCompatActivity(), ChatView {
                     BluetoothUseCase.send(Constants.TYPING)
             }
         })
+    }
 
-        mPresenter.readMessages()
-        mPresenter.sendMessagesReadCode()
+    override fun onResume() {
+        super.onResume()
+
+        NotificationUseCase.cleatAll(applicationContext)
     }
 
     override fun initToolbar() {

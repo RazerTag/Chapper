@@ -25,6 +25,7 @@ ChatListPresenter(private val viewState: ChatListView) {
         viewState.showChats()
 
         registerReceivers(context)
+        bluetoothStatusAction()
     }
 
     fun destroy(context: Context) {

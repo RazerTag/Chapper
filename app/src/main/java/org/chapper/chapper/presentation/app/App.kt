@@ -1,22 +1,19 @@
 package org.chapper.chapper.presentation.app
 
 import android.app.Application
-import android.bluetooth.BluetoothAdapter
-import android.content.IntentFilter
+import android.content.Intent
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.kotlinextensions.from
 import com.raizlabs.android.dbflow.kotlinextensions.insert
 import com.raizlabs.android.dbflow.kotlinextensions.select
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
+import org.chapper.chapper.data.bluetooth.BluetoothService
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
-import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import kotlin.properties.Delegates
 
 class App : Application(), AppView {
     private var mPresenter: AppPresenter by Delegates.notNull()
-
-    private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
 
     override fun onCreate() {
         super.onCreate()
@@ -27,30 +24,14 @@ class App : Application(), AppView {
         initSQLTables()
 
         BluetoothFactory.initBluetoothSSP(applicationContext)
-        mPresenter.bluetoothStatusAction(applicationContext)
+        BluetoothUseCase.bluetoothStatusAction(applicationContext)
 
-        mPresenter.registerBluetoothStateReceiver(applicationContext)
-        mPresenter.bluetoothConnectionListener(applicationContext)
-        mPresenter.onDataReceivedListener(applicationContext)
-    }
-
-    override fun onTerminate() {
-        super.onTerminate()
-
-        FlowManager.destroy()
-        BluetoothUseCase.stopService()
+        startService(Intent(applicationContext, BluetoothService::class.java))
     }
 
     private fun initSQLTables() {
         if (!(select from Settings::class).hasData()) {
             Settings().insert()
         }
-    }
-
-    override fun registerReceiver(listener: BluetoothStateBroadcastReceiver.ActionListener) {
-        mBtReceiverState = BluetoothStateBroadcastReceiver(applicationContext, listener)
-
-        registerReceiver(mBtReceiverState
-                , IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 }
