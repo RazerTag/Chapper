@@ -1,5 +1,6 @@
 package org.chapper.chapper.data.bluetooth
 
+import android.app.ActivityManager
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -21,6 +22,7 @@ import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import kotlin.properties.Delegates
+
 
 class BluetoothService : Service() {
     private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
@@ -82,11 +84,13 @@ class BluetoothService : Service() {
                     else -> {
                         Message(chatId = id, text = message).insert()
                         BluetoothUseCase.send(Constants.MESSAGE_RECEIVED)
-                        NotificationUseCase
-                                .sendNotification(application.applicationContext,
-                                        id,
-                                        ChatRepository.getName(chat),
-                                        message)
+                        if (!isForeground(application.applicationContext)) {
+                            NotificationUseCase
+                                    .sendNotification(application.applicationContext,
+                                            id,
+                                            ChatRepository.getName(chat),
+                                            message)
+                        }
                     }
                 }
             }
@@ -139,6 +143,16 @@ class BluetoothService : Service() {
                     text = context.getString(R.string.chat_created),
                     status = MessageStatus.ACTION)
                     .insert()
+        }
+    }
+
+    private fun isForeground(context: Context): Boolean {
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val tasks = am.runningAppProcesses
+        val packageName = context.packageName
+        return tasks.any {
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND == it.importance
+                    && packageName == it.processName
         }
     }
 }

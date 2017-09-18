@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.support.v7.app.NotificationCompat
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
@@ -21,9 +22,10 @@ object NotificationUseCase {
 
         val mBuilder = NotificationCompat.Builder(context)
                 .setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.bluetooth_connect_black)
+                .setSmallIcon(R.drawable.message)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setPriority(Notification.PRIORITY_HIGH)
 
         val notificationManager = context
