@@ -3,7 +3,7 @@ package org.chapper.chapper.presentation.screen.devicelist
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
-import butterknife.bindView
+import kotterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Device
 

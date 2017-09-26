@@ -1,4 +1,4 @@
-package org.chapper.chapper.presentation.app
+package org.chapper.chapper.presentation
 
 import android.app.Application
 import android.content.Intent
@@ -10,21 +10,17 @@ import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothService
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
-import kotlin.properties.Delegates
 
-class App : Application(), AppView {
-    private var mPresenter: AppPresenter by Delegates.notNull()
-
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        mPresenter = AppPresenter(this)
 
-        FlowManager.init(this)
+        FlowManager.init(applicationContext)
 
         initSQLTables()
 
         BluetoothFactory.initBluetoothSSP(applicationContext)
-        BluetoothUseCase.bluetoothStatusAction(applicationContext)
+        BluetoothUseCase.bluetoothStatusAction()
 
         startService(Intent(applicationContext, BluetoothService::class.java))
     }

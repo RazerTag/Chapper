@@ -1,5 +1,6 @@
 package org.chapper.chapper.presentation.screen.chatlist
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
 class ChatListAdapter(
+        val context: Context,
         private val mChats: MutableList<Chat>,
         private val listener: ChatListAdapter.OnItemClickListener
 ) : RecyclerView.Adapter<ChatHolder>() {
@@ -24,7 +26,7 @@ class ChatListAdapter(
 
     override fun onBindViewHolder(holder: ChatHolder?, position: Int) {
         val chat = mChats[position]
-        holder!!.bind(chat, listener)
+        holder!!.bind(context, chat, listener)
     }
 
     override fun getItemCount(): Int = mChats.size

@@ -16,6 +16,7 @@ import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
@@ -23,16 +24,16 @@ import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
 import kotlin.properties.Delegates
 
-
 class BluetoothService : Service() {
     private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
+    private var bit: String = ""
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        registerBluetoothStateReceiver(application.applicationContext)
+        registerBluetoothStateReceiver()
         bluetoothConnectionListener(application.applicationContext)
         onDataReceivedListener(application.applicationContext)
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(p0: Intent?): IBinder {
@@ -67,30 +68,35 @@ class BluetoothService : Service() {
 
                     message.contains(Constants.FIRST_NAME) -> {
                         val text = message.replace(Constants.FIRST_NAME, "")
-                        if (text.isNotEmpty()) {
-                            chat.firstName = text
-                            chat.save()
-                        }
+
+                        chat.firstName = text
+                        chat.save()
                     }
 
                     message.contains(Constants.LAST_NAME) -> {
                         val text = message.replace(Constants.LAST_NAME, "")
-                        if (text.isNotEmpty()) {
-                            chat.lastName = text
-                            chat.save()
-                        }
+
+                        chat.lastName = text
+                        chat.save()
                     }
 
-                    else -> {
-                        Message(chatId = id, text = message).insert()
-                        BluetoothUseCase.send(Constants.MESSAGE_RECEIVED)
+                    message.contains(Constants.MESSAGE) -> {
+                        val text = message.replace(Constants.MESSAGE, "")
+                        Message(chatId = id, text = text).insert()
+                        BluetoothUseCase.sendReceived()
                         if (!isForeground(application.applicationContext)) {
                             NotificationUseCase
                                     .sendNotification(application.applicationContext,
                                             id,
                                             ChatRepository.getName(chat),
-                                            message)
+                                            text)
                         }
+                    }
+
+                    message.contains(Constants.PHOTO) -> {
+                        ImageRepository.saveImage(application.applicationContext,
+                                id,
+                                ImageRepository.jsonToBitmap(message.replace(Constants.PHOTO, ""))!!)
                     }
                 }
             }
@@ -102,23 +108,31 @@ class BluetoothService : Service() {
             override fun onDeviceConnected(name: String?, address: String?) {
                 if (name != null && address != null) {
                     addChat(context, name, address)
-                    BluetoothUseCase.shareUserData()
                 }
+                BluetoothUseCase.shareUserData(application.applicationContext)
+
+                val intent = Intent(Constants.ACTION_CONNECTED)
+                intent.putExtra(Constants.NAME_EXTRA, name)
+                intent.putExtra(Constants.ADDRESS_EXTRA, address)
+                context.sendBroadcast(intent)
             }
 
             override fun onDeviceDisconnected() {
+                context.sendBroadcast(Intent(Constants.ACTION_DISCONNECTED))
             }
 
             override fun onDeviceConnectionFailed() {
-                BluetoothUseCase.bluetoothStatusAction(context)
+                BluetoothUseCase.bluetoothStatusAction()
+
+                context.sendBroadcast(Intent(Constants.ACTION_CONNECTION_FAILED))
             }
         })
     }
 
-    private fun registerBluetoothStateReceiver(context: Context) {
+    private fun registerBluetoothStateReceiver() {
         val listener = object : BluetoothStateBroadcastReceiver.ActionListener {
             override fun onBluetoothStatusAction() {
-                BluetoothUseCase.bluetoothStatusAction(context)
+                BluetoothUseCase.bluetoothStatusAction()
             }
         }
 

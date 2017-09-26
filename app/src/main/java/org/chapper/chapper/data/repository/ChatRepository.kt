@@ -37,10 +37,14 @@ object ChatRepository {
     }
 
     fun getFirstCharsName(chat: Chat): String {
-        return if (chat.firstName.isNotEmpty() && chat.lastName.isNotEmpty()) {
-            "${chat.firstName[0]}${chat.lastName[0]}"
-        } else {
-            "${chat.username[0]}"
+        return try {
+            if (chat.firstName.isNotEmpty() && chat.lastName.isNotEmpty()) {
+                "${chat.firstName[0]}${chat.lastName[0]}"
+            } else {
+                "${chat.username[0]}"
+            }
+        } catch (e: Exception) {
+            "..."
         }
     }
 }

@@ -15,10 +15,12 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import butterknife.bindView
+import de.hdodenhof.circleimageview.CircleImageView
+import kotterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.domain.usecase.NotificationUseCase
@@ -33,7 +35,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
     private val mChatName: TextView by bindView(R.id.chatName)
     private val mChatStatus: TextView by bindView(R.id.chatStatus)
-    private val mChatPhoto: TextView by bindView(R.id.profile_image)
+    private val mChatPhotoChars: TextView by bindView(R.id.profile_image_chars)
+    private val mChatPhoto: CircleImageView by bindView(R.id.profile_image)
 
     private val mRecyclerView: RecyclerView by bindView(R.id.recyclerView)
     private var mAdapter: ChatAdapter by Delegates.notNull()
@@ -62,7 +65,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (p0 != null && p0.isNotEmpty())
-                    BluetoothUseCase.send(Constants.TYPING)
+                    BluetoothUseCase.sendTyping()
             }
         })
     }
@@ -77,11 +80,11 @@ class ChatActivity : AppCompatActivity(), ChatView {
         setSupportActionBar(mToolbar)
         mChatName.text = ChatRepository.getName(mPresenter.mChat)
 
-        mChatPhoto.text = ChatRepository.getFirstCharsName(mPresenter.mChat)
+        mChatPhotoChars.text = ChatRepository.getFirstCharsName(mPresenter.mChat)
 
-        /*val photo = ImageRepository.getImage(applicationContext, mPresenter.mChatId)
-        if (photo != null) TODO : Do set custom photo
-            mChatPhoto.setImageBitmap(photo)*/
+        val photo = ImageRepository.getImage(applicationContext, mPresenter.mChatId)
+        if (photo != null)
+            mChatPhoto.setImageBitmap(photo)
 
         mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
         mToolbar.setNavigationOnClickListener {

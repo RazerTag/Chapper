@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.media.RingtoneManager
 import android.support.v7.app.NotificationCompat
 import org.chapper.chapper.R
@@ -26,6 +27,8 @@ object NotificationUseCase {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setVibrate(longArrayOf(1000, 250, 250, 250, 250))
+                .setLights(Color.GREEN, 3000, 3000)
                 .setPriority(Notification.PRIORITY_HIGH)
 
         val notificationManager = context

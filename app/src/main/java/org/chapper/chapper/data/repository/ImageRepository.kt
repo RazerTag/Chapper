@@ -2,8 +2,8 @@ package org.chapper.chapper.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
+import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -41,18 +41,21 @@ object ImageRepository {
         return b
     }
 
-    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val blob = ByteArrayOutputStream()
-        bitmap.compress(CompressFormat.PNG, 0 /* Ignored for PNGs */, blob)
-        return blob.toByteArray()
+    fun bitmapToJson(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
     }
 
-    fun byteArrayToBitmap(byteArray: ByteArray): Bitmap? {
-        try {
-            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    fun jsonToBitmap(encodedString: String): Bitmap? {
+        return try {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
         } catch (e: Exception) {
-            e.printStackTrace()
+            e.message
+            null
         }
-        return null
+
     }
 }

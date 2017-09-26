@@ -12,9 +12,9 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import butterknife.bindView
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.kotlinextensions.delete
+import kotterknife.bindView
 import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
@@ -124,7 +124,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         val chats = ChatRepository.getChatsSorted()
-        mAdapter = ChatListAdapter(chats, object : ChatListAdapter.OnItemClickListener {
+        mAdapter = ChatListAdapter(applicationContext, chats, object : ChatListAdapter.OnItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
                 intent.putExtra(Constants.CHAT_ID_EXTRA, chat.id)

@@ -1,5 +1,5 @@
 ext {
-    kotlinVersion = '1.1.4-3'
+    kotlinVersion = '1.1.50'
     ankoVersion = '0.10.1'
     kottenknifeVersion = '0.1.0-SNAPSHOT'
     rxjavaVersion = '2.1.3'

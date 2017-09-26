@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
+import kotterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.status.MessageStatus

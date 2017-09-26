@@ -8,7 +8,6 @@ import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import me.annenkov.bluekitten.BluetoothSPP
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
@@ -17,6 +16,7 @@ import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
+import org.chapper.chapper.presentation.broadcastreceiver.BluetoothConnectionBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.TypingBroadcastReceiver
 import java.util.*
@@ -33,6 +33,7 @@ class ChatPresenter(private val viewState: ChatView) {
     private val mTypingCalls: Queue<String> = ArrayDeque()
 
     private var mBtDiscoveryReceiver: BluetoothDiscoveryBroadcastReceiver by Delegates.notNull()
+    private var mBtConnectionReceiver: BluetoothConnectionBroadcastReceiver by Delegates.notNull()
     private var mTypingReceiver: TypingBroadcastReceiver by Delegates.notNull()
 
     private var mFlowObserver: FlowContentObserver by Delegates.notNull()
@@ -46,7 +47,6 @@ class ChatPresenter(private val viewState: ChatView) {
 
         registerReceivers(context)
         setupStatus(mChat.bluetoothMacAddress)
-        bluetoothConnectionListener()
 
         readMessages()
         sendMessagesReadCode()
@@ -133,7 +133,7 @@ class ChatPresenter(private val viewState: ChatView) {
                     text = text)
             Observable.just(text)
                     .doOnNext { message.insert() }
-                    .doOnNext { BluetoothUseCase.send(text) }
+                    .doOnNext { BluetoothUseCase.sendMessage(text) }
                     .observeOn(Schedulers.newThread())
                     .subscribe()
         }
@@ -160,7 +160,7 @@ class ChatPresenter(private val viewState: ChatView) {
 
     private fun sendMessagesReadCode() {
         Observable.just("")
-                .doOnNext { BluetoothUseCase.send(Constants.MESSAGES_READ) }
+                .doOnNext { BluetoothUseCase.sendRead() }
                 .observeOn(Schedulers.newThread())
                 .subscribe()
     }
@@ -170,9 +170,9 @@ class ChatPresenter(private val viewState: ChatView) {
         mChat.save()
     }
 
-    private fun bluetoothConnectionListener() {
-        BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
-            override fun onDeviceConnected(name: String?, address: String?) {
+    private fun registerBluetoothConnectionReceiver(context: Context) {
+        mBtConnectionReceiver = BluetoothConnectionBroadcastReceiver(context, object : BluetoothConnectionBroadcastReceiver.ActionListener {
+            override fun onDeviceConnected(name: String, address: String) {
                 if (address == mChat.bluetoothMacAddress) {
                     statusConnected()
                     updateLastConnectionDate()
@@ -196,6 +196,8 @@ class ChatPresenter(private val viewState: ChatView) {
                         .subscribe()
             }
         })
+
+        mBtConnectionReceiver.registerContext()
     }
 
     fun startDiscovery() {
@@ -206,12 +208,14 @@ class ChatPresenter(private val viewState: ChatView) {
         registerFlowObserver(context)
         registerDiscoveryReceiver(context)
         registerTypingReceiver(context)
+        registerBluetoothConnectionReceiver(context)
     }
 
-    fun unregisterReceivers(context: Context) {
+    private fun unregisterReceivers(context: Context) {
         mFlowObserver.unregisterForContentChanges(context)
         mBtDiscoveryReceiver.unregisterContext()
         mTypingReceiver.unregisterContext()
+        mBtConnectionReceiver.unregisterContext()
     }
 
     private fun registerFlowObserver(context: Context) {

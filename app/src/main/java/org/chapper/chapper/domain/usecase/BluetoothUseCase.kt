@@ -2,17 +2,16 @@ package org.chapper.chapper.domain.usecase
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
-import android.content.Intent
 import android.provider.Settings
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.bluetooth.BluetoothStatus
+import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.SettingsRepository
+import org.jetbrains.anko.doAsync
 
 object BluetoothUseCase {
-    fun bluetoothStatusAction(context: Context) {
-        context.sendBroadcast(Intent(Constants.TYPING_TAG))
-
+    fun bluetoothStatusAction() {
         if (BluetoothUseCase.checkStatus() == BluetoothStatus.ENABLED) {
             BluetoothUseCase.startService()
         } else {
@@ -99,10 +98,30 @@ object BluetoothUseCase {
         }
     }
 
-    fun shareUserData() {
+    fun sendMessage(text: String) {
+        send(Constants.MESSAGE + text)
+    }
+
+    fun sendData(bytes: ByteArray) {
+        send(bytes)
+    }
+
+    fun sendTyping() {
+        send(Constants.TYPING)
+    }
+
+    fun sendReceived() {
+        send(Constants.MESSAGE_RECEIVED)
+    }
+
+    fun sendRead() {
+        send(Constants.MESSAGES_READ)
+    }
+
+    fun shareUserData(context: Context) {
         shareFirstName()
         shareLastName()
-        sharePhoto()
+        sharePhoto(context)
     }
 
     private fun shareFirstName() {
@@ -113,8 +132,13 @@ object BluetoothUseCase {
         send(Constants.LAST_NAME + SettingsRepository.getLastName())
     }
 
-    private fun sharePhoto() {
-        // TODO : Do this method
+    private fun sharePhoto(context: Context) {
+        doAsync {
+            try {
+                send(Constants.PHOTO + ImageRepository.bitmapToJson(SettingsRepository.getProfilePhoto(context)!!))
+            } catch (e: Exception) {
+            }
+        }
     }
 
     fun isDiscovering(): Boolean {

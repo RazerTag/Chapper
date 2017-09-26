@@ -16,10 +16,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Switch
 import android.widget.TextView
-import butterknife.bindView
 import com.mvc.imagepicker.ImagePicker
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import de.hdodenhof.circleimageview.CircleImageView
+import kotterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
