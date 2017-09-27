@@ -9,6 +9,11 @@ import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 
 object SettingsRepository {
+    fun update() {
+        val settings = (select from Settings::class).querySingle()!!
+        settings.save()
+    }
+
     fun getAddress(context: Context): String = BluetoothUseCase.getBluetoothAddress(context)
 
     fun getUsername(): String = BluetoothUseCase.getBluetoothName()

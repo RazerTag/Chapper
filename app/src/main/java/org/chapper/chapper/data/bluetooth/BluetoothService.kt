@@ -22,11 +22,11 @@ import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
+import org.jetbrains.anko.doAsync
 import kotlin.properties.Delegates
 
 class BluetoothService : Service() {
     private var mBtReceiverState: BluetoothStateBroadcastReceiver by Delegates.notNull()
-    private var bit: String = ""
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         registerBluetoothStateReceiver()
@@ -94,9 +94,11 @@ class BluetoothService : Service() {
                     }
 
                     message.contains(Constants.PHOTO) -> {
-                        ImageRepository.saveImage(application.applicationContext,
-                                id,
-                                ImageRepository.jsonToBitmap(message.replace(Constants.PHOTO, ""))!!)
+                        doAsync {
+                            ImageRepository.saveImage(application.applicationContext,
+                                    id,
+                                    ImageRepository.jsonToBitmap(message.replace(Constants.PHOTO, ""))!!)
+                        }
                     }
                 }
             }

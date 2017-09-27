@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.mikepenz.materialdrawer.Drawer
 import com.raizlabs.android.dbflow.kotlinextensions.delete
@@ -88,21 +86,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                 mPresenter.handleDrawerItemClickListener(position)
             }
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_refresh, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val id = item!!.itemId
-
-        when (id) {
-            R.id.action_refresh -> {
-            } // TODO : Do something
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

@@ -187,6 +187,8 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
             SettingsRepository.setProfilePhoto(applicationContext, bitmap)
 
             mPresenter.init(applicationContext)
+
+            SettingsRepository.update()
         }
     }
 }
