@@ -20,9 +20,6 @@ object Constants {
     const val PHOTO: String = "5ae0c1c8a5260bc7b6648f6fbd115c35"
     const val PHOTO_REQUEST: String = "4c85ae48db98b5e3b2f57ee262fb94d2"
 
-    const val T_CODE: String = "5aE0G"
-    const val N_CODE: String = "342fB"
-
     const val WRITE_EXTERNAL_STORAGE_PERMISSIONS = 228
     const val COARSE_LOCATION_PERMISSIONS = 1337
 }

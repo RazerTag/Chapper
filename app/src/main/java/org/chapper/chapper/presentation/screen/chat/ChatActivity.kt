@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import com.wang.avi.AVLoadingIndicatorView
 import de.hdodenhof.circleimageview.CircleImageView
 import kotterknife.bindView
 import org.chapper.chapper.R
@@ -33,6 +34,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     private var mPresenter: ChatPresenter by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
+    private val mTypingAnimation: AVLoadingIndicatorView by bindView(R.id.typing_animation)
     private val mChatName: TextView by bindView(R.id.chatName)
     private val mChatStatus: TextView by bindView(R.id.chatStatus)
     private val mChatPhotoChars: TextView by bindView(R.id.profile_image_chars)
@@ -137,22 +139,27 @@ class ChatActivity : AppCompatActivity(), ChatView {
     }
 
     override fun startRefreshing() {
+        mTypingAnimation.visibility = View.GONE
         mPresenter.startDiscovery()
     }
 
     override fun statusTyping() {
+        mTypingAnimation.visibility = View.VISIBLE
         mChatStatus.text = getString(R.string.typing)
     }
 
     override fun statusConnected() {
+        mTypingAnimation.visibility = View.GONE
         mChatStatus.text = getString(R.string.connected)
     }
 
     override fun statusNearby() {
+        mTypingAnimation.visibility = View.GONE
         mChatStatus.text = getString(R.string.nearby)
     }
 
     override fun statusOffline() {
+        mTypingAnimation.visibility = View.GONE
         mChatStatus.text = mPresenter.mChat.getLastConnectionString(applicationContext)
     }
 

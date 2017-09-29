@@ -11,8 +11,8 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 17
-        versionName "0.1.17"
+        versionCode 18
+        versionName "0.1.18"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -93,6 +93,8 @@ dependencies {
     compile "tk.wasdennnoch:progresstoolbar:$progresstoolbarVersion"
 
     compile "com.intuit.sdp:sdp-android:$sdpVersion"
+
+    compile "com.wang.avi:library:$loadingAnimationVersion"
 
     compile(name: 'bluekitten', ext: 'aar')
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,26 +21,46 @@
             android:layout_height="40dp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_marginLeft="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/chatName"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_alignRight="@id/profile_image_chars"
                 android:text="Винсент Вега"
                 android:textColor="@color/color_white_text"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/chatStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/profile_image_chars"
-                android:text="@string/offline" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/typing_animation"
+                    style="@style/AVLoadingIndicatorView"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="2dp"
+                    android:visibility="visible"
+                    app:indicatorColor="@color/color_dark_white"
+                    app:indicatorName="BallPulseSyncIndicator" />
+
+                <TextView
+                    android:id="@+id/chatStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/profile_image_chars"
+                    android:text="@string/offline"
+                    android:textColor="@color/color_dark_white" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

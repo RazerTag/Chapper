@@ -30,8 +30,8 @@ class BluetoothService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         registerBluetoothStateReceiver()
-        bluetoothConnectionListener(application.applicationContext)
-        onDataReceivedListener(application.applicationContext)
+        bluetoothConnectionListener(applicationContext)
+        onDataReceivedListener(applicationContext)
 
         return START_REDELIVER_INTENT
     }
@@ -66,6 +66,9 @@ class BluetoothService : Service() {
                     message == Constants.MESSAGE_RECEIVED ->
                         MessageRepository.receiveMessages(id)
 
+                    message == Constants.PHOTO_REQUEST ->
+                        BluetoothUseCase.sharePhoto(applicationContext)
+
                     message.contains(Constants.FIRST_NAME) -> {
                         val text = message.replace(Constants.FIRST_NAME, "")
 
@@ -84,9 +87,9 @@ class BluetoothService : Service() {
                         val text = message.replace(Constants.MESSAGE, "")
                         Message(chatId = id, text = text).insert()
                         BluetoothUseCase.sendReceived()
-                        if (!isForeground(application.applicationContext)) {
+                        if (!isForeground(applicationContext)) {
                             NotificationUseCase
-                                    .sendNotification(application.applicationContext,
+                                    .sendNotification(applicationContext,
                                             id,
                                             ChatRepository.getName(chat),
                                             text)
@@ -95,7 +98,7 @@ class BluetoothService : Service() {
 
                     message.contains(Constants.PHOTO) -> {
                         doAsync {
-                            ImageRepository.saveImage(application.applicationContext,
+                            ImageRepository.saveImage(applicationContext,
                                     id,
                                     ImageRepository.jsonToBitmap(message.replace(Constants.PHOTO, ""))!!)
                         }
@@ -111,7 +114,9 @@ class BluetoothService : Service() {
                 if (name != null && address != null) {
                     addChat(context, name, address)
                 }
-                BluetoothUseCase.shareUserData(application.applicationContext)
+                BluetoothUseCase.shareUserData()
+                BluetoothUseCase.requestPhoto(applicationContext,
+                        ChatRepository.getChat(name!!, address!!).id)
 
                 val intent = Intent(Constants.ACTION_CONNECTED)
                 intent.putExtra(Constants.NAME_EXTRA, name)
@@ -124,8 +129,6 @@ class BluetoothService : Service() {
             }
 
             override fun onDeviceConnectionFailed() {
-                BluetoothUseCase.bluetoothStatusAction()
-
                 context.sendBroadcast(Intent(Constants.ACTION_CONNECTION_FAILED))
             }
         })

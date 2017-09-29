@@ -25,14 +25,6 @@ class IntroActivity : MaterialIntroActivity() {
                 .build())
 
         addSlide(SlideFragmentBuilder()
-                .backgroundColor(R.color.colorPrimary)
-                .buttonsColor(R.color.colorAccent)
-                .image(R.drawable.vector_polygon_white)
-                .title("Единая сеть.")
-                .description("Ваши сообщения дойдут до получателя даже если устройства не видят друг друга.")
-                .build())
-
-        addSlide(SlideFragmentBuilder()
                 .backgroundColor(R.color.color_secondary)
                 .buttonsColor(R.color.colorAccent)
                 .image(R.drawable.nature_people_white)

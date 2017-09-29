@@ -76,34 +76,25 @@ object BluetoothUseCase {
         if (bt.connectedDeviceAddress != address
                 && checkStatus() == BluetoothStatus.ENABLED)
             try {
+                bt.disconnect()
                 bt.connect(address)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
     }
 
-    fun send(text: String) {
-        try {
-            BluetoothFactory.sBtSPP.send(text, true)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun send(bytes: ByteArray) {
-        try {
-            BluetoothFactory.sBtSPP.send(bytes, true)
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun send(text: String) {
+        doAsync {
+            try {
+                BluetoothFactory.sBtSPP.send(text, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     fun sendMessage(text: String) {
         send(Constants.MESSAGE + text)
-    }
-
-    fun sendData(bytes: ByteArray) {
-        send(bytes)
     }
 
     fun sendTyping() {
@@ -118,10 +109,15 @@ object BluetoothUseCase {
         send(Constants.MESSAGES_READ)
     }
 
-    fun shareUserData(context: Context) {
+    fun requestPhoto(context: Context, chatId: String) {
+        if (ImageRepository.getImage(context, chatId) == null) {
+            send(Constants.PHOTO_REQUEST)
+        }
+    }
+
+    fun shareUserData() {
         shareFirstName()
         shareLastName()
-        sharePhoto(context)
     }
 
     private fun shareFirstName() {
@@ -132,7 +128,7 @@ object BluetoothUseCase {
         send(Constants.LAST_NAME + SettingsRepository.getLastName())
     }
 
-    private fun sharePhoto(context: Context) {
+    fun sharePhoto(context: Context) {
         doAsync {
             try {
                 send(Constants.PHOTO + ImageRepository.bitmapToJson(SettingsRepository.getProfilePhoto(context)!!))
