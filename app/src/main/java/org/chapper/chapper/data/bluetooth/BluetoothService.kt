@@ -1,6 +1,5 @@
 package org.chapper.chapper.data.bluetooth
 
-import android.app.ActivityManager
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -19,6 +18,7 @@ import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
+import org.chapper.chapper.domain.Utils
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothStateBroadcastReceiver
@@ -87,7 +87,7 @@ class BluetoothService : Service() {
                         val text = message.replace(Constants.MESSAGE, "")
                         Message(chatId = id, text = text).insert()
                         BluetoothUseCase.sendReceived()
-                        if (!isForeground(applicationContext)) {
+                        if (!Utils.isForeground(applicationContext)) {
                             NotificationUseCase
                                     .sendNotification(applicationContext,
                                             id,
@@ -162,16 +162,6 @@ class BluetoothService : Service() {
                     text = context.getString(R.string.chat_created),
                     status = MessageStatus.ACTION)
                     .insert()
-        }
-    }
-
-    private fun isForeground(context: Context): Boolean {
-        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val tasks = am.runningAppProcesses
-        val packageName = context.packageName
-        return tasks.any {
-            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND == it.importance
-                    && packageName == it.processName
         }
     }
 }

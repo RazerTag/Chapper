@@ -16,6 +16,7 @@ import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
+import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothConnectionBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.TypingBroadcastReceiver
@@ -48,8 +49,13 @@ class ChatPresenter(private val viewState: ChatView) {
         registerReceivers(context)
         setupStatus(mChat.bluetoothMacAddress)
 
+        resume(context)
+    }
+
+    fun resume(context: Context) {
         readMessages()
         sendMessagesReadCode()
+        NotificationUseCase.cleatAll(context)
     }
 
     fun destroy(context: Context) {
@@ -145,7 +151,8 @@ class ChatPresenter(private val viewState: ChatView) {
                 Message::class.java -> {
                     viewState.changeMessageList()
                     readMessages()
-                    sendMessagesReadCode()
+                    if (viewState.isForeground)
+                        sendMessagesReadCode()
                 }
             }
         }

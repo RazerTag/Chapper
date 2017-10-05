@@ -24,13 +24,14 @@ import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
-import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.jetbrains.anko.toast
 import tk.wasdennnoch.progresstoolbar.ProgressToolbar
 import kotlin.properties.Delegates
 
 
 class ChatActivity : AppCompatActivity(), ChatView {
+    override var isForeground: Boolean = false
+
     private var mPresenter: ChatPresenter by Delegates.notNull()
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
@@ -75,7 +76,14 @@ class ChatActivity : AppCompatActivity(), ChatView {
     override fun onResume() {
         super.onResume()
 
-        NotificationUseCase.cleatAll(applicationContext)
+        isForeground = true
+        mPresenter.resume(applicationContext)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        isForeground = false
     }
 
     override fun initToolbar() {

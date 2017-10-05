@@ -1,6 +1,8 @@
 package org.chapper.chapper.presentation.screen.chat
 
 interface ChatView {
+    var isForeground: Boolean
+
     fun initToolbar()
     fun showMessages()
 
