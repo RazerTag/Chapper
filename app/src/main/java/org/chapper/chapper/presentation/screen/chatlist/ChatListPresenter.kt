@@ -95,7 +95,7 @@ ChatListPresenter(private val viewState: ChatListView) {
 
     private fun registerReceivers(context: Context) {
         registerFlowObserver(context)
-        registerTypingReceiver(context)
+        registerStateBroadcastReceiver(context)
     }
 
     private fun unregisterReceivers(context: Context) {
@@ -111,7 +111,7 @@ ChatListPresenter(private val viewState: ChatListView) {
         databaseChangesListener(mFlowObserver)
     }
 
-    private fun registerTypingReceiver(context: Context) {
+    private fun registerStateBroadcastReceiver(context: Context) {
         val listener = object : BluetoothStateBroadcastReceiver.ActionListener {
             override fun onBluetoothStatusAction() {
                 viewState.changeChatList()
