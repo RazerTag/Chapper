@@ -26,33 +26,38 @@ class DrawerBuilderFactory(val context: Context,
                                 .withName(context.getString(R.string.search_for_devices))
                                 .withIcon(R.drawable.access_point_grey)
                                 .withSelectable(false)
-                                .withDescriptionTextColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
-                                .withIconColor(ResourceRepository.getColor(context, R.color.color_light_grey_text)),
+                                .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
+                                .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
+                                .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.enable_discoverable))
                                 .withIcon(R.drawable.lightbulb_on_grey)
                                 .withSelectable(false)
-                                .withDescriptionTextColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
-                                .withIconColor(ResourceRepository.getColor(context, R.color.color_light_grey_text)),
+                                .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
+                                .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
+                                .withIconTintingEnabled(true),
                         DividerDrawerItem(),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.invite_friends))
                                 .withIcon(R.drawable.account_plus_grey)
                                 .withSelectable(false)
-                                .withDescriptionTextColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
-                                .withIconColor(ResourceRepository.getColor(context, R.color.color_light_grey_text)),
+                                .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
+                                .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
+                                .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.settings))
                                 .withIcon(R.drawable.settings_grey)
                                 .withSelectable(false)
-                                .withDescriptionTextColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
-                                .withIconColor(ResourceRepository.getColor(context, R.color.color_light_grey_text)),
+                                .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
+                                .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
+                                .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.faq))
                                 .withIcon(R.drawable.help_circle_grey)
                                 .withSelectable(false)
-                                .withDescriptionTextColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
-                                .withIconColor(ResourceRepository.getColor(context, R.color.color_light_grey_text))
+                                .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
+                                .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
+                                .withIconTintingEnabled(true)
                 )
                 .withOnDrawerListener(object : Drawer.OnDrawerListener {
                     override fun onDrawerOpened(drawerView: View) {

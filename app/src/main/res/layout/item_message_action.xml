@@ -14,5 +14,5 @@
         android:paddingLeft="11dp"
         android:paddingRight="11dp"
         android:paddingTop="5dp"
-        android:textColor="@color/color_light_grey_text"/>
+        android:textColor="@color/color_light_grey" />
 </RelativeLayout>
