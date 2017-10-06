@@ -42,4 +42,5 @@
     <string name="save">Сохранить</string>
     <string name="visible_devices">Видимые устройства</string>
     <string name="typing">набирает…</string>
+    <string name="pick_image">Выбрать изображение</string>
 </resources>

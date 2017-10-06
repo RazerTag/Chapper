@@ -37,7 +37,8 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
     private val mToolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val mPhoto: CircleImageView by bindView(R.id.profilePhoto)
+    private val mPhotoChars: TextView by bindView(R.id.profile_image_chars)
+    private val mPhoto: CircleImageView by bindView(R.id.profile_image)
     private val mName: TextView by bindView(R.id.name)
     private val mAddress: TextView by bindView(R.id.address)
     private val mUsername: TextView by bindView(R.id.username)
@@ -134,6 +135,10 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
         mToolbar.setNavigationOnClickListener {
             finish()
         }
+    }
+
+    override fun initPhotoChars(chars: String) {
+        mPhotoChars.text = chars
     }
 
     override fun initPhoto(bitmap: Bitmap) {

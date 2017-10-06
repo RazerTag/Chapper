@@ -7,6 +7,7 @@ import org.chapper.chapper.data.repository.SettingsRepository
 class SettingsPresenter(private val viewState: SettingsView) {
     fun init(context: Context) {
         viewState.initToolbar()
+        viewState.initPhotoChars(SettingsRepository.getFirstCharsName())
 
         val photo = SettingsRepository.getProfilePhoto(context)
         if (photo != null)

@@ -44,4 +44,5 @@
     <string name="save">Save</string>
     <string name="visible_devices">Visible devices</string>
     <string name="typing">typing…</string>
+    <string name="pick_image">Pick image</string>
 </resources>

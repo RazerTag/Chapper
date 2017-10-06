@@ -30,6 +30,21 @@ object SettingsRepository {
 
     fun isSendByEnter(): Boolean = (select from Settings::class).querySingle()!!.isSendByEnter
 
+    fun getFirstCharsName(): String {
+        val firstName = getFirstName()
+        val lastName = getLastName()
+        val username = getUsername()
+        return try {
+            if (firstName.isNotEmpty() && lastName.isNotEmpty()) {
+                "${firstName[0]}${lastName[0]}"
+            } else {
+                "${username[0]}"
+            }
+        } catch (e: Exception) {
+            "..."
+        }
+    }
+
     fun setUsername(username: String) {
         BluetoothUseCase.setBluetoothName(username)
     }

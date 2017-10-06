@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/noChats"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/noChats"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -12,7 +13,7 @@
         android:layout_height="180dp"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/no_one_near"
-        android:src="@drawable/account_search_grey"/>
+        app:srcCompat="@drawable/account_search_grey" />
 
     <TextView
         android:id="@+id/noOneNearTextView"
