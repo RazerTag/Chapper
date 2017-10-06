@@ -19,6 +19,7 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.screen.chat.ChatActivity
 import org.chapper.chapper.presentation.screen.devicelist.DeviceListActivity
@@ -130,6 +131,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                             alert(getString(R.string.are_you_sure)) {
                                 yesButton {
                                     chat.delete()
+                                    MessageRepository.deleteAllMessages(chat.id)
                                 }
                                 noButton {}
                             }.show()

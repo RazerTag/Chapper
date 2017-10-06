@@ -21,6 +21,12 @@ object MessageRepository {
         }
     }
 
+    fun deleteAllMessages(chatId: String) {
+        for (message in getMessages(chatId)) {
+            message.delete()
+        }
+    }
+
     fun readOutgoingMessages(chatId: String) {
         val messages = (select from Message::class
                 where (Message_Table.chatId eq chatId)
