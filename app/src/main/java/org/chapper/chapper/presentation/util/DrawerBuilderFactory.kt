@@ -31,7 +31,7 @@ class DrawerBuilderFactory(val context: Context,
                                 .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.enable_discoverable))
-                                .withIcon(R.drawable.lightbulb_on_grey)
+                                .withIcon(R.drawable.lightbulb_on)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
@@ -39,21 +39,21 @@ class DrawerBuilderFactory(val context: Context,
                         DividerDrawerItem(),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.invite_friends))
-                                .withIcon(R.drawable.account_plus_grey)
+                                .withIcon(R.drawable.account_plus)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
                                 .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.settings))
-                                .withIcon(R.drawable.settings_grey)
+                                .withIcon(R.drawable.settings)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
                                 .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.faq))
-                                .withIcon(R.drawable.help_circle_grey)
+                                .withIcon(R.drawable.help_circle)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))

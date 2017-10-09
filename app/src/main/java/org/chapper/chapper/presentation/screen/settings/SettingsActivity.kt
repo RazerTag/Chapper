@@ -131,7 +131,7 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
     override fun initToolbar() {
         setSupportActionBar(mToolbar)
-        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
+        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left)
         mToolbar.setNavigationOnClickListener {
             finish()
         }

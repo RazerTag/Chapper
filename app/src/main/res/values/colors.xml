@@ -18,6 +18,7 @@
     <color name="color_white_text">#fff</color>
     <color name="color_grey">#242424</color>
     <color name="color_light_grey">#4f4f4f</color>
+    <color name="colorLightLightGrey">#808080</color>
     <color name="color_dark_white">#a2ebcd</color>
 
     <color name="color_menu_grey">#737373</color>

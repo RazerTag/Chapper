@@ -96,7 +96,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         if (photo != null)
             mChatPhoto.setImageBitmap(photo)
 
-        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left_white)
+        mToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_left)
         mToolbar.setNavigationOnClickListener {
             finish()
         }

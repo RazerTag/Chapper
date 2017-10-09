@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/noOneNear"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:visibility="visible">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:visibility="visible">
 
     <ImageView
         android:id="@+id/imageView"
@@ -13,7 +13,8 @@
         android:layout_height="180dp"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/no_one_near"
-        app:srcCompat="@drawable/radio_grey" />
+        android:tint="@color/colorLightLightGrey"
+        app:srcCompat="@drawable/radio" />
 
     <TextView
         android:id="@+id/noOneNearTextView"
@@ -21,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
-        android:text="@string/no_one_near"/>
+        android:text="@string/no_one_near" />
 
 </RelativeLayout>
