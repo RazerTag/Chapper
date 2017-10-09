@@ -137,11 +137,8 @@ class ChatPresenter(private val viewState: ChatView) {
             val message = Message(chatId = mChatId,
                     status = MessageStatus.OUTGOING_NOT_SENT,
                     text = text)
-            Observable.just(text)
-                    .doOnNext { message.insert() }
-                    .doOnNext { BluetoothUseCase.sendMessage(text) }
-                    .observeOn(Schedulers.newThread())
-                    .subscribe()
+            message.insert()
+            BluetoothUseCase.sendMessage(text)
         }
     }
 
@@ -159,17 +156,11 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     private fun readMessages() {
-        Observable.just("")
-                .doOnNext { MessageRepository.readIncomingMessages(mChatId) }
-                .observeOn(Schedulers.newThread())
-                .subscribe()
+        MessageRepository.readIncomingMessages(mChatId)
     }
 
     private fun sendMessagesReadCode() {
-        Observable.just("")
-                .doOnNext { BluetoothUseCase.sendRead() }
-                .observeOn(Schedulers.newThread())
-                .subscribe()
+        BluetoothUseCase.sendRead()
     }
 
     fun updateLastConnectionDate() {

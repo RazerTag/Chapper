@@ -107,7 +107,6 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
     }
 
     private fun doDiscovery() {
-        // Check permission
         if (isCoarseLocationPermissionDenied()) {
             requestCoarseLocationPermission()
             return

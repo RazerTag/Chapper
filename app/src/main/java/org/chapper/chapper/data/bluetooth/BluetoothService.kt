@@ -37,7 +37,7 @@ class BluetoothService : Service() {
     }
 
     override fun onBind(p0: Intent?): IBinder {
-        TODO("not implemented")
+        TODO("empty")
     }
 
     override fun onDestroy() {

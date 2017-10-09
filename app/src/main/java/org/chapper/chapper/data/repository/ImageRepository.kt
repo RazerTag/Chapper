@@ -5,12 +5,23 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.properties.Delegates
 
 
 object ImageRepository {
+    fun deleteImage(chatId: String) {
+        try {
+            val file = File(chatId)
+            if (file.exists())
+                file.delete()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun saveImage(context: Context, chatId: String, bitmap: Bitmap) {
         var fos: FileOutputStream by Delegates.notNull()
         try {

@@ -19,6 +19,7 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.presentation.screen.chat.ChatActivity
@@ -28,7 +29,6 @@ import org.chapper.chapper.presentation.screen.settings.SettingsActivity
 import org.chapper.chapper.presentation.util.DrawerBuilderFactory
 import org.jetbrains.anko.*
 import kotlin.properties.Delegates
-
 
 class ChatListActivity : AppCompatActivity(), ChatListView {
     private var mPresenter: ChatListPresenter by Delegates.notNull()
@@ -130,8 +130,11 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                         0 -> {
                             alert(getString(R.string.are_you_sure)) {
                                 yesButton {
-                                    chat.delete()
-                                    MessageRepository.deleteAllMessages(chat.id)
+                                    doAsync {
+                                        chat.delete()
+                                        MessageRepository.deleteAllMessages(chat.id)
+                                        ImageRepository.deleteImage(chat.id)
+                                    }
                                 }
                                 noButton {}
                             }.show()
