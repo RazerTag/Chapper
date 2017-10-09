@@ -2,15 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/selectedPhotoImageView"
+    <RelativeLayout
         android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/camera" />
+        android:layout_height="200dp">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/camera" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/selectedPhotoImageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/pickButton"
