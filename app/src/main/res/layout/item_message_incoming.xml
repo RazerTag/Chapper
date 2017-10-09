@@ -18,7 +18,7 @@
         android:paddingRight="11dp"
         android:paddingTop="5dp"
         android:text="Lol kek"
-        android:textColor="@color/color_black_text"/>
+        android:textColor="@color/color_black" />
 
     <TextView
         android:id="@+id/message_time"

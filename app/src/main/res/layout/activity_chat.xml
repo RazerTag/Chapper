@@ -73,7 +73,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@string/send"
-                android:src="@drawable/send"/>
+                app:srcCompat="@drawable/send" />
 
         </LinearLayout>
 

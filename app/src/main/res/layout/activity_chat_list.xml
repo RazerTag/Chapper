@@ -44,7 +44,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
             app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/access_point_white" />
+            app:srcCompat="@drawable/access_point" />
 
         <include layout="@layout/no_chats" />
 

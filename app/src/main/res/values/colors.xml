@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_text_black">#000</color>
+    <color name="color_black">#000</color>
 
     <color name="colorPrimary">#00aa5b</color>
     <color name="colorPrimaryLight">#55dd89</color>
@@ -16,7 +16,6 @@
     <color name="color_grey_message_background">#f1f1f1</color>
 
     <color name="color_white_text">#fff</color>
-    <color name="color_black_text">#000</color>
     <color name="color_grey">#242424</color>
     <color name="color_light_grey">#4f4f4f</color>
     <color name="color_dark_white">#a2ebcd</color>

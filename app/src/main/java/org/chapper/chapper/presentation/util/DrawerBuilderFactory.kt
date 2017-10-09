@@ -24,7 +24,7 @@ class DrawerBuilderFactory(val context: Context,
                 .addDrawerItems(
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.search_for_devices))
-                                .withIcon(R.drawable.access_point_grey)
+                                .withIcon(R.drawable.access_point)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.color_menu_dark_grey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.color_menu_grey))
@@ -65,11 +65,9 @@ class DrawerBuilderFactory(val context: Context,
                     }
 
                     override fun onDrawerClosed(drawerView: View) {
-
                     }
 
                     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-
                     }
                 })
     }
@@ -81,7 +79,7 @@ class DrawerBuilderFactory(val context: Context,
 
         val image: Bitmap? = SettingsRepository.getProfilePhoto(context)
         if (image == null)
-            profile.withIcon(ResourceRepository.getDrawable(context, R.drawable.account_circle_white))
+            profile.withIcon(ResourceRepository.getDrawable(context, R.drawable.account_circle))
         else
             profile.withIcon(image)
 
