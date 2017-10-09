@@ -38,14 +38,14 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             mNewMessagesCounter.text = newMessages.toString()
             mNewMessagesCounter.visibility = View.VISIBLE
         } else {
-            mNewMessagesCounter.visibility = View.INVISIBLE
+            mNewMessagesCounter.visibility = View.GONE
         }
 
         when (lastMessage.status) {
             MessageStatus.OUTGOING_NOT_SENT -> mLastMessageStatus.setImageResource(R.drawable.clock)
             MessageStatus.OUTGOING_UNREAD -> mLastMessageStatus.setImageResource(R.drawable.check)
             MessageStatus.OUTGOING_READ -> mLastMessageStatus.setImageResource(R.drawable.check_all)
-            else -> mLastMessageStatus.visibility = View.INVISIBLE
+            else -> mLastMessageStatus.visibility = View.GONE
         }
 
         mLastMessageTime.text = lastMessage.getTimeString()

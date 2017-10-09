@@ -143,7 +143,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     }
 
     override fun hideRefresher() {
-        mRefresher.visibility = View.INVISIBLE
+        mRefresher.visibility = View.GONE
     }
 
     override fun startRefreshing() {

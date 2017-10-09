@@ -8,6 +8,7 @@ import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.annotation.Unique
 import com.raizlabs.android.dbflow.kotlinextensions.*
 import org.chapper.chapper.R
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.database.AppDatabase
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
@@ -22,7 +23,7 @@ data class Chat(
         var id: String = UUID.randomUUID().toString(),
 
         @Column
-        var photo: String = "",
+        var photoId: String = Constants.PHOTO_REQUEST,
 
         @Column
         var firstName: String = "",

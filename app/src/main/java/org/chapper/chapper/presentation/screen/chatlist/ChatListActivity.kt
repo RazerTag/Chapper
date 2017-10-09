@@ -162,7 +162,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         if (chats.isEmpty())
             mNoChats.visibility = View.VISIBLE
         else {
-            mNoChats.visibility = View.INVISIBLE
+            mNoChats.visibility = View.GONE
         }
     }
 

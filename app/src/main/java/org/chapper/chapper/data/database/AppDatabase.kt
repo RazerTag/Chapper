@@ -11,7 +11,21 @@ import org.chapper.chapper.data.model.Settings
 class AppDatabase {
     companion object {
         const val NAME = "Chapper"
-        const val VERSION = 3
+        const val VERSION = 4
+    }
+
+    @Migration(database = AppDatabase::class, version = 4)
+    class Migration4Chat : AlterTableMigration<Chat>(Chat::class.java) {
+        override fun onPreMigrate() {
+            addColumn(SQLiteType.TEXT, "photoId")
+        }
+    }
+
+    @Migration(database = AppDatabase::class, version = 4)
+    class Migration4Settings : AlterTableMigration<Settings>(Settings::class.java) {
+        override fun onPreMigrate() {
+            addColumn(SQLiteType.TEXT, "photoId")
+        }
     }
 
     @Migration(database = AppDatabase::class, version = 3)

@@ -4,6 +4,7 @@ import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.annotation.Unique
+import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.database.AppDatabase
 
 @Table(database = AppDatabase::class)
@@ -22,5 +23,8 @@ data class Settings(
         var lastName: String = "",
 
         @Column
-        var isSendByEnter: Boolean = false
+        var isSendByEnter: Boolean = false,
+
+        @Column
+        var photoId: String = Constants.PHOTO_REQUEST
 )

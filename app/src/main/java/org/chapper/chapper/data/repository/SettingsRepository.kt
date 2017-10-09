@@ -7,10 +7,19 @@ import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.kotlinextensions.select
 import org.chapper.chapper.data.model.Settings
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
+import java.util.*
 
 object SettingsRepository {
     fun update() {
         val settings = (select from Settings::class).querySingle()!!
+        settings.save()
+    }
+
+    fun getPhotoId(): String = (select from Settings::class).querySingle()!!.photoId
+
+    fun generatePhotoId() {
+        val settings = (select from Settings::class).querySingle()!!
+        settings.photoId = UUID.randomUUID().toString()
         settings.save()
     }
 
@@ -51,6 +60,7 @@ object SettingsRepository {
 
     fun setProfilePhoto(context: Context, image: Bitmap) {
         ImageRepository.saveImage(context, "profile", image)
+        generatePhotoId()
     }
 
     fun setFirstStart(isFirstStart: Boolean) {

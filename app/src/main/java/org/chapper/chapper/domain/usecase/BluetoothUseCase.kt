@@ -111,7 +111,7 @@ object BluetoothUseCase {
 
     fun requestPhoto(context: Context, chatId: String) {
         if (ImageRepository.getImage(context, chatId) == null) {
-            send(Constants.PHOTO_REQUEST)
+            send(Constants.PHOTO_REQUEST + SettingsRepository.getPhotoId())
         }
     }
 
@@ -132,6 +132,7 @@ object BluetoothUseCase {
         doAsync {
             try {
                 send(Constants.PHOTO + ImageRepository.bitmapToJson(SettingsRepository.getProfilePhoto(context)!!))
+                send(Constants.PHOTO_ID + SettingsRepository.getPhotoId())
             } catch (e: Exception) {
             }
         }

@@ -31,6 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignRight="@id/profile_image_chars"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Винсент Вега"
                 android:textColor="@color/color_white_text"
                 android:textSize="16sp" />
@@ -57,6 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignRight="@id/profile_image_chars"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@string/offline"
                     android:textColor="@color/color_dark_white" />
 

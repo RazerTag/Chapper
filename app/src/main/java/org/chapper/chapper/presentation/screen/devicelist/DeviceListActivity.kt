@@ -74,7 +74,7 @@ class DeviceListActivity : AppCompatActivity(), DeviceListView {
     }
 
     override fun hideNoOneNearBlock() {
-        mNoOneNearBlock.visibility = View.INVISIBLE
+        mNoOneNearBlock.visibility = View.GONE
     }
 
     override fun setRefreshingTitle() {

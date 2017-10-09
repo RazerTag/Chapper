@@ -67,7 +67,12 @@ class BluetoothService : Service() {
                         MessageRepository.receiveMessages(id)
 
                     message == Constants.PHOTO_REQUEST ->
-                        BluetoothUseCase.sharePhoto(applicationContext)
+                        if (chat.photoId != message.replace(Constants.PHOTO_REQUEST, "")) {
+                            BluetoothUseCase.sharePhoto(applicationContext)
+                        }
+
+                    message == Constants.PHOTO_ID ->
+                        chat.photoId = message.replace(Constants.PHOTO_ID, "")
 
                     message.contains(Constants.FIRST_NAME) -> {
                         val text = message.replace(Constants.FIRST_NAME, "")
