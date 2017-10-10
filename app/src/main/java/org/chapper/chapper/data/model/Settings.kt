@@ -17,14 +17,14 @@ data class Settings(
         var isFirstStart: Boolean = true,
 
         @Column
+        var photoId: String = Constants.PHOTO_REQUEST,
+
+        @Column
         var firstName: String = "",
 
         @Column
         var lastName: String = "",
 
         @Column
-        var isSendByEnter: Boolean = false,
-
-        @Column
-        var photoId: String = Constants.PHOTO_REQUEST
+        var isSendByEnter: Boolean = false
 )

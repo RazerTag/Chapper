@@ -17,7 +17,7 @@ object SettingsRepository {
 
     fun getPhotoId(): String = (select from Settings::class).querySingle()!!.photoId
 
-    fun generatePhotoId() {
+    private fun generatePhotoId() {
         val settings = (select from Settings::class).querySingle()!!
         settings.photoId = UUID.randomUUID().toString()
         settings.save()

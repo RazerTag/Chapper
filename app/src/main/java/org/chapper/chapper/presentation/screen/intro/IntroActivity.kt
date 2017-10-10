@@ -17,7 +17,7 @@ class IntroActivity : MaterialIntroActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         addSlide(SlideFragmentBuilder()
-                .backgroundColor(R.color.color_secondary)
+                .backgroundColor(R.color.colorSecondary)
                 .buttonsColor(R.color.colorAccent)
                 .image(R.drawable.forum)
                 .title("Привет.")
@@ -25,7 +25,7 @@ class IntroActivity : MaterialIntroActivity() {
                 .build())
 
         addSlide(SlideFragmentBuilder()
-                .backgroundColor(R.color.color_secondary)
+                .backgroundColor(R.color.colorSecondary)
                 .buttonsColor(R.color.colorAccent)
                 .image(R.drawable.nature_people)
                 .title("Работает как рация.\nНо лучше.")

@@ -35,7 +35,7 @@ class RegisterSlide : SlideFragment() {
         return view
     }
 
-    override fun backgroundColor(): Int = R.color.color_secondary
+    override fun backgroundColor(): Int = R.color.colorSecondary
 
     override fun buttonsColor(): Int = R.color.colorAccent
 

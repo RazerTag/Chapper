@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/color_green_message_background"/>
+    <solid android:color="@color/colorGreenMessageBackground" />
 
     <corners
         android:bottomLeftRadius="32.5px"

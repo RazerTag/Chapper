@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Митрий Дедмедев"
-                        android:textColor="@color/color_grey"
+                        android:textColor="@color/colorGrey"
                         android:textSize="16sp" />
 
                     <TextView
@@ -106,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DeadMed"
-                        android:textColor="@color/color_grey"
+                        android:textColor="@color/colorGrey"
                         android:textSize="16sp" />
 
                     <TextView
@@ -152,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/send_by_enter"
-                        android:textColor="@color/color_grey"
+                        android:textColor="@color/colorGrey"
                         android:textSize="16sp" />
 
                     <Switch
