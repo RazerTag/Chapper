@@ -186,7 +186,11 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val bitmap: Bitmap = ImagePicker.getImageFromResult(applicationContext, requestCode, resultCode, data)!!
+            val bitmap: Bitmap = try {
+                ImagePicker.getImageFromResult(applicationContext, requestCode, resultCode, data)!!
+            } catch (e: KotlinNullPointerException) {
+                return
+            }
 
             mPhoto.setImageBitmap(bitmap)
             SettingsRepository.setProfilePhoto(applicationContext, bitmap)

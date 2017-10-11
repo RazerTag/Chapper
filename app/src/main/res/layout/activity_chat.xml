@@ -14,16 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <tk.wasdennnoch.progresstoolbar.ProgressToolbar
-                android:id="@+id/refresher"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="1.5dp"
-                android:background="@color/colorPrimaryDark"
-                android:indeterminate="true"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
             <include layout="@layout/toolbar_chat" />
 
         </RelativeLayout>

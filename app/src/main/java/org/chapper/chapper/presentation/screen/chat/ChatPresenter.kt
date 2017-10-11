@@ -20,6 +20,7 @@ import org.chapper.chapper.domain.usecase.NotificationUseCase
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothConnectionBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.TypingBroadcastReceiver
+import org.jetbrains.anko.doAsync
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -146,10 +147,12 @@ class ChatPresenter(private val viewState: ChatView) {
         observer.addModelChangeListener { table, _, _ ->
             when (table) {
                 Message::class.java -> {
-                    viewState.changeMessageList()
-                    readMessages()
-                    if (viewState.isForeground)
-                        sendMessagesReadCode()
+                    doAsync {
+                        viewState.changeMessageList()
+                        readMessages()
+                        if (viewState.isForeground)
+                            sendMessagesReadCode()
+                    }
                 }
             }
         }

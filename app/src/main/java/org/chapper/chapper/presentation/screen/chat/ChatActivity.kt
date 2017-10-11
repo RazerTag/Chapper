@@ -25,9 +25,7 @@ import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
 import org.jetbrains.anko.toast
-import tk.wasdennnoch.progresstoolbar.ProgressToolbar
 import kotlin.properties.Delegates
-
 
 class ChatActivity : AppCompatActivity(), ChatView {
     override var isForeground: Boolean = false
@@ -47,7 +45,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     private val mSendButton: ImageButton by bindView(R.id.sendButton)
     private val mMessageEditText: EditText by bindView(R.id.messageEditText)
 
-    private val mRefresher: ProgressToolbar by bindView(R.id.refresher)
+    private val mRefresher: AVLoadingIndicatorView by bindView(R.id.connecting_animation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

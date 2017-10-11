@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import org.chapper.chapper.data.model.Device
+import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import kotlin.properties.Delegates
 
@@ -24,8 +25,10 @@ class DeviceListPresenter(private val viewState: DeviceListView) {
         else deviceModel.bluetoothName = device.name
         deviceModel.bluetoothAddress = device.address
 
-        viewState.hideNoOneNearBlock()
-        viewState.addDevice(deviceModel)
+        if (!ChatRepository.contains(deviceModel.bluetoothAddress)) {
+            viewState.hideNoOneNearBlock()
+            viewState.addDevice(deviceModel)
+        }
     }
 
     fun discoveryStarted() {
