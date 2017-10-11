@@ -105,10 +105,24 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
         mPresenter.destroy(applicationContext)
     }
 
-    override fun showChats() {
+    override fun initChats() {
         mRecyclerView.setHasFixedSize(false)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        val chats = ChatRepository.getChatsSorted()
+
+        changeChatList()
+    }
+
+    override fun changeChatList() {
+        runOnUiThread {
+            val chats = ChatRepository.getChatsSorted()
+            updateAdapter(chats)
+            mRecyclerView.adapter = mAdapter
+
+            showNoChats(chats)
+        }
+    }
+
+    private fun updateAdapter(chats: MutableList<Chat>) {
         mAdapter = ChatListAdapter(applicationContext, chats, object : ChatListAdapter.OnItemClickListener {
             override fun onItemClick(chat: Chat) {
                 val intent = Intent(applicationContext, ChatActivity::class.java)
@@ -137,18 +151,6 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
                 return true
             }
         })
-        mRecyclerView.adapter = mAdapter
-
-        showNoChats(chats)
-    }
-
-    override fun changeChatList() {
-        runOnUiThread {
-            val chats = ChatRepository.getChatsSorted()
-            mAdapter.changeDataSet(chats)
-
-            showNoChats(chats)
-        }
     }
 
     override fun showNoChats(chats: MutableList<Chat>) {

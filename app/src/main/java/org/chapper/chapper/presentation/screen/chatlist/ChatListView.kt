@@ -5,7 +5,7 @@ import org.chapper.chapper.data.model.Chat
 interface ChatListView {
     fun initToolbar()
     fun initDrawer()
-    fun showChats()
+    fun initChats()
     fun changeChatList()
     fun showNoChats(chats: MutableList<Chat>)
 

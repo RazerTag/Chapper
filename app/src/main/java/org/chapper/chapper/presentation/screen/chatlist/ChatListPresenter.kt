@@ -22,7 +22,7 @@ ChatListPresenter(private val viewState: ChatListView) {
     fun init(context: Context) {
         viewState.initToolbar()
         viewState.initDrawer()
-        viewState.showChats()
+        viewState.initChats()
 
         registerReceivers(context)
         bluetoothStatusAction()

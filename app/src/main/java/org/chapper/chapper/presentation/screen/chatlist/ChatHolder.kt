@@ -29,6 +29,8 @@ class ChatHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val photo = ImageRepository.getImage(context, chat.id)
         if (photo != null)
             mProfileImage.setImageBitmap(photo)
+        else
+            mProfileImage.visibility = View.GONE
 
         mChatName.text = ChatRepository.getName(chat)
         mChatPreview.text = lastMessage.text
