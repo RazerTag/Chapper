@@ -15,7 +15,6 @@ ext {
     dbflowVersion = '4.1.1'
     imagePickerVersion = '1.2.0'
     dexterVersion = '4.1.0'
-    progresstoolbarVersion = '1.0.3'
     sdpVersion = '1.0.4'
     loadingAnimationVersion = '2.1.3'
 }

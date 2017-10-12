@@ -71,8 +71,10 @@ class BluetoothService : Service() {
                             BluetoothUseCase.sharePhoto(applicationContext)
                         }
 
-                    message.contains(Constants.PHOTO_ID) ->
+                    message.contains(Constants.PHOTO_ID) -> {
                         chat.photoId = message.replace(Constants.PHOTO_ID, "")
+                        chat.save()
+                    }
 
                     message.contains(Constants.FIRST_NAME) -> {
                         val text = message.replace(Constants.FIRST_NAME, "")
@@ -120,8 +122,7 @@ class BluetoothService : Service() {
                     addChat(context, name, address)
                 }
                 BluetoothUseCase.shareUserData()
-                BluetoothUseCase.requestPhoto(applicationContext,
-                        ChatRepository.getChat(name!!, address!!).id)
+                BluetoothUseCase.requestPhoto()
 
                 val intent = Intent(Constants.ACTION_CONNECTED)
                 intent.putExtra(Constants.NAME_EXTRA, name)

@@ -134,12 +134,14 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     fun sendMessage(text: String) {
-        if (text.isNotEmpty()) {
-            val message = Message(chatId = mChatId,
-                    status = MessageStatus.OUTGOING_NOT_SENT,
-                    text = text)
-            message.insert()
-            BluetoothUseCase.sendMessage(text)
+        doAsync {
+            if (text.isNotEmpty()) {
+                val message = Message(chatId = mChatId,
+                        status = MessageStatus.OUTGOING_NOT_SENT,
+                        text = text)
+                message.insert()
+                BluetoothUseCase.sendMessage(text)
+            }
         }
     }
 

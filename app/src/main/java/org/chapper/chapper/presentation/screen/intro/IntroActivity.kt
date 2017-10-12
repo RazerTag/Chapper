@@ -5,10 +5,17 @@ import agency.tango.materialintroscreen.SlideFragmentBuilder
 import android.Manifest
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.support.v7.app.AppCompatDelegate
 import org.chapper.chapper.R
 
 
 class IntroActivity : MaterialIntroActivity() {
+    companion object {
+        init {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableLastSlideAlphaExitTransition(false)
