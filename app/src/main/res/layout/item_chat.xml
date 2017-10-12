@@ -6,19 +6,20 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
+    android:paddingBottom="12dp"
+    android:paddingLeft="12dp"
     android:paddingRight="16dp"
-    android:paddingTop="8dp">
+    android:paddingTop="12dp">
 
     <include
         layout="@layout/circle_image_view_text"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -26,7 +27,6 @@
             android:id="@+id/chat_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
@@ -38,7 +38,6 @@
             android:id="@+id/chat_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"

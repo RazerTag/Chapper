@@ -1,4 +1,5 @@
 ext {
+    supportVersion = '26.0.2'
     kotlinVersion = '1.1.51'
     ankoVersion = '0.10.1'
     kottenknifeVersion = '0.1.0-SNAPSHOT'
@@ -6,15 +7,11 @@ ext {
     rxandroidVersion = '2.0.1'
     gsonVersion = '2.8.1'
     sqliteVersion = '0.2.0'
-    glideVersion = '4.0.0'
     materialDrawerVersion = '5.9.2'
     materialIntroScreenVersion = '0.0.5'
     circleImageViewVersion = '2.1.0'
-    bluetoothsppVersion = '1.0.0'
-    daggerVersion = '2.11'
     dbflowVersion = '4.1.1'
     imagePickerVersion = '1.2.0'
-    dexterVersion = '4.1.0'
     sdpVersion = '1.0.4'
     loadingAnimationVersion = '2.1.3'
 }
