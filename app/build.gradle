@@ -11,8 +11,8 @@ android {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 25
-        versionName "1.0.0"
+        versionCode 26
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true

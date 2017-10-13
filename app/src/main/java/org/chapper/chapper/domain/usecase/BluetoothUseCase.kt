@@ -109,8 +109,8 @@ object BluetoothUseCase {
         send(Constants.MESSAGES_READ)
     }
 
-    fun requestPhoto() {
-        send(Constants.PHOTO_REQUEST + SettingsRepository.getPhotoId())
+    fun requestPhoto(photoId: String) {
+        send(Constants.PHOTO_REQUEST + photoId)
     }
 
     fun shareUserData() {

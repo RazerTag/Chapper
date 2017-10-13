@@ -17,6 +17,7 @@ import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
+import org.chapper.chapper.data.repository.SettingsRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.Utils
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
@@ -67,7 +68,7 @@ class BluetoothService : Service() {
                         MessageRepository.receiveMessages(id)
 
                     message.contains(Constants.PHOTO_REQUEST) ->
-                        if (chat.photoId != message.replace(Constants.PHOTO_REQUEST, "")) {
+                        if (SettingsRepository.getPhotoId() != message.replace(Constants.PHOTO_REQUEST, "")) {
                             BluetoothUseCase.sharePhoto(applicationContext)
                         }
 
@@ -118,16 +119,22 @@ class BluetoothService : Service() {
     private fun bluetoothConnectionListener(context: Context) {
         BluetoothFactory.sBtSPP.setBluetoothConnectionListener(object : BluetoothSPP.BluetoothConnectionListener {
             override fun onDeviceConnected(name: String?, address: String?) {
-                if (name != null && address != null) {
-                    addChat(context, name, address)
-                }
-                BluetoothUseCase.shareUserData()
-                BluetoothUseCase.requestPhoto()
+                doAsync {
+                    if (name != null && address != null)
+                        addChat(context, name, address)
 
-                val intent = Intent(Constants.ACTION_CONNECTED)
-                intent.putExtra(Constants.NAME_EXTRA, name)
-                intent.putExtra(Constants.ADDRESS_EXTRA, address)
-                context.sendBroadcast(intent)
+                    BluetoothUseCase.shareUserData()
+
+                    if (name != null && address != null) {
+                        val chat = ChatRepository.getChat(name, address)
+                        BluetoothUseCase.requestPhoto(chat.photoId)
+                    }
+
+                    val intent = Intent(Constants.ACTION_CONNECTED)
+                    intent.putExtra(Constants.NAME_EXTRA, name)
+                    intent.putExtra(Constants.ADDRESS_EXTRA, address)
+                    context.sendBroadcast(intent)
+                }
             }
 
             override fun onDeviceDisconnected() {
