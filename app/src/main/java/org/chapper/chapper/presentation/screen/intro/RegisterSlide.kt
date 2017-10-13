@@ -54,8 +54,11 @@ class RegisterSlide : SlideFragment() {
     }
 
     private fun saveData() {
-        SettingsRepository.setFirstName(firstName!!.text.toString())
-        SettingsRepository.setLastName(lastName!!.text.toString())
-        BluetoothAdapter.getDefaultAdapter().name = username!!.text.toString()
+        try {
+            SettingsRepository.setFirstName(firstName!!.text.toString())
+            SettingsRepository.setLastName(lastName!!.text.toString())
+            BluetoothAdapter.getDefaultAdapter().name = username!!.text.toString()
+        } catch (e: NullPointerException) {
+        }
     }
 }

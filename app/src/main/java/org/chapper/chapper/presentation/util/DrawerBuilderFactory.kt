@@ -46,7 +46,7 @@ class DrawerBuilderFactory(val context: Context,
                                 .withIconTintingEnabled(true),
                         PrimaryDrawerItem()
                                 .withName(context.getString(R.string.settings))
-                                .withIcon(R.drawable.settings)
+                                .withIcon(R.drawable.settings_color)
                                 .withSelectable(false)
                                 .withTextColor(ResourceRepository.getColor(context, R.color.colorMenuDarkGrey))
                                 .withIconColor(ResourceRepository.getColor(context, R.color.colorMenuGrey))

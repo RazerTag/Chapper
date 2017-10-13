@@ -42,16 +42,6 @@ class ImagePickSlide : SlideFragment() {
 
     override fun buttonsColor(): Int = R.color.colorAccent
 
-    override fun onPause() {
-        super.onPause()
-
-        saveData()
-    }
-
-    private fun saveData() {
-        SettingsRepository.setFirstStart(false)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
             val bitmap: Bitmap = ImagePicker.getImageFromResult(activity.applicationContext, requestCode, resultCode, data)!!
