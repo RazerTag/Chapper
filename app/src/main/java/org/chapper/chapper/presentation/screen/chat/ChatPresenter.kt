@@ -188,15 +188,17 @@ class ChatPresenter(private val viewState: ChatView) {
                     updateLastConnectionDate()
                     viewState.startRefreshing()
                 }
+                doAsync {
+                    Thread.sleep(3000)
+                    BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                }
             }
 
             override fun onDeviceConnectionFailed() {
-                Observable.just("")
-                        .observeOn(Schedulers.newThread())
-                        .doOnNext { Thread.sleep(2500) }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext { BluetoothUseCase.connect(mChat.bluetoothMacAddress) }
-                        .subscribe()
+                doAsync {
+                    Thread.sleep(1500)
+                    BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                }
             }
         })
 

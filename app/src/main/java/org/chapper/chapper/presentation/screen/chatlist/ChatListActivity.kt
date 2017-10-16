@@ -17,6 +17,7 @@ import kotterknife.bindView
 import me.annenkov.bluekitten.BluetoothState
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
+import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
@@ -41,6 +42,7 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
     private val mNoChats: View by bindView(R.id.noChats)
 
     private val mSearchDevicesFloatButton: FloatingActionButton by bindView(R.id.search_devices_float_button)
+    private val mBluetoothOffFloatButton: FloatingActionButton by bindView(R.id.bluetooth_off_float_button)
 
     companion object {
         init {
@@ -64,6 +66,13 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
         mSearchDevicesFloatButton.setOnClickListener {
             startSearchDevicesListActivity()
+        }
+
+        mBluetoothOffFloatButton.setOnClickListener {
+            try {
+                BluetoothFactory.sBtAdapter!!.enable()
+            } catch (e: Exception) {
+            }
         }
     }
 
@@ -197,16 +206,22 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
 
     override fun btNotAvailable() {
         mToolbar.title = getString(R.string.bluetooth_not_available)
+        mSearchDevicesFloatButton.hide()
+        mBluetoothOffFloatButton.show()
         initDrawer()
     }
 
     override fun btNotEnabled() {
         mToolbar.title = getString(R.string.bluetooth_not_enabled)
+        mSearchDevicesFloatButton.hide()
+        mBluetoothOffFloatButton.show()
         initDrawer()
     }
 
     override fun btEnabled() {
         mToolbar.title = getString(R.string.app_name)
+        mSearchDevicesFloatButton.show()
+        mBluetoothOffFloatButton.hide()
         initDrawer()
     }
 

@@ -2,6 +2,7 @@ package org.chapper.chapper.presentation.screen.chat
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -21,11 +22,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotterknife.bindView
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
+import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
 import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import kotlin.properties.Delegates
 
 class ChatActivity : AppCompatActivity(), ChatView {
@@ -57,8 +59,12 @@ class ChatActivity : AppCompatActivity(), ChatView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-        window.setBackgroundDrawableResource(R.drawable.background)
         mPresenter = ChatPresenter(this)
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            window.setBackgroundDrawableResource(R.drawable.background)
+        } else {
+            window.setBackgroundDrawableResource(R.drawable.background_land)
+        }
 
         mPresenter.init(applicationContext, intent)
 
@@ -114,7 +120,25 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mRecyclerView.layoutManager = layout
         mAdapter = ChatAdapter(MessageRepository
                 .getMessages(intent
-                        .getStringExtra(Constants.CHAT_ID_EXTRA)))
+                        .getStringExtra(Constants.CHAT_ID_EXTRA)), object : ChatAdapter.OnItemClickListener {
+            override fun onItemClick(message: Message) {
+                val countries = listOf(getString(R.string.delete))
+                selector(getString(R.string.select_action), countries, { _, i ->
+                    when (i) {
+                        0 -> {
+                            alert(getString(R.string.are_you_sure)) {
+                                yesButton {
+                                    doAsync {
+                                        message.delete()
+                                    }
+                                }
+                                noButton {}
+                            }.show()
+                        }
+                    }
+                })
+            }
+        })
         mRecyclerView.adapter = mAdapter
     }
 

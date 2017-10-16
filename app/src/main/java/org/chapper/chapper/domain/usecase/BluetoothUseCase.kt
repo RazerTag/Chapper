@@ -76,7 +76,6 @@ object BluetoothUseCase {
         if (bt.connectedDeviceAddress != address
                 && checkStatus() == BluetoothStatus.ENABLED)
             try {
-                bt.disconnect()
                 bt.connect(address)
             } catch (e: Exception) {
                 e.printStackTrace()

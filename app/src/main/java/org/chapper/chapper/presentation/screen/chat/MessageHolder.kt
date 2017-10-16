@@ -15,7 +15,7 @@ class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val mMessageTime: TextView by bindView(R.id.message_time)
     private val mMessageStatus: ImageView by bindView(R.id.message_status)
 
-    fun bind(message: Message) {
+    fun bind(message: Message, listener: ChatAdapter.OnItemClickListener) {
         mMessageText.text = message.text
         if (!message.isAction())
             mMessageTime.text = message.getTimeString()
@@ -33,6 +33,10 @@ class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             else -> {
                 // Nothing
             }
+        }
+
+        itemView.setOnClickListener {
+            listener.onItemClick(message)
         }
     }
 }

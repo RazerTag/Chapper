@@ -9,12 +9,19 @@ import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.status.MessageStatus
 import kotlin.properties.Delegates
 
-class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChatAdapter(
+        private val mMessages: MutableList<Message>,
+        private val mListener: ChatAdapter.OnItemClickListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ACTION = 1
     private val INCOMING_TYPE = 2
     private val INCOMING_FIRST_TYPE = 3
     private val OUTGOING_TYPE = 4
     private val OUTGOING_FIRST_TYPE = 5
+
+    interface OnItemClickListener {
+        fun onItemClick(message: Message)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         var itemView: View by Delegates.notNull()
@@ -48,7 +55,7 @@ class ChatAdapter(private val mMessages: MutableList<Message>) : RecyclerView.Ad
     override fun onBindViewHolder(holderAction: RecyclerView.ViewHolder?, position: Int) {
         val message = mMessages[position]
         val holder: MessageHolder = holderAction as MessageHolder
-        holder.bind(message)
+        holder.bind(message, mListener)
     }
 
     override fun getItemCount(): Int = mMessages.size

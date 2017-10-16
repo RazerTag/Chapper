@@ -38,7 +38,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_weight="0"
             android:background="@drawable/shadow"
             android:elevation="20dp"
@@ -53,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/message"
-                android:inputType="textCapSentences"
+                android:inputType="textCapSentences|textMultiLine"
                 android:maxHeight="150dp" />
 
             <ImageButton

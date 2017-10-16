@@ -45,6 +45,19 @@
             app:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/access_point" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/bluetooth_off_float_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:tint="@color/md_white_1000"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/bluetooth_off" />
+
         <include layout="@layout/no_chats" />
 
     </RelativeLayout>

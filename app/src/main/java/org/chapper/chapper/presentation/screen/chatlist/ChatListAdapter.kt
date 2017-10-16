@@ -8,9 +8,9 @@ import org.chapper.chapper.R
 import org.chapper.chapper.data.model.Chat
 
 class ChatListAdapter(
-        val context: Context,
+        private val mContext: Context,
         private val mChats: MutableList<Chat>,
-        private val listener: ChatListAdapter.OnItemClickListener
+        private val mListener: ChatListAdapter.OnItemClickListener
 ) : RecyclerView.Adapter<ChatHolder>() {
     interface OnItemClickListener {
         fun onItemClick(chat: Chat)
@@ -26,7 +26,7 @@ class ChatListAdapter(
 
     override fun onBindViewHolder(holder: ChatHolder?, position: Int) {
         val chat = mChats[position]
-        holder!!.bind(context, chat, listener)
+        holder!!.bind(mContext, chat, mListener)
     }
 
     override fun getItemCount(): Int = mChats.size
