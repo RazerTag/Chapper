@@ -147,10 +147,21 @@ class ChatListActivity : AppCompatActivity(), ChatListView {
             }
 
             override fun onItemLongClick(chat: Chat): Boolean {
-                val countries = listOf(getString(R.string.delete))
-                selector(getString(R.string.select_action), countries, { _, i ->
+                val actions = listOf(getString(R.string.clear_history),
+                        getString(R.string.delete))
+                selector(getString(R.string.select_action), actions, { _, i ->
                     when (i) {
                         0 -> {
+                            alert(getString(R.string.are_you_sure)) {
+                                yesButton {
+                                    doAsync {
+                                        MessageRepository.clearHistory(chat.id)
+                                    }
+                                }
+                                noButton {}
+                            }.show()
+                        }
+                        1 -> {
                             alert(getString(R.string.are_you_sure)) {
                                 yesButton {
                                     doAsync {

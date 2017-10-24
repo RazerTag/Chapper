@@ -24,6 +24,15 @@ object MessageRepository {
         }
     }
 
+    fun clearHistory(chatId: String) {
+        doAsync {
+            val messages = getMessages(chatId)
+            for (i in 1 until messages.size) {
+                messages[i].delete()
+            }
+        }
+    }
+
     fun deleteAllMessages(chatId: String) {
         doAsync {
             for (message in getMessages(chatId)) {

@@ -21,6 +21,7 @@ import org.chapper.chapper.presentation.broadcastreceiver.BluetoothConnectionBro
 import org.chapper.chapper.presentation.broadcastreceiver.BluetoothDiscoveryBroadcastReceiver
 import org.chapper.chapper.presentation.broadcastreceiver.TypingBroadcastReceiver
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -190,14 +191,18 @@ class ChatPresenter(private val viewState: ChatView) {
                 }
                 doAsync {
                     Thread.sleep(3000)
-                    BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                    uiThread {
+                        BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                    }
                 }
             }
 
             override fun onDeviceConnectionFailed() {
                 doAsync {
                     Thread.sleep(1500)
-                    BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                    uiThread {
+                        BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                    }
                 }
             }
         })

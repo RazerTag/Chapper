@@ -122,8 +122,8 @@ class ChatActivity : AppCompatActivity(), ChatView {
                 .getMessages(intent
                         .getStringExtra(Constants.CHAT_ID_EXTRA)), object : ChatAdapter.OnItemClickListener {
             override fun onItemClick(message: Message) {
-                val countries = listOf(getString(R.string.delete))
-                selector(getString(R.string.select_action), countries, { _, i ->
+                val actions = listOf(getString(R.string.delete))
+                selector(getString(R.string.select_action), actions, { _, i ->
                     when (i) {
                         0 -> {
                             alert(getString(R.string.are_you_sure)) {
