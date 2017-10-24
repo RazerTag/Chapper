@@ -44,4 +44,5 @@
     <string name="typing">набирает…</string>
     <string name="pick_image">Выбрать изображение</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="image_content">Изображение</string>
 </resources>
