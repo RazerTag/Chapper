@@ -109,7 +109,7 @@ object BluetoothUseCase {
     }
 
     fun requestPhoto(photoId: String) {
-        send(Constants.PHOTO_REQUEST + photoId)
+        send(Constants.PROFILE_PHOTO_REQUEST + photoId)
     }
 
     fun shareUserData() {
@@ -128,8 +128,8 @@ object BluetoothUseCase {
     fun sharePhoto(context: Context) {
         doAsync {
             try {
-                send(Constants.PHOTO + ImageRepository.bitmapToJson(SettingsRepository.getProfilePhoto(context)!!))
-                send(Constants.PHOTO_ID + SettingsRepository.getPhotoId())
+                send(Constants.PROFILE_PHOTO + ImageRepository.bitmapToJson(SettingsRepository.getProfilePhoto(context)!!))
+                send(Constants.PROFILE_PHOTO_ID + SettingsRepository.getPhotoId())
             } catch (e: Exception) {
             }
         }

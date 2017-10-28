@@ -67,13 +67,13 @@ class BluetoothService : Service() {
                     message == Constants.MESSAGE_RECEIVED ->
                         MessageRepository.receiveMessages(id)
 
-                    message.contains(Constants.PHOTO_REQUEST) ->
-                        if (SettingsRepository.getPhotoId() != message.replace(Constants.PHOTO_REQUEST, "")) {
+                    message.contains(Constants.PROFILE_PHOTO_REQUEST) ->
+                        if (SettingsRepository.getPhotoId() != message.replace(Constants.PROFILE_PHOTO_REQUEST, "")) {
                             BluetoothUseCase.sharePhoto(applicationContext)
                         }
 
-                    message.contains(Constants.PHOTO_ID) -> {
-                        chat.photoId = message.replace(Constants.PHOTO_ID, "")
+                    message.contains(Constants.PROFILE_PHOTO_ID) -> {
+                        chat.photoId = message.replace(Constants.PROFILE_PHOTO_ID, "")
                         chat.save()
                     }
 
@@ -104,11 +104,11 @@ class BluetoothService : Service() {
                         }
                     }
 
-                    message.contains(Constants.PHOTO) -> {
+                    message.contains(Constants.PROFILE_PHOTO) -> {
                         doAsync {
                             ImageRepository.saveImage(applicationContext,
                                     id,
-                                    ImageRepository.jsonToBitmap(message.replace(Constants.PHOTO, ""))!!)
+                                    ImageRepository.jsonToBitmap(message.replace(Constants.PROFILE_PHOTO, ""))!!)
                         }
                     }
                 }

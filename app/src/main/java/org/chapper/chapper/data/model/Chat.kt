@@ -23,7 +23,7 @@ data class Chat(
         var id: String = UUID.randomUUID().toString(),
 
         @Column
-        var photoId: String = Constants.PHOTO_REQUEST,
+        var photoId: String = Constants.PROFILE_PHOTO_REQUEST,
 
         @Column
         var firstName: String = "",

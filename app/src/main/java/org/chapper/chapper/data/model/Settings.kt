@@ -17,7 +17,7 @@ data class Settings(
         var isFirstStart: Boolean = true,
 
         @Column
-        var photoId: String = Constants.PHOTO_REQUEST,
+        var photoId: String = Constants.PROFILE_PHOTO_REQUEST,
 
         @Column
         var firstName: String = "",
