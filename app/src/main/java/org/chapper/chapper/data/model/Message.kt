@@ -28,6 +28,9 @@ data class Message(
         var text: String = "",
 
         @Column
+        var photo: String = "",
+
+        @Column
         var date: Date = Date()
 ) : BaseModel() {
     fun getTimeString(): String = when {

@@ -3,6 +3,7 @@ package org.chapper.chapper.presentation.screen.chat
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import io.reactivex.Observable
@@ -13,6 +14,7 @@ import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
 import org.chapper.chapper.data.model.Message
 import org.chapper.chapper.data.repository.ChatRepository
+import org.chapper.chapper.data.repository.ImageRepository
 import org.chapper.chapper.data.repository.MessageRepository
 import org.chapper.chapper.data.status.MessageStatus
 import org.chapper.chapper.domain.usecase.BluetoothUseCase
@@ -142,6 +144,19 @@ class ChatPresenter(private val viewState: ChatView) {
                         text = text)
                 message.insert()
                 BluetoothUseCase.sendMessage(text)
+            }
+        }
+    }
+
+    fun sendMessage(context: Context, bitmap: Bitmap?) {
+        doAsync {
+            if (bitmap != null) {
+                val message = Message(chatId = mChatId,
+                        status = MessageStatus.OUTGOING_NOT_SENT)
+                message.photo = message.id
+                ImageRepository.saveImage(context, message.photo, bitmap)
+                message.insert()
+                BluetoothUseCase.sendMessage(Constants.PHOTO + ImageRepository.bitmapToJson(bitmap))
             }
         }
     }

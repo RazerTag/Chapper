@@ -9,6 +9,7 @@ interface ChatView {
     fun changeMessageList()
 
     fun sendMessage()
+    fun attachContent()
 
     fun showRefresher()
     fun hideRefresher()

@@ -1,8 +1,11 @@
 package org.chapper.chapper.presentation.screen.chat
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -17,6 +20,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import com.mvc.imagepicker.ImagePicker
 import com.wang.avi.AVLoadingIndicatorView
 import de.hdodenhof.circleimageview.CircleImageView
 import kotterknife.bindView
@@ -46,6 +50,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
     private var mAdapter: ChatAdapter by Delegates.notNull()
 
     private val mSendButton: ImageButton by bindView(R.id.sendButton)
+    private val mAttachButton: ImageButton by bindView(R.id.attachButton)
     private val mMessageEditText: EditText by bindView(R.id.messageEditText)
 
     private val mRefresher: AVLoadingIndicatorView by bindView(R.id.connecting_animation)
@@ -69,6 +74,10 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mPresenter.init(applicationContext, intent)
 
         mSendButton.setOnClickListener {
+            sendMessage()
+        }
+
+        mAttachButton.setOnClickListener {
             sendMessage()
         }
 
@@ -160,6 +169,19 @@ class ChatActivity : AppCompatActivity(), ChatView {
         mMessageEditText.setText("")
     }
 
+    override fun attachContent() {
+        val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS)
+            return
+        }
+
+        ImagePicker.pickImage(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -210,6 +232,14 @@ class ChatActivity : AppCompatActivity(), ChatView {
                 Constants.COARSE_LOCATION_PERMISSIONS)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            val bitmap: Bitmap = ImagePicker.getImageFromResult(applicationContext, requestCode, resultCode, data)!!
+
+            mPresenter.sendMessage(applicationContext, bitmap)
+        }
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             Constants.COARSE_LOCATION_PERMISSIONS -> {
@@ -217,6 +247,11 @@ class ChatActivity : AppCompatActivity(), ChatView {
                     sendMessage()
                 } else {
                     toast(resources.getString(R.string.error))
+                }
+            }
+            Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS -> {
+                if ((grantResults.isNotEmpty()) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    attachContent()
                 }
             }
         }
