@@ -45,6 +45,15 @@
             android:paddingBottom="4dp"
             android:paddingTop="4dp">
 
+            <ImageButton
+                android:id="@+id/attachButton"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/send"
+                android:tint="@color/colorSecondaryDark"
+                app:srcCompat="@drawable/attachment" />
+
             <EditText
                 android:id="@+id/messageEditText"
                 style="@style/FullWidthEditText"
