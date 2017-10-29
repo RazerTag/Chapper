@@ -46,4 +46,5 @@
     <string name="typing">typing…</string>
     <string name="pick_image">Pick image</string>
     <string name="clear_history">Clear history</string>
+    <string name="image_content">Image content</string>
 </resources>
