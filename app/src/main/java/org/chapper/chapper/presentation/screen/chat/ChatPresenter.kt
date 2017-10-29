@@ -190,37 +190,38 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     private fun registerBluetoothConnectionReceiver(context: Context) {
-        mBtConnectionReceiver = BluetoothConnectionBroadcastReceiver(context, object : BluetoothConnectionBroadcastReceiver.ActionListener {
-            override fun onDeviceConnected(name: String, address: String) {
-                if (address == mChat.bluetoothMacAddress) {
-                    statusConnected()
-                    updateLastConnectionDate()
-                }
-            }
-
-            override fun onDeviceDisconnected() {
-                if (isConnected) {
-                    statusOffline()
-                    updateLastConnectionDate()
-                    viewState.startRefreshing()
-                }
-                doAsync {
-                    Thread.sleep(3000)
-                    uiThread {
-                        BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+        mBtConnectionReceiver = BluetoothConnectionBroadcastReceiver(context,
+                object : BluetoothConnectionBroadcastReceiver.ActionListener {
+                    override fun onDeviceConnected(name: String, address: String) {
+                        if (address == mChat.bluetoothMacAddress) {
+                            statusConnected()
+                            updateLastConnectionDate()
+                        }
                     }
-                }
-            }
 
-            override fun onDeviceConnectionFailed() {
-                doAsync {
-                    Thread.sleep(1500)
-                    uiThread {
-                        BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                    override fun onDeviceDisconnected() {
+                        if (isConnected) {
+                            statusOffline()
+                            updateLastConnectionDate()
+                            viewState.startRefreshing()
+                        }
+                        doAsync {
+                            Thread.sleep(3000)
+                            uiThread {
+                                BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                            }
+                        }
                     }
-                }
-            }
-        })
+
+                    override fun onDeviceConnectionFailed() {
+                        doAsync {
+                            Thread.sleep(1500)
+                            uiThread {
+                                BluetoothUseCase.connect(mChat.bluetoothMacAddress)
+                            }
+                        }
+                    }
+                })
 
         mBtConnectionReceiver.registerContext()
     }
