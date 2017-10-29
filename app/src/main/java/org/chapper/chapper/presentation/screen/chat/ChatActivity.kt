@@ -78,7 +78,7 @@ class ChatActivity : AppCompatActivity(), ChatView {
         }
 
         mAttachButton.setOnClickListener {
-            sendMessage()
+            attachContent()
         }
 
         mMessageEditText.addTextChangedListener(object : TextWatcher {
@@ -127,9 +127,10 @@ class ChatActivity : AppCompatActivity(), ChatView {
         val layout = LinearLayoutManager(this)
         layout.stackFromEnd = true
         mRecyclerView.layoutManager = layout
-        mAdapter = ChatAdapter(MessageRepository
-                .getMessages(intent
-                        .getStringExtra(Constants.CHAT_ID_EXTRA)), object : ChatAdapter.OnItemClickListener {
+        mAdapter = ChatAdapter(applicationContext,
+                MessageRepository
+                        .getMessages(intent
+                                .getStringExtra(Constants.CHAT_ID_EXTRA)), object : ChatAdapter.OnItemClickListener {
             override fun onItemClick(message: Message) {
                 val actions = listOf(getString(R.string.delete))
                 selector(getString(R.string.select_action), actions, { _, i ->

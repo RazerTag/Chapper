@@ -1,5 +1,6 @@
 package org.chapper.chapper.presentation.screen.chat
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import org.chapper.chapper.data.status.MessageStatus
 import kotlin.properties.Delegates
 
 class ChatAdapter(
+        private val context: Context,
         private val mMessages: MutableList<Message>,
         private val mListener: ChatAdapter.OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -49,7 +51,7 @@ class ChatAdapter(
             }
         }
 
-        return MessageHolder(itemView)
+        return MessageHolder(context, itemView)
     }
 
     override fun onBindViewHolder(holderAction: RecyclerView.ViewHolder?, position: Int) {
