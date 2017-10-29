@@ -104,6 +104,19 @@ class BluetoothService : Service() {
                         }
                     }
 
+                    message.contains(Constants.PHOTO) -> {
+                        doAsync {
+                            val bitmap = ImageRepository.jsonToBitmap(message)
+
+                            if (bitmap != null) {
+                                val message = Message(chatId = chat.id)
+                                message.photo = message.id
+                                ImageRepository.saveImage(context, message.photo, bitmap)
+                                message.insert()
+                            }
+                        }
+                    }
+
                     message.contains(Constants.PROFILE_PHOTO) -> {
                         doAsync {
                             ImageRepository.saveImage(applicationContext,
