@@ -19,6 +19,9 @@ class MessageHolder(val context: Context, itemView: View) : RecyclerView.ViewHol
     private val mMessageStatus: ImageView by bindView(R.id.message_status)
 
     fun bind(message: Message, listener: ChatAdapter.OnItemClickListener) {
+        if (message.status != MessageStatus.ACTION)
+            mMessagePhoto.setImageResource(0)
+
         if (message.photo != "") {
             val bitmap = ImageRepository.getImage(context, message.photo)
             if (bitmap != null) mMessagePhoto.setImageBitmap(bitmap)
