@@ -62,7 +62,7 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
         mPresenter.init(applicationContext)
 
-        mFlowObserver = FlowContentObserver()
+        mFlowObserver = FlowContentObserver("org.chapper.chapper")
         mFlowObserver.registerForContentChanges(applicationContext, Settings::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Chat::class.java)
         mFlowObserver.registerForContentChanges(applicationContext, Message::class.java)

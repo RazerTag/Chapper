@@ -10,7 +10,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.properties.Delegates
 
-
 object ImageRepository {
     fun deleteImage(chatId: String) {
         try {

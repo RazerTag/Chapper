@@ -5,9 +5,6 @@ import android.content.Context
 import android.content.Intent
 import com.raizlabs.android.dbflow.kotlinextensions.save
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.data.bluetooth.BluetoothFactory
 import org.chapper.chapper.data.model.Chat
@@ -101,15 +98,11 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     private fun typing() {
-        Observable.just("")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { startTyping() }
-                .observeOn(Schedulers.newThread())
-                .doOnNext { Thread.sleep(2500) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { stopTyping() }
-                .subscribe()
+        startTyping()
+        doAsync {
+            Thread.sleep(2500)
+            uiThread { stopTyping() }
+        }
     }
 
     private fun startTyping() {
@@ -229,7 +222,7 @@ class ChatPresenter(private val viewState: ChatView) {
     }
 
     private fun registerFlowObserver(context: Context) {
-        mFlowObserver = FlowContentObserver()
+        mFlowObserver = FlowContentObserver("org.chapper.chapper")
         mFlowObserver.registerForContentChanges(context, Chat::class.java)
         mFlowObserver.registerForContentChanges(context, Message::class.java)
         databaseChangesListener(mFlowObserver)

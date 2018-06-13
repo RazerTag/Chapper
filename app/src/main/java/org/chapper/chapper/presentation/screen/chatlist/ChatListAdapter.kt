@@ -18,15 +18,15 @@ class ChatListAdapter(
         fun onItemLongClick(chat: Chat): Boolean
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChatHolder {
-        val itemView = LayoutInflater.from(parent!!.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatHolder {
+        val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_chat, parent, false)
         return ChatHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ChatHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ChatHolder, position: Int) {
         val chat = mChats[position]
-        holder!!.bind(mContext, chat, mListener)
+        holder.bind(mContext, chat, mListener)
     }
 
     override fun getItemCount(): Int = mChats.size

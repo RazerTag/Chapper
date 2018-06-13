@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import org.chapper.chapper.R
 import org.chapper.chapper.data.Constants
 import org.chapper.chapper.presentation.screen.chat.ChatActivity

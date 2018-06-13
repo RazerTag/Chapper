@@ -23,28 +23,28 @@ class ChatAdapter(
         fun onItemClick(message: Message)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var itemView: View by Delegates.notNull()
 
         when (viewType) {
             INCOMING_TYPE -> {
-                itemView = LayoutInflater.from(parent!!.context)
+                itemView = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_message_incoming, parent, false)
             }
             INCOMING_FIRST_TYPE -> {
-                itemView = LayoutInflater.from(parent!!.context)
+                itemView = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_message_incoming_with_angle, parent, false)
             }
             OUTGOING_TYPE -> {
-                itemView = LayoutInflater.from(parent!!.context)
+                itemView = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_message_outgoing, parent, false)
             }
             OUTGOING_FIRST_TYPE -> {
-                itemView = LayoutInflater.from(parent!!.context)
+                itemView = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_message_outgoing_with_angle, parent, false)
             }
             else -> {
-                itemView = LayoutInflater.from(parent!!.context)
+                itemView = LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_message_action, parent, false)
             }
         }
@@ -52,7 +52,7 @@ class ChatAdapter(
         return MessageHolder(itemView)
     }
 
-    override fun onBindViewHolder(holderAction: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holderAction: RecyclerView.ViewHolder, position: Int) {
         val message = mMessages[position]
         val holder: MessageHolder = holderAction as MessageHolder
         holder.bind(message, mListener)

@@ -11,15 +11,15 @@ class DeviceListAdapter(private val mDevices: ArrayList<Device>, private val lis
         fun onItemClick(device: Device)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DeviceHolder {
-        val itemView = LayoutInflater.from(parent!!.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceHolder {
+        val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_device, parent, false)
         return DeviceHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: DeviceHolder?, position: Int) {
+    override fun onBindViewHolder(holder: DeviceHolder, position: Int) {
         val device = mDevices[position]
-        holder!!.bind(device, listener)
+        holder.bind(device, listener)
     }
 
     override fun getItemCount(): Int = mDevices.size

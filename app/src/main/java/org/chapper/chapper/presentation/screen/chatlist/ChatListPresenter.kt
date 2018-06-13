@@ -104,7 +104,7 @@ ChatListPresenter(private val viewState: ChatListView) {
     }
 
     private fun registerFlowObserver(context: Context) {
-        mFlowObserver = FlowContentObserver()
+        mFlowObserver = FlowContentObserver("org.chapper.chapper")
         mFlowObserver.registerForContentChanges(context, Settings::class.java)
         mFlowObserver.registerForContentChanges(context, Chat::class.java)
         mFlowObserver.registerForContentChanges(context, Message::class.java)

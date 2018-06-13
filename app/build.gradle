@@ -6,14 +6,13 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
     defaultConfig {
         applicationId "org.chapper.chapper"
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 29
-        versionName "1.0.4"
+        targetSdkVersion 27
+        versionCode 30
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -51,52 +50,48 @@ repositories {
 apply from: '../versions.gradle'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:cardview-v7:$supportVersion"
+    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
 
     // Kotlin & Anko
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre7', version: "$kotlinVersion"
-    compile "org.jetbrains.anko:anko:$ankoVersion"
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: "$kotlinVersion"
+    implementation "org.jetbrains.anko:anko:$ankoVersion"
 
     // View libraries
-    compile("com.mikepenz:materialdrawer:${materialDrawerVersion}@aar") {
+    implementation("com.mikepenz:materialdrawer:${materialDrawerVersion}@aar") {
         transitive = true
     }
-    compile "agency.tango.android:material-intro-screen:$materialIntroScreenVersion"
-    compile "de.hdodenhof:circleimageview:$circleImageViewVersion"
+    implementation "agency.tango.android:material-intro-screen:$materialIntroScreenVersion"
+    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
     // KottenKnife
-    compile "com.jakewharton:kotterknife:$kottenknifeVersion"
+    implementation "com.jakewharton:kotterknife:$kottenknifeVersion"
 
     // Gson
-    compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
-
-    // RXJava
-    compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
+    implementation group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 
     // DBFlow
     kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-rx:${dbflowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflowVersion}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflowVersion}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflowVersion}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-rx:${dbflowVersion}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-rx-kotlinextensions:${dbflowVersion}"
 
-    compile "com.github.Mariovc:ImagePicker:$imagePickerVersion"
+    implementation "com.github.Mariovc:ImagePicker:$imagePickerVersion"
 
-    compile "com.intuit.sdp:sdp-android:$sdpVersion"
+    implementation "com.intuit.sdp:sdp-android:$sdpVersion"
 
-    compile "com.wang.avi:library:$loadingAnimationVersion"
+    implementation "com.wang.avi:library:$loadingAnimationVersion"
 
-    compile(name: 'bluekitten', ext: 'aar')
+    implementation(name: 'bluekitten', ext: 'aar')
 }
 
 kapt {

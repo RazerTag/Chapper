@@ -42,6 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
+            android:tint="#fff"
             app:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/access_point" />
 
@@ -53,7 +54,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
-            android:tint="@color/md_white_1000"
+            android:tint="#fff"
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/bluetooth_off" />

@@ -44,18 +44,18 @@ class ImagePickSlide : SlideFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
-            val bitmap: Bitmap = ImagePicker.getImageFromResult(activity.applicationContext, requestCode, resultCode, data)!!
+            val bitmap: Bitmap = ImagePicker.getImageFromResult(activity!!.applicationContext, requestCode, resultCode, data)!!
 
             mPhoto.setImageBitmap(bitmap)
-            SettingsRepository.setProfilePhoto(activity.applicationContext, bitmap)
+            SettingsRepository.setProfilePhoto(activity!!.applicationContext, bitmap)
         }
     }
 
     private fun pick() {
-        val permissionCheck = ContextCompat.checkSelfPermission(activity.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permissionCheck = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
+            ActivityCompat.requestPermissions(activity!!,
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     Constants.WRITE_EXTERNAL_STORAGE_PERMISSIONS)
             return

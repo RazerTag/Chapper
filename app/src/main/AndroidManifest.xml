@@ -37,6 +37,10 @@
         <service
             android:name="org.chapper.chapper.data.bluetooth.BluetoothService"
             android:enabled="true" />
+
+        <provider
+            android:name="com.raizlabs.android.dbflow.runtime.StubContentProvider"
+            android:authorities="org.chapper.chapper" />
     </application>
 
 </manifest>
